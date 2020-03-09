@@ -3,4 +3,6 @@ WORKDIR /app
 COPY . .
 ENV NODE_ENV=development
 EXPOSE 4200
-CMD npm i -y && npm i -g angular/cli -y && npm start -y
+RUN npm i -y
+RUN npm i -g angular/cli -y
+CMD npm start -y
