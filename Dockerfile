@@ -10,6 +10,14 @@ RUN npm install -y
 
 COPY . .
 
-EXPOSE 4200
+RUN npm run build
 
-CMD npm start
+# Stage 2
+
+FROM nginx:1.13.12-alpine
+
+COPY --from=node /usr/src/app/dist/generator /usr/share/nginx/html
+
+EXPOSE 80
+
+CMD ["nginx", "-g", "daemon off;"]

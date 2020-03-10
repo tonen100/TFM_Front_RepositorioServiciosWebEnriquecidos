@@ -3,8 +3,8 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve --host 0.0.0.0 --port 4200 --disableHostCheck",
-    "build": "ng build",
+    "start": "ng serve --host 0.0.0.0 --port 80 --disableHostCheck",
+    "build": "ng build --prod",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"
@@ -23,7 +23,9 @@
     "express": "^4.17.1",
     "rxjs": "~6.5.4",
     "tslib": "^1.10.0",
-    "zone.js": "~0.10.2",
+    "zone.js": "~0.10.2"
+  },
+  "devDependencies": {
     "@angular-devkit/build-angular": "~0.900.5",
     "@angular/compiler-cli": "~9.0.5",
     "@angular/language-service": "~9.0.5",
@@ -42,9 +44,6 @@
     "ts-node": "~8.3.0",
     "tslint": "~5.18.0",
     "typescript": "~3.7.5"
-  },
-  "devDependencies": {
-    
   },
   "engines": {
     "node": "12.16.1",
