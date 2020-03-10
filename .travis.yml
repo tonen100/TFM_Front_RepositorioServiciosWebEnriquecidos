@@ -5,6 +5,13 @@ node_js:
 services:
   - docker
 
+before_install:
+  - sudo rm /usr/local/bin/docker-compose
+  - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
+  - chmod +x docker-compose
+  - sudo mv docker-compose /usr/local/bin
+  - docker-compose up -d
+
 install:
   - npm install
 
@@ -14,12 +21,6 @@ env:
 script:
   - echo "npm test"
 
-deploy:
-  provider: heroku
-  api_key: $API_KEY
-  app: tfm-front-repositorio
-  on:
-    branch: master
 after_success:
   - sudo docker login --username $HEROKU_DOCKER_USERNAME --password $API_KEY registry.heroku.com
   - sudo docker tag tfm-front:latest registry.heroku.com/tfm-front-repositorio/web
