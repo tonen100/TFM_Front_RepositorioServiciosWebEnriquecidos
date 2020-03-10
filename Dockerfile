@@ -14,7 +14,7 @@ RUN npm run build
 
 # Stage 2
 
-FROM nginx:1.13.12-alpine
+FROM nginx:alpine
 
 COPY --from=node /usr/src/app/dist/generator /usr/share/nginx/html
 
