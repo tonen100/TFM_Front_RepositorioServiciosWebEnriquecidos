@@ -12,4 +12,4 @@ RUN npm install -y
 
 COPY . .
 
-CMD ng serve --host 0.0.0.0
+EXPOSE 4200
