@@ -8,6 +8,9 @@ services:
 install:
   - npm install
 
+env:
+  - DOCKER_COMPOSE_VERSION=1.16.1
+
 script:
   - echo "npm test"
 
@@ -17,3 +20,7 @@ deploy:
   app: tfm-front-repositorio
   on:
     branch: master
+after_success:
+  - sudo docker login --username $HEROKU_DOCKER_USERNAME --password $API_KEY registry.heroku.com
+  - sudo docker tag tfm-front:latest registry.heroku.com/tfm-front-repositorio/web
+  - if [ $TRAVIS_BRANCH == "master" ] && [ $TRAVIS_PULL_REQUEST = "false" ]; then sudo docker push registry.heroku.com/tfm-front-repositorio/web; fi
