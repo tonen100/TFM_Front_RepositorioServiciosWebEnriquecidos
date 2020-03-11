@@ -11,10 +11,10 @@ services:
     networks:
       - prod-network
     ports:
-      - '80:80'
+      - '4200:80'
     environment:
     - PORT=80
-
+ 
 networks:
   prod-network:
     driver: bridge
