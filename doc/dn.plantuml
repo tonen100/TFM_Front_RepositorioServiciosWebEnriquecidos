@@ -16,11 +16,11 @@ class "Edit profile" <<(P,IndianRed) form>>
 class "Contributions list" <<(C,RoyalBlue) component>>
 class "Link provider" <<(P,IndianRed) form>>
 class "Add provider" <<(C,RoyalBlue) component>>
+class "Edit provider" <<(P,IndianRed) form>>
 class "Contribution" <<(C,RoyalBlue) component>>
 class "Add API" <<(P,IndianRed) form>>
 class "Edit API" <<(P,IndianRed) form>>
 class "Add version" <<(P,IndianRed) form>>
-class "Users list" <<(P,IndianRed) page>>
 class "Users list" <<(P,IndianRed) page>>
 
 "Home" --> "API search results": <<process>>\nsearch
@@ -47,9 +47,11 @@ class "Users list" <<(P,IndianRed) page>>
 "REST API" *-- "Versions list"
 "Versions list" *-- "Version"
 "Contributions list" *-left- "Contribution"
-"Details provider" *-- "Provider"
+"Details provider" *-left- "Provider"
 "Details provider" *-- "REST APIs list"
 "Details provider" --> "Details API": <<link>>
+"Details provider" --> "Edit provider": <<link>>\n(if logged)
+"Edit provider" --> "Details provider": <<process>>\nedit
 "Home" -up-> "Users list": <<link>>\n(if admin)
 "Users list" --> "User profile": <<link>>\n(if admin)
 @enduml
