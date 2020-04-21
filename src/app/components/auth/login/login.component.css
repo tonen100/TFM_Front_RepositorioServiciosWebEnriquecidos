@@ -1,0 +1,42 @@
+
+.fieldsGroup {
+    height: calc(100vh - 150px);
+}
+
+.centerVerticalBlock {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.fieldsGroup > * {
+    margin: auto;
+}
+
+#formLogin {
+    width: fit-content;
+    margin: auto;
+}
+
+.row {
+    vertical-align: middle;
+}
+
+.row > input {
+    text-align: start;
+    margin: 0;
+    padding: 0px;
+}
+
+.row > label {
+    text-align: end;
+    margin: 0;
+    padding: 0px;
+    font-size: large;
+}
+
+.smallAuthButton {
+    height: 35px;
+    width: 90px;
+    font-size: medium;
+}

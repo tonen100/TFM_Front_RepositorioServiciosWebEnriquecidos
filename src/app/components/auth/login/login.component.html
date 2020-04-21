@@ -1,0 +1,39 @@
+
+<ng-container *ngIf="this.authService.getCurrentUser() != null; else logForm">
+    <div style="text-align: center;">
+        <br>
+        <br>
+        <span> The user {{name}} is logged in the system</span>
+    </div>
+</ng-container>
+<ng-template #logForm>
+    <form class="form-horizontal" (ngSubmit)="onLogin(f)" #f="ngForm" id="formLogin">
+        <fieldset class="fieldsGroup">
+            <legend style="text-align: center; height:15%;justify-content: flex-end; font-size: xxx-large;" class="centerVerticalBlock">Sign in</legend>
+            <div style="height: 50%; min-width: 600px;" class="centerVerticalBlock">        
+                <div class="form-group has-danger row align-items-center">
+                    <label for="name" class="form-control-label col-5">Username or e-mail:</label>
+                    <span class="col-1"></span>
+                    <input type="text" name="name" class="form-control col-5" id="name" placeholder="Enter name" ngModel>
+                </div>
+                <div class="form-group has-danger row align-items-center">
+                    <label for="password" class="form-control-label col-5">Password:</label>
+                    <span class="col-1"></span>
+                    <input name="password" type="password" class="form-control col-5"  placeholder="Enter name" ngModel
+                    id="password">
+                </div>
+                <div class="row justify-content-center align-items-center"> 
+                    <button type="submit" class="btn btn-primary">
+                        Login
+                    </button>
+                </div>
+            </div>
+            <div class="row justify-content-center align-items-center centerVerticalBlock" style="height:15%;">
+                <p style="width: 100%;text-align: center;">Doesn't have an account ?</p>
+                <button type="button" class="btn btn-primary smallAuthButton" routerLink="/register">Sign up</button>
+            </div>
+        </fieldset>
+    </form> 
+</ng-template>
+
+<!-- <div class="text-danger">{{errorMessage}}</div> -->

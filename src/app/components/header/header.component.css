@@ -1,0 +1,42 @@
+.search-icon {
+    color: #333333;
+    background-color: whitesmoke;
+    border-color: #333333;
+}
+
+.search-icon:hover {
+    color: whitesmoke;
+    background-color: #333333;
+    border-color: whitesmoke;
+}
+
+.textButtonCol {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.textButton {
+    width: 100%;
+    height: 100%;
+    font-size: x-large;
+    margin: 0;
+    padding: 0;
+}
+
+.smallAuthButton {
+    height: 35px;
+    width: 90px;
+    font-size: medium;
+}
+
+.row {
+    display: flex;
+    align-items: center;
+    height: 50%;
+}
+
+* {
+    font-family: "Arial Black", "Gadget", "sans-serif"
+}
