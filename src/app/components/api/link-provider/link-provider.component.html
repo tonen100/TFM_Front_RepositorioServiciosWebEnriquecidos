@@ -5,21 +5,21 @@
 <form [formGroup]="linkProviderForm" (ngSubmit)="onLinkApiToProvider()" id="formLinkProvider" style="width: 90%;">
     <fieldset class="fieldsGroup container" style="width: 100%;max-width: 100%;">
         <legend style="text-align: left; height:17%; margin-top:2%; justify-content: flex-start; font-size: xxx-large;" class="centerVerticalBlock">Set REST API provider</legend>
-        <div class="centerVerticalBlock row align-items-center" style="height: 75%;">
+        <div class="centerVerticalBlock row" style="height: 75%;margin-top: 50px;">
             <div class="col-5">
-                <div class="form-group has-danger row align-items-center">
-                    <h3>Existing provider</h3>
+                <div class="form-group has-danger row align-items-center" style="margin-bottom: 50px;">
+                    <h3 style="margin: auto;">Existing provider</h3>
                 </div>
                 <div class="form-group has-danger row align-items-center">
-                    <div class="active-cyan-4 mb-4" style="width: 50%">
+                    <div class="active-cyan-4 mb-4" style="width: 50%;margin: auto;">
                         <input class="form-control" type="search" formControlName="existingProviderName" placeholder="Search provider..." aria-label="Search">
                     </div>
                 </div>
             </div>
-            <span class="col-1"></span>
+            <div class="col-1" style="height: 80%;align-items: center;"><div class="v-divider"></div></div>
             <div class="col-5">
-                <div class="form-group has-danger row align-items-center">
-                    <h3>Add provider</h3>
+                <div class="form-group has-danger row align-items-center" style="margin-bottom: 50px;">
+                    <h3 style="margin: auto;">Add provider</h3>
                 </div>
                 <div class="form-group has-danger row align-items-center">
                     <label for="name" class="form-control-label col-4">Name :</label>
@@ -39,15 +39,19 @@
                 <div class="form-group has-danger row align-items-center">
                     <img id="imageLogo" style="width: 90%; height: auto;"/>
                 </div>
-                <div class="custom-control custom-checkbox form-group has-danger row align-items-center">
-                    <ul>
-                        <li *ngFor="let businessModel of businessModels">
-                            <input [formControlName]="businessModel" [name]="businessModel" type="checkbox" class="custom-control-input" [id]="businessModel">
-                            <label class="custom-control-label" [for]="businessModel">{{ businessModel }}</label>
-                        </li>
-                    </ul>
+                <div class="form-group has-danger row align-items-center shadow-textarea">
+                    <label for="description" class="form-control-label col-4" style="margin-bottom: 15px;">Description</label>
+                    <textarea class="form-control z-depth-1" formControlName="description" id="description" rows="3" placeholder="Write something here..."></textarea>
+                </div>
+                <div class="form-group has-danger row align-items-center">
+                    <label for="name" class="form-control-label col-4">Related links :</label>
+                    <span class="col-1"></span>
+                    <div class="col-7" style="margin:0;padding:0;">
+                        <input type="text" *ngFor="let link of links" [formControlName]="link" (change)="addLink(link)" class="form-control" style="margin-bottom: 10px;">
+                    </div>
                     
-                  </div>
+                </div>
+
             </div>
         </div>
         <div class="centerVerticalBlock" style="max-width: 200px;"> 

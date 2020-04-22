@@ -4,7 +4,7 @@ import { Version } from '../../../models/version';
 import { API } from '../../../models/api';
 import { AuthService } from 'src/app/services/auth.service';
 import { Router, ActivatedRoute, Params } from '@angular/router';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
 import { ToastrService } from 'ngx-toastr';
 import { ImgStorageService } from 'src/app/services/img-storage.service';
@@ -33,6 +33,9 @@ export class LinkProviderComponent implements AfterViewInit {
   errorAlert: HTMLDivElement;
   apiId: string;
   logo: any;
+  links = [
+    'link-0'
+  ];
 
   constructor(
     private authService: AuthService,
@@ -68,6 +71,7 @@ export class LinkProviderComponent implements AfterViewInit {
         description: [''],
         externalsLinks: [''],
         existingProviderName: [''],
+        'link-0': [''],
         validated: ['true']
       }, { validators: [this.alternateValidation] });
   }
@@ -159,6 +163,16 @@ export class LinkProviderComponent implements AfterViewInit {
       onLoad(fileReader.result);
     }
     fileReader.readAsText(pathFile);
+  }
+
+  addLink(linkIndex: string) {
+    if(this.linkProviderForm.value[linkIndex]) {
+      const nextIndex = linkIndex.slice(0, linkIndex.length - 1) + (Number.parseInt(linkIndex.slice(linkIndex.length - 1), 10) + 1);
+      if(!this.linkProviderForm.contains(nextIndex)) {
+        this.linkProviderForm.addControl(nextIndex, new FormControl(''));
+        this.links.push(nextIndex);
+      }
+    }
   }
 
 }

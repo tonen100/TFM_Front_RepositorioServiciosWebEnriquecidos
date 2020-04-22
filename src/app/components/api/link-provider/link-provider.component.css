@@ -76,4 +76,19 @@
 .active-cyan-4 input[type=text]:focus:not([readonly]) {
     border: 1px solid #4dd0e1;
     box-shadow: 0 0 0 1px #4dd0e1;
-  }
+}
+
+.v-divider{
+    max-width: 2px;
+    margin: auto;
+    width:2px;
+    height:100%;
+    border-left:2px solid black;
+}
+
+.shadow-textarea textarea.form-control::placeholder {
+    font-weight: 300;
+}
+.shadow-textarea textarea.form-control {
+    padding-left: 0.8rem;
+}

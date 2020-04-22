@@ -36,7 +36,7 @@ export class VersionService {
 
   getAllVersions(api: API) {
     const url = `${this.URL_API}/v1/restApis/${api._id}/versions`;
-    return this.http.get<Array<API>>(url).toPromise();
+    return this.http.get<Array<Version>>(url).toPromise();
   }
 
   postVersion(api: API, version: Version) {
@@ -51,12 +51,17 @@ export class VersionService {
       httpOptions.headers = httpOptions.headers.delete('Authorization');
     }
 
-    return this.http.post<API>(url, postVersion, httpOptions).toPromise();
+    return this.http.post<Version>(url, postVersion, httpOptions).toPromise();
   }
 
   getVersion(id: string, version: Version) {
     const url = `${this.URL_API}/v1/restApis/${id}/versions/${version._id}`;
-    return this.http.get<API>(url).toPromise();
+    return this.http.get<Version>(url).toPromise();
+  }
+
+  getMetadata(originalDocumentation: string) {
+    const url = `${this.URL_API}/v1/restApis/versions/generateMetadata`;
+    return this.http.post<Version>(url, { originalDocumentation }, httpOptions).toPromise();
   }
 
   updateVersion(api: API, version: Version) {
@@ -122,6 +127,6 @@ export class VersionService {
       httpOptions.headers = httpOptions.headers.delete('Authorization');
     }
 
-    return this.http.delete<API>(url, httpOptions).toPromise();
+    return this.http.delete<Version>(url, httpOptions).toPromise();
   }
 }

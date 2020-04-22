@@ -39,7 +39,11 @@ export class AddAPIComponent implements AfterViewInit {
   createAPIForm: FormGroup;
   errorMessage: string;
   errorAlert: HTMLDivElement;
-  originalDocumentation: string;
+  previewVersion: {
+    originalDocumentation: string;
+    oasDocumentation: string;
+    metadata: string;
+  };
   logo: any;
   businessModels = businessModels;
 
@@ -122,13 +126,42 @@ export class AddAPIComponent implements AfterViewInit {
     });
   }
 
+  switchDocumentPreview(documentName: string) {
+    if(this.previewVersion != null) {
+      document.getElementById('documents').getElementsByTagName('pre')[0].textContent = this.previewVersion[documentName];
+    }
+    document.getElementById('originalDocumentation').classList.remove('active');
+    document.getElementById('oasDocumentation').classList.remove('active');
+    document.getElementById('metadata').classList.remove('active');
+    document.getElementById(documentName).classList.add('active');
+  }
+
   onLoadDocumentation() {
     const fileBlob = (document.getElementById('documentation') as HTMLInputElement).files[0];
     if(['application/json', 'application/x-yaml', 'text/markdown'].find(fileType => fileType === fileBlob.type)) {
       this.uploadDocument(fileBlob, (text) => {
         try {
-          this.createAPIForm.value.originalDocumentation = text;
-          document.getElementById('OASDocument').childNodes[0].textContent = text;
+          this.versionService.getMetadata(text).then(previewVersion => {
+            this.createAPIForm.value.originalDocumentation = previewVersion.originalDocumentation;
+            this.previewVersion = {
+              originalDocumentation: previewVersion.originalDocumentation,
+              oasDocumentation: previewVersion.oasDocumentation,
+              metadata: JSON.stringify(previewVersion.metadata, null, '\t'),
+            };
+            this.switchDocumentPreview('originalDocumentation');
+            document.getElementById('documents').getElementsByTagName('nav')[0].style.display = 'flex';
+          }).catch(err => {
+            switch(err.status) {
+              case 422:
+                this.showError('Failed to generate the OAS documentation, your documentation might be invalid');
+                break;
+              case 424:
+                this.showError('Failed to extract the metadata, your documentation might be invalid');
+                break;
+              default:
+                this.showError('Failed to extract the metadata (Unexpected error)');
+            }
+          });
         } catch(error) {
           this.showError('Failed to load the documentation (Unexpected error)');
         }
@@ -169,8 +202,8 @@ export class AddAPIComponent implements AfterViewInit {
         this.router.navigate(['api', api._id, 'provider', 'link']);
       }).catch(err => {
         this.apiService.deleteApi(api._id);
-        this.showError('Failed to create the version of the API check the validity of the informations (especially the documentation)');
-      }).catch(err => this.showError('Failed to create the REST API check the validity of the informations'));
+        this.showError('Failed to create the version of the API, please check the validity of the informations (documentation...)');
+      }).catch(err => this.showError('Failed to create the REST API, please check the validity of the informations'));
     });
   }
 

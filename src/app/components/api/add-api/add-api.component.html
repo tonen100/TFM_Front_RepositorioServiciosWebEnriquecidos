@@ -18,21 +18,21 @@
                     <input type="text" id="logoURL" formControlName="logoURL" class="form-control col-7" (change)="onLoadLogoURL()"/>
                 </div>
                 <div class="form-group has-danger row align-items-center">
-                    <label for="logo" class="form-control-label col-4">(or upload an image) :</label>
+                    <label for="logo" class="form-control-label col-4">(or upload<br/>an image) :</label>
                     <span class="col-1"></span>
                     <input type="file" class="form-control col-7" accept="image/*" id="logo" name="logo" aria-describedby="fileHelp" (change)="onLoadLogoFile()">
                 </div>
                 <div class="form-group has-danger row align-items-center">
                     <img id="imageLogo" style="width: 90%; height: auto;"/>
                 </div>
-                <div class="custom-control custom-checkbox form-group has-danger row align-items-center">
+                <div class="custom-control custom-checkbox form-group has-danger row align-items-center" style="margin: auto;width: fit-content;">
+                    <div class="form-control-label" style="text-align: start;">Business Models</div>
                     <ul>
                         <li *ngFor="let businessModel of businessModels">
                             <input [formControlName]="businessModel" [name]="businessModel" type="checkbox" class="custom-control-input" [id]="businessModel">
                             <label class="custom-control-label" [for]="businessModel">{{ businessModel }}</label>
                         </li>
                     </ul>
-                    
                   </div>
             </div>
             <span class="col-1"></span>
@@ -47,7 +47,12 @@
                 <div class="form-group row align-items-center justify-content-center">
                     <small style="font-style: italic;">Supported types: OAS (Swagger or v3), RAML (v1), API Blueprint</small>
                 </div>
-                <div id="OASDocument" class="form-group row align-items-center">
+                <div id="documents" class="form-group align-items-center">
+                    <nav class="nav nav-pills flex-column flex-sm-row justify-content-end">
+                        <span id="originalDocumentation" class="flex-sm-fill text-sm-center nav-link active" (click)="switchDocumentPreview('originalDocumentation')">Initial</span>
+                        <span id="oasDocumentation" class="flex-sm-fill text-sm-center nav-link" (click)="switchDocumentPreview('oasDocumentation')">OAS v3</span>
+                        <span id="metadata" class="flex-sm-fill text-sm-center nav-link" (click)="switchDocumentPreview('metadata')">Metadata</span>
+                    </nav>
                     <pre></pre>
                 </div>
                 <div class="form-group has-danger row align-items-center" style="height: 50px; width: 80%; margin: auto;">
