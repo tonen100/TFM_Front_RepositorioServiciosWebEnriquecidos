@@ -1,0 +1,87 @@
+{
+    "auth": {
+        "sign_in_title": "Connectarse",
+        "sign_up_title": "Registrarse",
+        "login_label": "Nombre de usuario o correo",
+        "name_label": "Nombre",
+        "email_label": "Correo electronico",
+        "password_label": "Contraseña",
+        "confirm_password_label": "Confirmar la contraseña",
+        "log_in": "Conectarse",
+        "log_out": "Desconectarse",
+        "sign_up": "Crear una cuenta",
+        "no_account_question": "¿No tienes cuenta ya?",
+        "have_account_question": "¿Ya tienes una cuenta?",
+        "success_connection": "¡Conectado con excito!"
+    }, "api": {
+        "browse_title": "Buscar una API REST",
+        "our_api": "Nuestra API",
+        "add_title": "Añadir una API REST al repositorio",
+        "name_label": "Nombre",
+        "logo_label": "URL del logo",
+        "upload_label": "o descargar una imagen",
+        "choose_file_label": "Seleccionar un fichero",
+        "additional_information": "Información adicional para los metadatos",
+        "add": "Añadir una API",
+        "categories": "Categorías de recursos",
+        "business_models": {
+            "title": "Modelos de negocio",
+            "Free": "Gratuito",
+            "FreeWithLimitations": "Gratuito con restrictiones",
+            "FreeTrialVersion": "Versión de prueba",
+            "FlatRateAllInclusive": "Tarifa plana integral",
+            "FlatRatesWithLimitations": "Tarifas planas con limitaciones",
+            "Billing": "Facturación"
+        }, "version": {
+            "title": "Versión",
+            "doc_label": "Documentación",
+            "supported_types": "Tipos de documento soportados: OAS (Swagger o v3), RAML (v1), API Blueprint",
+            "root_url_api_label": "URL raíz de la API",
+            "url_doc_label": "URL de la documentación" ,
+            "summary_label": "Resumen de la versión",
+            "initial": "Inicial",
+            "metadata": "Metadatos",
+            "details": "Detalles de la versión",
+            "errors": {
+                "fail_generate_oas_doc": "No se generó la documentación OAS, su documentación puede ser inválida",
+                "fail_generate_metadata": "No se pudieron extraer los metadatos, su documentación puede ser inválida",
+                "fail_create_version": "Falló al crear la versión de la API. Por favor, compruebe la validez de las informaciones (documentación...)",
+                "wrong_file_type": "No se ha cargado la documentación, no pudimos reconocer el tipo de archivo",
+                "generate_unexpected": "No se pudieron extraer los metadatos (Error imprevisto)",
+                "load_doc_unexpected": "No se ha cargado la documentación (Error imprevisto)",
+                "unexpected": "No se pudo extraer la versión de la API (Error imprevisto)"
+            }
+        },
+        "filter_by_business_model": "Filtrar por modelo de negocio",
+        "results": "Resultados para",
+        "delete": "Soprimir",
+        "cancel": "Cancelar",
+        "cant_undo_action": "Esta acción es irreversible !",
+        "delete_repository_question": "¿Estás seguro de que quieres borrar esta API de REST del repositorio?",
+        "provided_by": "Proporcionado por",
+        "edit": "Editar",
+        "last_version": "Última versión",
+        "terms_of_service": "Términos de servicio",
+        "original_documentation": "Documentación original",
+        "api_url": "URL Raíz de la API",
+        "errors": {
+            "unprocessable_file": "No se ha podido cargar la imagen, el archivo puede ser un binario, corrupto o simplemente inaccesible",
+            "server_inaccessible": "Imposible solicitar el servidor ahora mismo, espera un poco y vuelve a intentarlo.",
+            "fail_create_api": "Falló al crear la REST API, por favor, compruebe la validez de las informaciones",
+            "already_exist_name": "Ya existe una API con este nombre"
+        }
+    }, "provider": {
+        "link_title": "Definir el proveedor de la API",
+        "existing_title": "Proveedor existente",
+        "search_placeholder": "Buscar un proveedor...",
+        "add_title": "Nuevo proveedor",
+        "name_label": "Nombre",
+        "logo_label": "URL del logo",
+        "upload_label": "o descargar una imagen",
+        "choose_file_label": "Selecionar un fichero",
+        "description_label": "Descripción",
+        "description_placeholder": "Escribir algo aqui...",
+        "related_links_label": "Enlaces relacionados (URLs)",
+        "finalize": "Finalizar la API"
+    }
+}

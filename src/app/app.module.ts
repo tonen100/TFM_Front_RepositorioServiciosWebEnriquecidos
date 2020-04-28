@@ -35,7 +35,7 @@ import { RegisterComponent } from './components/auth/register/register.component
 import { ListUserComponent } from './components/user/list-user/list-user.component';
 import { ApiSearchComponent } from './components/api/api-search/api-search.component';
 import { EditUserComponent } from './components/user/edit-user/edit-user.component';
-import { RestApiItemComponent } from './components/api/api-search/rest-api-item/rest-api-item.component'
+import { RestApiItemComponent } from './components/api/api-search/rest-api-item/rest-api-item.component';
 import { AuthService } from './services/auth.service';
 import { CommonModule } from '@angular/common';
 import { TranslatableComponent } from './components/shared/translatable/translatable.component';

@@ -4,21 +4,21 @@
 
 <form [formGroup]="createAPIForm" (ngSubmit)="onCreateAPI()" id="formCreateAPI" style="width: 90%;">
     <fieldset class="fieldsGroup container" style="width: 100%;max-width: 100%;">
-        <legend style="text-align: left; height:17%; margin-top:2%; justify-content: flex-start; font-size: xxx-large;" class="centerVerticalBlock">Add REST API to directory</legend>
+        <legend style="text-align: left; height:17%; margin-top:2%; justify-content: flex-start; font-size: xxx-large;" class="centerVerticalBlock">{{ translateService.instant('api.add_title') }}</legend>
         <div class="centerVerticalBlock row align-items-center" style="height: 75%;">
             <div class="col-4">
                 <div class="form-group has-danger row align-items-center">
-                    <label for="name" class="form-control-label col-4">Name :</label>
+                    <label for="name" class="form-control-label col-4">{{ translateService.instant('api.name_label') }} :</label>
                     <span class="col-1"></span>
                     <input type="text" formControlName="name" class="form-control col-7">
                 </div>
                 <div class="form-group has-danger row align-items-center">
-                    <label for="logoURL" class="form-control-label col-4">Logo URL :</label>
+                    <label for="logoURL" class="form-control-label col-4">{{ translateService.instant('api.logo_label') }} :</label>
                     <span class="col-1"></span>
                     <input type="text" id="logoURL" formControlName="logoURL" class="form-control col-7" (change)="onLoadLogoURL()"/>
                 </div>
                 <div class="form-group has-danger row align-items-center">
-                    <label for="logo" class="form-control-label col-4">(or upload<br/>an image) :</label>
+                    <label for="logo" class="form-control-label col-4">({{ translateService.instant('api.upload_label') }}) :</label>
                     <span class="col-1"></span>
                     <input type="file" class="form-control col-7" accept="image/*" id="logo" name="logo" aria-describedby="fileHelp" (change)="onLoadLogoFile()">
                 </div>
@@ -26,11 +26,11 @@
                     <img id="imageLogo" style="width: 90%; height: auto;"/>
                 </div>
                 <div class="custom-control custom-checkbox form-group has-danger row align-items-center" style="margin: auto;width: fit-content;">
-                    <div class="form-control-label" style="text-align: start;">Business Models</div>
+                    <div class="form-control-label" style="text-align: start;font-weight: 500;">{{ translateService.instant('api.business_models.title') }}</div>
                     <ul>
                         <li *ngFor="let businessModel of businessModels">
                             <input [formControlName]="businessModel" [name]="businessModel" type="checkbox" class="custom-control-input" [id]="businessModel">
-                            <label class="custom-control-label" [for]="businessModel">{{ businessModel }}</label>
+                            <label class="custom-control-label" [for]="businessModel">{{ translateService.instant('api.business_models.' + businessModel) }}</label>
                         </li>
                     </ul>
                   </div>
@@ -38,25 +38,31 @@
             <span class="col-1"></span>
             <div id="versionFields" class="col-7" style="height: 100%;">
                 <div class="form-group has-danger row align-items-center" style="height: 50px;">
-                    <label for="versionNb" class="form-control-label col-2">Version :</label>
+                    <label for="versionNb" class="form-control-label col-2">{{ translateService.instant('api.version.title') }} :</label>
                     <input type="text" formControlName="versionNb" class="form-control col-3">
-                    <label for="documentation" class="form-control-label col-3">Documentation :</label>
+                    <label for="documentation" class="form-control-label col-3">{{ translateService.instant('api.version.doc_label') }} :</label>
                     <input formControlName="documentation" type="file" class="form-control col-3" accept=".md,.json,.yml,.yaml,.markdown,text/markdown,application/json,application/x-yaml"
                         id="documentation" name="documentation" aria-describedby="fileHelp" (change)="onLoadDocumentation()">
                 </div>
                 <div class="form-group row align-items-center justify-content-center">
-                    <small style="font-style: italic;">Supported types: OAS (Swagger or v3), RAML (v1), API Blueprint</small>
+                    <small style="font-style: italic;">{{ translateService.instant('api.version.supported_types') }}</small>
                 </div>
                 <div id="documents" class="form-group align-items-center">
                     <nav class="nav nav-pills flex-column flex-sm-row justify-content-end">
-                        <span id="originalDocumentation" class="flex-sm-fill text-sm-center nav-link active" (click)="switchDocumentPreview('originalDocumentation')">Initial</span>
+                        <span id="originalDocumentation" class="flex-sm-fill text-sm-center nav-link active" (click)="switchDocumentPreview('originalDocumentation')">{{ translateService.instant('api.version.initial') }}</span>
                         <span id="oasDocumentation" class="flex-sm-fill text-sm-center nav-link" (click)="switchDocumentPreview('oasDocumentation')">OAS v3</span>
-                        <span id="metadata" class="flex-sm-fill text-sm-center nav-link" (click)="switchDocumentPreview('metadata')">Metadata</span>
+                        <span id="metadata" class="flex-sm-fill text-sm-center nav-link" (click)="switchDocumentPreview('metadata')">{{ translateService.instant('api.version.metadata') }}</span>
                     </nav>
                     <pre></pre>
                 </div>
+                <div class="form-group has-danger row align-items-center" style="height: 50px;">
+                    <label for="rootUrlApi" class="form-control-label col-2" style="font-size:small;">{{ translateService.instant('api.version.root_url_api_label') }} :</label>
+                    <input type="text" formControlName="rootUrlApi" class="form-control col-3" id="rootUrlApi" [placeholder]="translateService.instant('api.additional_information')" style="font-size:small;">
+                    <label for="urlDoc" class="form-control-label col-3" style="font-size:small;">{{ translateService.instant('api.version.url_doc_label') }}:</label>
+                    <input formControlName="urlDoc" type="text" class="form-control col-3" id="urlDoc" [placeholder]="translateService.instant('api.additional_information')" style="font-size:small;">
+                </div>
                 <div class="form-group has-danger row align-items-center" style="height: 50px; width: 80%; margin: auto;">
-                    <label for="versionSummary" class="form-control-label col-3">Version summary :</label>
+                    <label for="versionSummary" class="form-control-label col-3">{{ translateService.instant('api.version.summary_label') }} :</label>
                     <span class="col-1"></span>
                     <input type="text" formControlName="versionSummary" class="form-control col-8">
                 </div>
@@ -64,7 +70,7 @@
         </div>
         <div class="centerVerticalBlock" style="max-width: 200px;"> 
             <button type="submit" class="btn btn-primary" style="height: 60px;" [disabled]="!createAPIForm.valid">
-                Add API
+                {{ translateService.instant('api.add') }}
             </button>
         </div>
     </fieldset>

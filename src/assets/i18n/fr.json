@@ -1,0 +1,87 @@
+{
+    "auth": {
+        "sign_in_title": "Se connecter",
+        "sign_up_title": "S'enregistrer",
+        "login_label": "Pseudonyme ou e-mail",
+        "name_label": "Pseudo",
+        "email_label": "E-mail",
+        "password_label": "Mot de passe",
+        "confirm_password_label": "Confirmer mot de passe",
+        "log_in": "Connexion",
+        "log_out": "Déconnexion",
+        "sign_up": "Créer un compte",
+        "no_account_question": "Pas encore de compte ?",
+        "have_account_question": "Déjà un compte ?",
+        "success_connection": "Succès de la connexion !"
+    }, "api": {
+        "browse_title": "Trouver une API REST",
+        "our_api": "Notre API",
+        "add_title": "Ajouter une API REST au dépôt",
+        "name_label": "Nom",
+        "logo_label": "URL du logo",
+        "upload_label": "ou télécharger une image",
+        "choose_file_label": "Choisir un fichier",
+        "additional_information": "Information aditionnelle pour les métadonnées",
+        "add": "Ajouter une API",
+        "categories": "Catégories de ressources",
+        "business_models": {
+            "title": "Modèles économiques",
+            "Free": "Gratuit",
+            "FreeWithLimitations": "Gratuit mais avec des restrictions",
+            "FreeTrialVersion": "Version d'essai gratuite",
+            "FlatRateAllInclusive": "Prix forfaitaire tout compris",
+            "FlatRatesWithLimitations": "Prix forfaitaires avec des limitations",
+            "Billing": "Facturation"
+        }, "version": {
+            "title": "Version",
+            "doc_label": "Documentation",
+            "supported_types": "Types de document supportés: OAS (Swagger or v3), RAML (v1), API Blueprint",
+            "root_url_api_label": "URL racine de l'API",
+            "url_doc_label": "URL de la documentation" ,
+            "summary_label": "Résumé de la version",
+            "initial": "Initial",
+            "metadata": "Métadonnées",
+            "details": "Détails de la version",
+            "errors": {
+                "fail_generate_oas_doc": "La génération de la documentation OAS a échoué, votre documentation est peut être invalide",
+                "fail_generate_metadata": "L'extracion des métadonnées a échouée, votre documentation est peut être invalide",
+                "fail_create_version": "La création de la version de l'API a échoué, vérifiez s'il vous plait la validité des informations",
+                "wrong_file_type": "Le chargement de la documentation a échouén le type de fichier n'a pas pu être reconnu",
+                "generate_unexpected": "L'extracion des métadonnées a échouée (Erreur imprévue)",
+                "load_doc_unexpected": "Le chargement de la documentation a échoué (Erreur imprévue)",
+                "unexpected": "La récuperation de la version de l'API a échoué (Erreur imprévue)"
+            }
+        },
+        "filter_by_business_model": "Filtrer par modèle économique",
+        "results": "Résultats pour",
+        "delete": "Supprimer",
+        "cancel": "Annuler",
+        "cant_undo_action": "Cette action est irréversible !",
+        "delete_repository_question": "Êtes-vous sûr de vouloir supprimer cette API REST du dépôt ?",
+        "provided_by": "Fournie par",
+        "edit": "Editer",
+        "last_version": "Dernière version",
+        "terms_of_service": "Conditions d'utilisation",
+        "original_documentation": "Documentation originelle",
+        "api_url": "URL racine de l'API",
+        "errors": {
+            "unprocessable_file": "Le chargement de l'image a échoué. Le fichier est peut être corrompu, ou bien un fichier binaire, ou tout simplement inaccessible",
+            "server_inaccessible": "Impossible d'accéder au serveur pour le moment, veuillez réessayer plus tard",
+            "fail_create_api": " La création de l'API REST a échoué, veuillez s'il vous plait vérifier la validité des informations",
+            "already_exist_name": "Il existe déjà una API avec ce nom"
+        }
+    }, "provider": {
+        "link_title": "Définir le fournisseur de l'API REST",
+        "existing_title": "Fournisseur existant",
+        "search_placeholder": "Chercher un fournisseur...",
+        "add_title": "Ajouter fournisseur",
+        "name_label": "Nom",
+        "logo_label": "URL du logo",
+        "upload_label": "ou télécharger une image",
+        "choose_file_label": "Choisir un fichier",
+        "description_label": "Descripion",
+        "description_placeholder": "Ecrire une présentation du fournisseur...",
+        "related_links_label": "Liens annexes (URLs)",
+        "finalize": "Finaliser l'API"
+    }
+}

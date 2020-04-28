@@ -1,0 +1,87 @@
+{
+    "auth": {
+        "sign_in_title": "Sign in",
+        "sign_up_title": "Sign up",
+        "login_label": "Username or e-mail",
+        "name_label": "Name",
+        "email_label": "E-mail",
+        "password_label": "Password",
+        "confirm_password_label": "Confirm Password",
+        "log_in": "Log in",
+        "log_out": "Log out",
+        "sign_up": "Register",
+        "no_account_question": "No account yet ?",
+        "have_account_question": "Already have an account ?",
+        "success_connection": "Successfully connected !"
+    }, "api": {
+        "browse_title": "Browse REST APIs",
+        "our_api": "Our API",
+        "add_title": "Add REST API to directory",
+        "name_label": "Name",
+        "logo_label": "Logo URL",
+        "upload_label": "or upload an image",
+        "choose_file_label": "Choose file",
+        "additional_information": "Additional information for metadata",
+        "add": "Add API",
+        "categories": "Ressources categories",
+        "business_models": {
+            "title": "Business Models",
+            "Free": "Free",
+            "FreeWithLimitations": "Free with limitations",
+            "FreeTrialVersion": "Free trial version",
+            "FlatRateAllInclusive": "Flat rate all inclusive",
+            "FlatRatesWithLimitations": "Flat rates with limitations",
+            "Billing": "Billing"
+        }, "version": {
+            "title": "Version",
+            "doc_label": "Documentation",
+            "supported_types": "Supported types: OAS (Swagger or v3), RAML (v1), API Blueprint",
+            "root_url_api_label": "Root URL API",
+            "url_doc_label": "URL Documentation" ,
+            "summary_label": "Version summary",
+            "initial": "Initial",
+            "metadata": "Metadata",
+            "details": "Versions details",
+            "errors": {
+                "fail_generate_oas_doc": "Failed to generate the OAS documentation, your documentation might be invalid",
+                "fail_generate_metadata": "Failed to extract the metadata, your documentation might be invalid",
+                "fail_create_version": "Failed to create the version of the API, please check the validity of the informations (documentation...)",
+                "wrong_file_type": "Failed to load the documentation, couldn't recognize the file type",
+                "generate_unexpected": "Failed to extract the metadata (Unexpected error)",
+                "load_doc_unexpected": "Failed to load the documentation (Unexpected error)",
+                "unexpected": "Failed to extract the version of the API (Unexpected error)"
+            }
+        },
+        "filter_by_business_model": "Filter by business model",
+        "results": "Results for",
+        "delete": "Delete",
+        "cancel": "Cancel",
+        "cant_undo_action": "This action cannot be undone !",
+        "delete_repository_question": "Are you sure you want to delete this REST API from the repository ?",
+        "provided_by": "Provided by",
+        "edit": "Edit",
+        "last_version": "Last version",
+        "terms_of_service": "Terms of service",
+        "original_documentation": "Original documentation",
+        "api_url": "API root URL",
+        "errors": {
+            "unprocessable_file": "Failed to load the image, the file might be a binary, corrupted or just unaccessible",
+            "server_inaccessible": "Impossible to request the server right now, wait a bit and retry",
+            "fail_create_api": "Failed to create the REST API, please check the validity of the informations",
+            "already_exist_name": "An API with this name already exists"
+        }
+    }, "provider": {
+        "link_title": "Set REST API provider",
+        "existing_title": "Existing provider",
+        "search_placeholder": "Search provider...",
+        "add_title": "Add provider",
+        "name_label": "Name",
+        "logo_label": "Logo URL",
+        "upload_label": "or upload an image",
+        "choose_file_label": "Choose file",
+        "description_label": "Description",
+        "description_placeholder": "Write something here...",
+        "related_links_label": "Related links (URLs)",
+        "finalize": "Finalize API"
+    }
+}

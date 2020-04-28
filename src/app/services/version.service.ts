@@ -45,9 +45,9 @@ export class VersionService {
     delete postVersion._id;
     const idToken = this.authService.getIdToken();
 
-    if(idToken != null) {
+    if (idToken != null) {
       httpOptions.headers = httpOptions.headers.set('Authorization', idToken);
-    } else if(httpOptions.headers.get('Authorization') != null) {
+    } else if (httpOptions.headers.get('Authorization') != null) {
       httpOptions.headers = httpOptions.headers.delete('Authorization');
     }
 
@@ -73,10 +73,10 @@ export class VersionService {
 
     const idToken = this.authService.getIdToken();
 
-    if(idToken != null) {
+    if (idToken != null) {
       httpOptions.headers = httpOptions.headers.set('Authorization', idToken);
-    } else if(httpOptions.headers.get('Authorization') != null) {
-      httpOptions.headers = httpOptions.headers.delete('Authorization')
+    } else if (httpOptions.headers.get('Authorization') != null) {
+      httpOptions.headers = httpOptions.headers.delete('Authorization');
     }
 
     this.http.put<Version>(url, body, httpOptions).toPromise();
@@ -88,10 +88,10 @@ export class VersionService {
 
     const idToken = this.authService.getIdToken();
 
-    if(idToken != null) {
+    if (idToken != null) {
       httpOptions.headers = httpOptions.headers.set('Authorization', idToken);
-    } else if(httpOptions.headers.get('Authorization') != null) {
-      httpOptions.headers = httpOptions.headers.delete('Authorization')
+    } else if (httpOptions.headers.get('Authorization') != null) {
+      httpOptions.headers = httpOptions.headers.delete('Authorization');
     }
 
     this.http.patch<Version>(url, body, httpOptions).toPromise();
@@ -103,9 +103,9 @@ export class VersionService {
 
     const idToken = this.authService.getIdToken();
 
-    if(idToken != null) {
+    if (idToken != null) {
       httpOptions.headers = httpOptions.headers.set('Authorization', idToken);
-    } else if(httpOptions.headers.get('Authorization') != null) {
+    } else if (httpOptions.headers.get('Authorization') != null) {
       httpOptions.headers = httpOptions.headers.delete('Authorization');
     }
 
@@ -121,9 +121,9 @@ export class VersionService {
 
     const idToken = this.authService.getIdToken();
 
-    if(idToken != null) {
+    if (idToken != null) {
       httpOptions.headers = httpOptions.headers.set('Authorization', idToken);
-    } else if(httpOptions.headers.get('Authorization') != null) {
+    } else if (httpOptions.headers.get('Authorization') != null) {
       httpOptions.headers = httpOptions.headers.delete('Authorization');
     }
 

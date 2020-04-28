@@ -1,4 +1,6 @@
-import { Component, OnInit, Sanitizer, AfterViewInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { TranslatableComponent } from '../../shared/translatable/translatable.component';
+import { TranslateService } from '@ngx-translate/core';
 import { APIService } from 'src/app/services/api.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { User } from 'src/app/models/user';
@@ -12,10 +14,8 @@ import { UserService } from 'src/app/services/user.service';
 import { HistoryContributionService } from 'src/app/services/historyContribution.service';
 import { HistoryContribution } from 'src/app/models/historyContribution';
 import { faCaretSquareDown } from '@fortawesome/free-solid-svg-icons';
-import * as moment from 'moment';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { DomSanitizer } from '@angular/platform-browser';
-
+import * as moment from 'moment';
 import * as fileDownload from 'js-file-download';
 
 declare class NestedVersion {
@@ -28,7 +28,7 @@ declare class NestedVersion {
   templateUrl: './details-api.component.html',
   styleUrls: ['./details-api.component.css']
 })
-export class DetailsAPIComponent implements OnInit, AfterViewInit {
+export class DetailsAPIComponent extends TranslatableComponent implements OnInit, AfterViewInit {
 
   currentUser: User;
   activeRole: string;
@@ -47,16 +47,18 @@ export class DetailsAPIComponent implements OnInit, AfterViewInit {
   faCaretSquareDown = faCaretSquareDown;
 
   constructor(
+    public translateService: TranslateService,
     private modalService: NgbModal,
     private activatedRoute: ActivatedRoute,
     private router: Router,
-    private sanitizer: DomSanitizer ,
     private authService: AuthService,
     private apiService: APIService,
     private providerService: ProviderService,
     private versionService: VersionService,
     private historyContributionService: HistoryContributionService,
-    private userService: UserService) { }
+    private userService: UserService) {
+      super(translateService);
+    }
 
   ngOnInit(): void {
     this.currentUser = this.authService.getCurrentUser();

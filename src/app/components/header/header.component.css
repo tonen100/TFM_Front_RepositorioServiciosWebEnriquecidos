@@ -27,8 +27,9 @@
 
 .smallAuthButton {
     height: 35px;
-    width: 90px;
+    width: 135px;
     font-size: medium;
+    padding: 0;
 }
 
 .row {

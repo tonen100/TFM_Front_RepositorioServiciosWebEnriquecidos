@@ -7,28 +7,30 @@ import { TranslateService } from '@ngx-translate/core';
 import { ToastrService } from 'ngx-toastr';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { StorageService } from 'src/app/services/local-storage.service';
+import { TranslatableComponent } from '../../shared/translatable/translatable.component';
 
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.css']
 })
-export class RegisterComponent {
+export class RegisterComponent extends TranslatableComponent {
 
   registrationForm: FormGroup;
   errorMessage: string;
   roleList = ['Administrator', 'Contributor'];
 
   constructor(
+    public translateService: TranslateService,
     private authService: AuthService,
     private fb: FormBuilder,
-    private translateService: TranslateService,
     private router: Router,
     private toastr: ToastrService,
     private fireAuth: AngularFireAuth,
     private storageService: StorageService
     ) {
-    this.createForm();
+      super(translateService);
+      this.createForm();
   }
 
   createForm() {

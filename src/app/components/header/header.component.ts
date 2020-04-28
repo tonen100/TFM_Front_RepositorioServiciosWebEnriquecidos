@@ -26,7 +26,7 @@ export class HeaderComponent extends TranslatableComponent implements OnInit {
   keywords = '';
 
   constructor(
-    private translateService: TranslateService,
+    public translateService: TranslateService,
     public authService: AuthService,
     private toastr: ToastrService,
     private router: Router,
@@ -56,7 +56,7 @@ export class HeaderComponent extends TranslatableComponent implements OnInit {
           this.token = null;
           localStorage.removeItem('idToken');
           this.router.navigate(['']);
-          this.toastr.success(this.translateService.instant('message.disconnected'));
+          this.toastr.success(this.translateService.instant('auth.success_connection'));
         }
       );
   }

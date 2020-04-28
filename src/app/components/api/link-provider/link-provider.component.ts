@@ -11,6 +11,7 @@ import { ImgStorageService } from 'src/app/services/img-storage.service';
 import { APIService } from 'src/app/services/api.service';
 import { ProviderService } from 'src/app/services/provider.service';
 import { Provider } from 'src/app/models/provider';
+import { TranslatableComponent } from '../../shared/translatable/translatable.component';
 
 const snakeCase = (str) => {
   return str.replace(/\W+/g, ' ')
@@ -24,7 +25,7 @@ const snakeCase = (str) => {
   templateUrl: './link-provider.component.html',
   styleUrls: ['./link-provider.component.css']
 })
-export class LinkProviderComponent implements AfterViewInit {
+export class LinkProviderComponent extends TranslatableComponent implements AfterViewInit {
 
   currentUser: User;
   activeRole: string;
@@ -40,9 +41,9 @@ export class LinkProviderComponent implements AfterViewInit {
   ];
 
   constructor(
+    public translateService: TranslateService,
     private authService: AuthService,
     private fb: FormBuilder,
-    private translateService: TranslateService,
     private router: Router,
     private activatedRoute: ActivatedRoute,
     private toastr: ToastrService,
@@ -50,6 +51,7 @@ export class LinkProviderComponent implements AfterViewInit {
     private apiService: APIService,
     private providerService: ProviderService
     ) {
+    super(translateService);
     this.currentUser = this.authService.getCurrentUser();
     if (this.currentUser && this.authService.getIdToken()) {
       this.activeRole = this.currentUser.role.toString();
@@ -93,9 +95,9 @@ export class LinkProviderComponent implements AfterViewInit {
   }
 
   alternateValidation(group: FormGroup) {
-    if(group.get('providerId') && group.get('providerId').value) {
+    if (group.get('providerId') && group.get('providerId').value) {
       return null;
-    } else if(group.get('logoURL') && group.get('logoURL')  && group.get('description') &&
+    } else if (group.get('logoURL') && group.get('logoURL')  && group.get('description') &&
       group.get('logoURL').value && group.get('logoURL').value  && group.get('description').value) {
       return null;
     } else {
@@ -104,7 +106,7 @@ export class LinkProviderComponent implements AfterViewInit {
   }
 
   onLoadLogoURL() {
-    if(this.linkProviderForm.value.logoURL != null && this.linkProviderForm.value.logoURL !== '') {
+    if (this.linkProviderForm.value.logoURL != null && this.linkProviderForm.value.logoURL !== '') {
       this.logo = null;
       (document.getElementById('imageLogo') as HTMLImageElement).src = this.linkProviderForm.value.logoURL;
     }
@@ -114,11 +116,11 @@ export class LinkProviderComponent implements AfterViewInit {
     const imageUrl = URL.createObjectURL((document.getElementById('logo') as HTMLInputElement).files[0]);
     this.uploadDocument((document.getElementById('logo') as HTMLInputElement).files[0], (img) => {
       try {
-        if(img != null) {
+        if (img != null) {
           this.logo = img;
           (document.getElementById('imageLogo') as HTMLImageElement).src = imageUrl;
         }
-      } catch(error) {
+      } catch (error) {
         this.showError('Failed to load the image, the file might be a binary, corrupted or just unaccessible');
       }
     });
@@ -126,8 +128,8 @@ export class LinkProviderComponent implements AfterViewInit {
 
   onSearching(event: any) {
     this.linkProviderForm.patchValue({ providerId: '' });
-    var value = this.linkProviderForm.value.existingProviderName;
-    if(value && value.length >= 2) {
+    const value = this.linkProviderForm.value.existingProviderName;
+    if (value && value.length >= 2) {
       this.providerService.getAllProviders(value).then(providers => {
         this.listProviders = providers;
       });
@@ -149,9 +151,9 @@ export class LinkProviderComponent implements AfterViewInit {
         )
       ).then((downloadURL) => {
         this.linkProviderForm.value.logoURL = downloadURL;
-        console.log(this.linkProviderForm.value)
+        console.log(this.linkProviderForm.value);
       });
-    } catch(error) {
+    } catch (error) {
       // TODO
     }
   }
@@ -162,11 +164,11 @@ export class LinkProviderComponent implements AfterViewInit {
   }
 
   onLinkApiToProvider() {
-    if(this.logo != null) {
+    if (this.logo != null) {
       this.storeLogo();
     }
     const values = this.linkProviderForm.value;
-    if(values.providerId) {
+    if (values.providerId) {
       this.linkApiToProvider(this.apiId, values.providerId);
     } else {
       const newProvider = new Provider(values.name, values.logoURL, values.description, values.externalLinks);
@@ -179,14 +181,14 @@ export class LinkProviderComponent implements AfterViewInit {
     const fileReader = new FileReader();
     fileReader.onload = (e) => {
       onLoad(fileReader.result);
-    }
+    };
     fileReader.readAsText(pathFile);
   }
 
   addLink(linkIndex: string) {
-    if(this.linkProviderForm.value[linkIndex]) {
+    if (this.linkProviderForm.value[linkIndex]) {
       const nextIndex = linkIndex.slice(0, linkIndex.length - 1) + (Number.parseInt(linkIndex.slice(linkIndex.length - 1), 10) + 1);
-      if(!this.linkProviderForm.contains(nextIndex)) {
+      if (!this.linkProviderForm.contains(nextIndex)) {
         this.linkProviderForm.addControl(nextIndex, new FormControl(''));
         this.links.push(nextIndex);
       }

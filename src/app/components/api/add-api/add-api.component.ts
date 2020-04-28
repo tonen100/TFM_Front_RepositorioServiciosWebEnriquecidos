@@ -11,6 +11,7 @@ import { ImgStorageService } from 'src/app/services/img-storage.service';
 import { APIService } from 'src/app/services/api.service';
 import { VersionService } from 'src/app/services/version.service';
 import { businessModels } from '../business-models.enum';
+import { TranslatableComponent } from '../../shared/translatable/translatable.component';
 
 const snakeCase = (str) => {
   return str.replace(/\W+/g, ' ')
@@ -24,7 +25,7 @@ const snakeCase = (str) => {
   templateUrl: './add-api.component.html',
   styleUrls: ['./add-api.component.css']
 })
-export class AddAPIComponent implements OnInit, AfterViewInit {
+export class AddAPIComponent extends TranslatableComponent implements OnInit, AfterViewInit {
 
   currentUser: User;
   activeRole: string;
@@ -40,16 +41,15 @@ export class AddAPIComponent implements OnInit, AfterViewInit {
   businessModels = businessModels;
 
   constructor(
+    public translateService: TranslateService,
     private authService: AuthService,
     private fb: FormBuilder,
-    private translateService: TranslateService,
     private router: Router,
-    private toastr: ToastrService,
     private imgStorageService: ImgStorageService,
     private apiService: APIService,
     private versionService: VersionService
     ) {
-
+      super(translateService);
   }
 
   ngOnInit() {
@@ -73,6 +73,8 @@ export class AddAPIComponent implements OnInit, AfterViewInit {
       originalDocumentation: [''],
       versionNb: ['', Validators.required],
       documentation: ['', Validators.required],
+      rootUrlApi: [''],
+      urlDoc: [''],
       versionSummary: ['', Validators.required],
       validated: ['true']
     };
@@ -102,7 +104,7 @@ export class AddAPIComponent implements OnInit, AfterViewInit {
   }
 
   onLoadLogoURL() {
-    if(this.createAPIForm.value.logoURL != null && this.createAPIForm.value.logoURL != '') {
+    if (this.createAPIForm.value.logoURL != null && this.createAPIForm.value.logoURL !== '') {
       this.logo = null;
       (document.getElementById('imageLogo') as HTMLImageElement).src = this.createAPIForm.value.logoURL;
     }
@@ -112,18 +114,18 @@ export class AddAPIComponent implements OnInit, AfterViewInit {
     const imageUrl = URL.createObjectURL((document.getElementById('logo') as HTMLInputElement).files[0]);
     this.uploadDocument((document.getElementById('logo') as HTMLInputElement).files[0], (img) => {
       try {
-        if(img != null) {
+        if (img != null) {
           this.logo = img;
           (document.getElementById('imageLogo') as HTMLImageElement).src = imageUrl;
         }
-      } catch(error) {
-        this.showError('Failed to load the image, the file might be a binary, corrupted or just unaccessible');
+      } catch (error) {
+        this.showError(this.translateService.instant('api.errors.unprocessable_file'));
       }
     });
   }
 
   switchDocumentPreview(documentName: string) {
-    if(this.previewVersion != null) {
+    if (this.previewVersion != null) {
       document.getElementById('documents').getElementsByTagName('pre')[0].textContent = this.previewVersion[documentName];
     }
     document.getElementById('originalDocumentation').classList.remove('active');
@@ -134,7 +136,7 @@ export class AddAPIComponent implements OnInit, AfterViewInit {
 
   onLoadDocumentation() {
     const fileBlob = (document.getElementById('documentation') as HTMLInputElement).files[0];
-    if(['application/json', 'application/x-yaml', 'text/markdown'].find(fileType => fileType === fileBlob.type)) {
+    if (['application/json', 'application/x-yaml', 'text/markdown'].find(fileType => fileType === fileBlob.type)) {
       this.uploadDocument(fileBlob, (text) => {
         try {
           this.versionService.getMetadata(text).then(previewVersion => {
@@ -149,23 +151,23 @@ export class AddAPIComponent implements OnInit, AfterViewInit {
             this.switchDocumentPreview('originalDocumentation');
             document.getElementById('documents').getElementsByTagName('nav')[0].style.display = 'flex';
           }).catch(err => {
-            switch(err.status) {
+            switch (err.status) {
               case 422:
-                this.showError('Failed to generate the OAS documentation, your documentation might be invalid');
+                this.showError(this.translateService.instant('api.errors.version.fail_generate_oas_doc'));
                 break;
               case 424:
-                this.showError('Failed to extract the metadata, your documentation might be invalid');
+                this.showError(this.translateService.instant('api.errors.version.fail_generate_metadata'));
                 break;
               default:
-                this.showError('Failed to extract the metadata (Unexpected error)');
+                this.showError(this.translateService.instant('api.errors.version.generate_unexpected'));
             }
           });
-        } catch(error) {
-          this.showError('Failed to load the documentation (Unexpected error)');
+        } catch (error) {
+          this.showError(this.translateService.instant('api.errors.version.load_doc_unexpected'));
         }
       });
     } else {
-      this.showError('Failed to load the documentation, couldn\'t recognize the file type');
+      this.showError(this.translateService.instant('api.errors.version.wrong_file_type'));
     }
   }
 
@@ -181,56 +183,56 @@ export class AddAPIComponent implements OnInit, AfterViewInit {
       ).then((downloadURL) => {
         this.createAPIForm.value.logoURL = downloadURL;
       });
-    } catch(error) {
-      this.showError('Impossible to request the server right now, wait a bit and retry');
+    } catch (error) {
+      this.showError(this.translateService.instant('api.errors.server_inaccessible'));
     }
   }
 
   onCreateAPI() {
     const values = this.createAPIForm.value;
     this.apiService.getApisByName(values.name).then(result => {
-      if(result.length !== 0) {
-        this.showError('An API with this name already exists');
+      if (result.length !== 0) {
+        this.showError(this.translateService.instant('api.errors.already_exist_name'));
       } else {
-        if(this.logo != null) {
+        if (this.logo != null) {
           this.storeLogo();
         }
         const newAPI = new API(values.name, values.logoURL, businessModels.filter(businessModel => values[businessModel]));
         this.apiService.postApi(newAPI).then(api => {
-          const newVersion = new Version(values.versionNb, values.originalDocumentation, values.versionSummary);
+          // tslint:disable-next-line: max-line-length
+          const newVersion = new Version(values.versionNb, values.originalDocumentation, values.versionSummary, values.urlDoc, values.rootUrlApi);
           this.versionService.postVersion(api, newVersion).then(version => {
             this.router.navigate(['api', api._id, 'provider', 'link']);
           }).catch(err => {
             this.apiService.deleteApi(api._id);
-            this.showError('Failed to create the version of the API, please check the validity of the informations (documentation...)');
+            this.showError(this.translateService.instant('api.version.errors.fail_create_version'));
           });
         }).catch(err => {
-          switch(err.status) {
+          switch (err.status) {
             case 401:
             case 403:
               this.authService.logout();
-              this.router.navigate(['login'])
+              this.router.navigate(['login']);
               break;
             case 404:
-              this.showError('Impossible to request the server right now, wait a bit and retry');
+              this.showError(this.translateService.instant('api.errors.server_inaccessible'));
               break;
             case 422:
-              this.showError('Failed to create the REST API, please check the validity of the informations (your connexion)');
+              this.showError(this.translateService.instant('api.errors.fail_create_api'));
               break;
             default:
-              this.showError('Failed to extract the version of the API (Unexpected error)');
+              this.showError(this.translateService.instant('api.version.errors.unexpected'));
           }
         });
       }
-    }).catch(err => this.showError('Impossible to request the server right now, wait a bit and retry'));
+    }).catch(err => this.showError(this.translateService.instant('api.errors.server_inaccessible')));
   }
 
   uploadDocument(pathFile: Blob, onLoad: any) {
     const fileReader = new FileReader();
     fileReader.onload = (e) => {
       onLoad(fileReader.result);
-    }
+    };
     fileReader.readAsText(pathFile);
   }
-
 }

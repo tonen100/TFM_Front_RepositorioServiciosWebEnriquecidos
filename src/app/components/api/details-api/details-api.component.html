@@ -1,17 +1,17 @@
 <div style="margin: 50px;">
     <ng-template #content let-modal>
         <div class="modal-header">
-          <h4 class="modal-title">Delete {{ restApi.name }}</h4>
+          <h4 class="modal-title">{{ translateService.instant('api.delete') }} {{ restApi.name }}</h4>
           <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
         <div class="modal-body">
-          <p><span style="font-weight: 500;" >This action cannot be undone !</span> Are you sure you want to delete this REST API from the repository ?</p>
+          <p><span style="font-weight: 500;" >{{ translateService.instant('api.cant_undo_action') }}</span> {{ translateService.instant('api.delete_repository_question') }}</p>
         </div>
         <div class="modal-footer">
-            <button type="button" class="btn btn-danger" (click)="deleteAPI()">Delete</button>
-            <button type="button" class="btn btn-light" (click)="modal.close('Close click')">Cancel</button>
+            <button type="button" class="btn btn-danger" (click)="deleteAPI()">{{ translateService.instant('api.delete') }}</button>
+            <button type="button" class="btn btn-light" (click)="modal.close('Close click')">{{ translateService.instant('api.cancel') }}</button>
         </div>
     </ng-template>
     <div *ngIf="restApi">
@@ -21,11 +21,11 @@
         <div class="centerVerticalBlock" style="margin-left: 2%;width: 73%;display: inline-block">
             <div class="row" style="line-height: 100px;margin-right: 0;">
                 <span style="font-size: xxx-large;">{{ restApi.name }}</span>
-                <span *ngIf="provider != null" style="font-size: x-large;margin-left: 10%;">Provided by
+                <span *ngIf="provider != null" style="font-size: x-large;margin-left: 10%;">{{ translateService.instant('api.provided_by') }}
                     <button type="button" class="btn btn-light" style="font-size: x-large;color: coral;font-weight: 500;" (click)="goToProvider()">{{ provider.name }}</button>
                 </span>
                 <span *ngIf="activeRole == 'Contributor' || activeRole == 'Administrator'" style="margin-left: auto;margin-right: 50px;">
-                    <button type="button" class="btn btn-info" style="font-size: x-large;" (click)="goToEditAPI()">Edit</button>
+                    <button type="button" class="btn btn-info" style="font-size: x-large;" (click)="goToEditAPI()">{{ translateService.instant('api.edit') }}</button>
                 </span>
             </div>
             <div class="row">
@@ -39,10 +39,10 @@
             </div>
             <div class="row">
                 <p style="font-size: small;font-style: italic; width: 100%;">
-                    <span style="margin-right: 10%;">Last version :
+                    <span style="margin-right: 10%;">{{ translateService.instant('api.last_version') }} :
                         <span style="font-weight: bold;">{{ restApi.versions[0].number }}</span>
                     </span>
-                    <span *ngIf="restApi.metadata.category">Ressources categories : {{ extractCategories(restApi) }}</span>
+                    <span *ngIf="restApi.metadata.category">{{ translateService.instant('api.categories') }} : {{ extractCategories(restApi) }}</span>
                 </p>
             </div>
             <div class="row" style="min-height: 100px;">
@@ -51,17 +51,17 @@
             </div>
         </div>
         <div class="row" style="margin-left: 25%; margin-right: 50px;font-size: large;">
-            <button *ngIf="restApi.metadata.termsOfService" type="button" class="btn btn-light referenceLink" (click)="displayModalToS()">Terms of service</button>
-            <button *ngIf="apiDocName" type="button" (click)="downloadOriginalDocumentation()" class="btn btn-light referenceLink">Original documentation</button>
-            <button *ngIf="restApi.metadata.url" type="button" class="btn btn-light referenceLink" (click)="redirectToAPIRoot()">API root URI</button>
-            <button *ngIf="activeRole == 'Contributor' || activeRole == 'Administrator'" type="button" class="btn btn-outline-danger" style="margin-left: auto;font-size: x-large;" (click)="openModalDeleteAPI(content)">Delete</button>
+            <button *ngIf="restApi.metadata.termsOfService" type="button" class="btn btn-light referenceLink" (click)="displayModalToS()">{{ translateService.instant('api.terms_of_service') }}</button>
+            <button *ngIf="apiDocName" type="button" (click)="downloadOriginalDocumentation()" class="btn btn-light referenceLink">{{ translateService.instant('api.original_documentation') }}</button>
+            <button *ngIf="restApi.metadata.url" type="button" class="btn btn-light referenceLink" (click)="redirectToAPIRoot()">{{ translateService.instant('api.api_url') }}</button>
+            <button *ngIf="activeRole == 'Contributor' || activeRole == 'Administrator'" type="button" class="btn btn-outline-danger" style="margin-left: auto;font-size: x-large;" (click)="openModalDeleteAPI(content)">{{ translateService.instant('api.delete') }}</button>
         </div>
     </div>
     <div style="height: auto;margin-top: 50px;">
         
         <div>
             <div style="display:inline-block; width: 400px; vertical-align: top;">
-                <p style="font-size: xx-large; text-align: center; margin-right: 50px;">Versions details</p>
+                <p style="font-size: xx-large; text-align: center; margin-right: 50px;">{{ translateService.instant('api.version.details') }}</p>
                 <div class="row versionList">
                     <div *ngFor="let v of versions" class="row versionRow">
                         <div class="versionMenuDropDown">

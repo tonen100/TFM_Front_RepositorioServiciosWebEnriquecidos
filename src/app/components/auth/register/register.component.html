@@ -1,6 +1,6 @@
 <form [formGroup]="registrationForm" (ngSubmit)="onRegister()" id="formRegister">
     <fieldset class="fieldsGroup">
-        <legend style="text-align: center; height:15%;justify-content: flex-end; font-size: xxx-large;" class="centerVerticalBlock">Sign up</legend>
+        <legend style="text-align: center; height:15%;justify-content: flex-end; font-size: xxx-large;" class="centerVerticalBlock">{{ translateService.instant('auth.sign_in_title') }}</legend>
         <div style="height: 50%; min-width: 600px;" class="centerVerticalBlock">
             <!-- <div class="form-group has-danger">
                 <label for="role" class="form-control-label">Role:</label>
@@ -12,39 +12,39 @@
             </div> -->
         
             <div class="form-group has-danger row align-items-center">
-                <label for="username" class="form-control-label col-5">Name:</label>
+                <label for="username" class="form-control-label col-5">{{ translateService.instant('auth.name_label') }} :</label>
                 <span class="col-1"></span>
                 <input type="text" formControlName="username" class="form-control col-5">
             </div>
             <div class="form-group has-danger row align-items-center">
-                <label for="email" class="form-control-label col-5">Email:</label>
+                <label for="email" class="form-control-label col-5">{{ translateService.instant('auth.email_label') }} :</label>
                 <span class="col-1"></span>
                 <input formControlName="email" type="email" class="form-control col-5" 
                     id="email" name="email" aria-describedby="emailHelp">
             </div>
         
             <div class="form-group has-danger row align-items-center">
-                <label for="password" class="form-control-label col-5">Password:</label>
+                <label for="password" class="form-control-label col-5">{{ translateService.instant('auth.password_label') }} :</label>
                 <span class="col-1"></span>
                 <input formControlName="password" type="password" class="form-control col-5" 
                 id="password" name="password">
             </div>
             <div class="form-group has-danger row align-items-center">
-                <label for="passwordConfirm" class="form-control-label col-5">Confirm Password:</label>
+                <label for="passwordConfirm" class="form-control-label col-5">{{ translateService.instant('auth.confirm_password_label') }} :</label>
                 <span class="col-1"></span>
                 <input formControlName="passwordConfirm" type="password" class="form-control col-5" 
                 id="passwordConfirm" name="passwordConfirm">
             </div>
             <div class="row justify-content-center align-items-center"> 
                 <button type="submit" class="btn btn-primary" [disabled]="!registrationForm.valid">
-                    Register
+                    {{ translateService.instant('auth.sign_up_title') }}
                 </button>
             </div>
         </div>
         
         <div class="row justify-content-center align-items-center centerVerticalBlock" style="height:15%;">
-            <p style="width: 100%;text-align: center;">Already have an account ?</p>
-            <button type="button" class="btn btn-primary smallAuthButton" routerLink="/login">Sign in</button>
+            <p style="width: 100%;text-align: center;">{{ translateService.instant('auth.have_account_question') }}</p>
+            <button type="button" class="btn btn-primary smallAuthButton" routerLink="/login">{{ translateService.instant('auth.log_in') }}</button>
         </div>
     </fieldset>
   </form>

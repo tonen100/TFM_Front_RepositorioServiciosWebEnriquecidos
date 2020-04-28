@@ -11,7 +11,7 @@ export class TranslatableComponent implements OnInit {
   constructor(private translate: TranslateService) {
     let lang = localStorage.getItem('language');
     if (lang === 'null') {
-      lang = this.translate.getBrowserLang();
+      lang = 'en';
     }
     this.translate.setDefaultLang(lang);
     this.changeLanguage(lang);
