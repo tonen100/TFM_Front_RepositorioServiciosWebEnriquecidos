@@ -61,11 +61,10 @@ export class HeaderComponent extends TranslatableComponent implements OnInit {
       );
   }
 
-  // searchAPIs() {
-  //   this.router.navigate(['/apis/searchResults'], {
-  //     queryParams: { keywords: this.keywords }
-  //   });
-  //   console.log(this.keywords);
-  // }
+  searchAPIs() {
+    this.router.navigate(['/apis/searchResults'], {
+      queryParams: { keywords: this.keywords }
+    });
+  }
 
 }

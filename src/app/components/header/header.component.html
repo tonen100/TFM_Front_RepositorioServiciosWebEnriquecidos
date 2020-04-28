@@ -8,7 +8,7 @@
                     <h2>Browse REST APIs</h2>
                 </span>
                 <span class="row justify-content-center">
-                    <input class="form-control mr-sm-2" type="search" placeholder="Twitter, AWS..." [value]="keywords" (input)="keywords = $event.target.value" aria-label="Search">
+                    <input class="form-control mr-sm-2" type="search" placeholder="Twitter, AWS..." [value]="keywords" (input)="keywords = $event.target.value" (keyup.enter)="searchAPIs()" aria-label="Search">
                     <button class="btn btn-outline-success my-2 my-sm-0 search-icon" type="submit" [disabled]="keywords == ''" routerLink="/apis/searchResults" [queryParams]="{ keywords: keywords}"><fa-icon [icon]="faSearch"></fa-icon></button>
                 </span>
             </div>

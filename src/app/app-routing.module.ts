@@ -15,6 +15,7 @@ import { ApiSearchComponent } from './components/api/api-search/api-search.compo
 import { LinkProviderComponent } from './components/api/link-provider/link-provider.component';
 import { DetailsProviderComponent } from './components/provider/details-provider/details-provider.component';
 import { EditProviderComponent } from './components/provider/edit-provider/edit-provider.component';
+import { NotFoundComponent } from './components/shared/not-found/not-found.component';
 
 
 const routes: Routes = [
@@ -26,7 +27,7 @@ const routes: Routes = [
   { path: 'user/add', component: AddUserComponent },
   { path: 'user/:id', component: DetailsUserComponent },
   { path: 'user/:id/edit', component: EditUserComponent },
-  { path: 'apis/searchResults', component: ApiSearchComponent },
+  { path: 'apis/searchResults', component: ApiSearchComponent, runGuardsAndResolvers: 'always' },
   { path: 'api/add', component: AddAPIComponent },
   { path: 'api/:id', component: DetailsAPIComponent },
   { path: 'api/:id/edit', component: EditUserComponent },
@@ -34,7 +35,9 @@ const routes: Routes = [
   { path: 'version/add', component: AddVersionComponent },
   { path: 'version/:id', component: DetailsVersionComponent },
   { path: 'provider/:id', component: DetailsProviderComponent },
-  { path: 'provider/:id/edit', component: EditProviderComponent }
+  { path: 'provider/:id/edit', component: EditProviderComponent },
+  { path: '404', component: NotFoundComponent },
+  { path: '**', redirectTo: '/404' }
 ];
 
 @NgModule({

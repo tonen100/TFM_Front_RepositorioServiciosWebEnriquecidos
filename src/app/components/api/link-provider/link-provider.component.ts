@@ -31,6 +31,8 @@ export class LinkProviderComponent implements AfterViewInit {
   linkProviderForm: FormGroup;
   errorMessage: string;
   errorAlert: HTMLDivElement;
+  searchControl = new FormControl();
+  listProviders: Provider[] = [];
   apiId: string;
   logo: any;
   links = [
@@ -52,7 +54,7 @@ export class LinkProviderComponent implements AfterViewInit {
     if (this.currentUser && this.authService.getIdToken()) {
       this.activeRole = this.currentUser.role.toString();
       this.createForm();
-      this.activatedRoute.queryParams.subscribe((params: Params) => {
+      this.activatedRoute.params.subscribe((params: Params) => {
         this.apiId = params.id;
       });
     } else {
@@ -70,6 +72,7 @@ export class LinkProviderComponent implements AfterViewInit {
         logoURL: [''],
         description: [''],
         externalsLinks: [''],
+        providerId: [''],
         existingProviderName: [''],
         'link-0': [''],
         validated: ['true']
@@ -90,9 +93,10 @@ export class LinkProviderComponent implements AfterViewInit {
   }
 
   alternateValidation(group: FormGroup) {
-    if(group.get('providerId')) {
+    if(group.get('providerId') && group.get('providerId').value) {
       return null;
-    } else if(group.get('logoURL') && group.get('logoURL') && group.get('description') && group.get('externalLinks')) {
+    } else if(group.get('logoURL') && group.get('logoURL')  && group.get('description') &&
+      group.get('logoURL').value && group.get('logoURL').value  && group.get('description').value) {
       return null;
     } else {
       return { missingProvider: true } ;
@@ -118,6 +122,20 @@ export class LinkProviderComponent implements AfterViewInit {
         this.showError('Failed to load the image, the file might be a binary, corrupted or just unaccessible');
       }
     });
+  }
+
+  onSearching(event: any) {
+    this.linkProviderForm.patchValue({ providerId: '' });
+    var value = this.linkProviderForm.value.existingProviderName;
+    if(value && value.length >= 2) {
+      this.providerService.getAllProviders(value).then(providers => {
+        this.listProviders = providers;
+      });
+    }
+  }
+
+  selectProvider(provider: Provider) {
+    this.linkProviderForm.patchValue({ providerId: provider._id });
   }
 
   storeLogo() {

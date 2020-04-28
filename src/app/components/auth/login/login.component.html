@@ -1,4 +1,6 @@
-
+<div class="alert alert-danger alert-dismissible fade in" style="width: 100%; display: none;" id="errorAlert">
+    <p style="margin: auto;text-align: center;">{{ errorMessage }}<span (click)="hideError()" aria-label="close" style="float: right;">&times;</span></p>
+</div>
 <ng-container *ngIf="this.authService.getCurrentUser() != null; else logForm">
     <div style="text-align: center;">
         <br>
@@ -35,5 +37,3 @@
         </fieldset>
     </form> 
 </ng-template>
-
-<!-- <div class="text-danger">{{errorMessage}}</div> -->

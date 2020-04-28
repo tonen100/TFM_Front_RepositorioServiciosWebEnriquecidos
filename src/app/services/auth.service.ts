@@ -35,7 +35,7 @@ export class AuthService {
         this.fireAuth.auth.signInWithCustomToken(newUser.customToken)
         .then(_ => {
           this.currentUser = newUser;
-          localStorage.setItem('currentUser', JSON.stringify(this.currentUser));
+          this.storageService.setItem('currentUser', JSON.stringify(this.currentUser));
           resolve(this.currentUser);
         }).catch(error => {
           this.fireAuth.auth.currentUser.delete();
@@ -51,7 +51,7 @@ export class AuthService {
         this.fireAuth.auth.signInWithCustomToken(user.customToken)
         .then(_ => {
           this.currentUser = user;
-          localStorage.setItem('currentUser', JSON.stringify(this.currentUser));
+          this.storageService.setItem('currentUser', JSON.stringify(this.currentUser));
           this.fireAuth.auth.currentUser.getIdToken().then(idToken => {
             this.idToken = idToken;
             this.storageService.setItem('idToken', idToken);
@@ -66,6 +66,7 @@ export class AuthService {
 
   logout() {
     return new Promise<any>((resolve, reject) => {
+      this.storageService.removeItem('currentUser');
       this.storageService.removeItem('idToken');
       this.fireAuth.auth.signOut()
         .then(_ => {

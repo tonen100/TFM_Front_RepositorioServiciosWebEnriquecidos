@@ -4,11 +4,11 @@ export class Version extends Entity {
     number: string;
     originalDocumentation: string;
     oasDocumentation: string;
-    metadata: Object;
+    metadata: any;
     description: string;
     deprecated: boolean;
     blacklister: boolean;
-    createdAt: boolean;
+    createdAt: Date;
 
     constructor(
         number: string,

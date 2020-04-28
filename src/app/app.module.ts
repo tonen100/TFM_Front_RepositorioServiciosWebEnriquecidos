@@ -1,5 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { AngularMaterialModule } from './angular-material.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { AngularFireModule } from '@angular/fire';
@@ -10,8 +11,11 @@ import { TranslateModule, TranslateLoader  } from '@ngx-translate/core';
 import { ToastrModule } from 'ngx-toastr';
 import { registerLocaleData } from '@angular/common';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
 import localeEs from '@angular/common/locales/es';
 import localeFr from '@angular/common/locales/fr';
+
+import { StopPropagationDirective } from './directives/stop-propagation.directive';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -31,11 +35,13 @@ import { RegisterComponent } from './components/auth/register/register.component
 import { ListUserComponent } from './components/user/list-user/list-user.component';
 import { ApiSearchComponent } from './components/api/api-search/api-search.component';
 import { EditUserComponent } from './components/user/edit-user/edit-user.component';
+import { RestApiItemComponent } from './components/api/api-search/rest-api-item/rest-api-item.component'
 import { AuthService } from './services/auth.service';
 import { CommonModule } from '@angular/common';
 import { TranslatableComponent } from './components/shared/translatable/translatable.component';
 import { environment } from 'src/environments/environment';
 import { LinkProviderComponent } from './components/api/link-provider/link-provider.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 registerLocaleData(localeEs, 'es');
 registerLocaleData(localeFr, 'fr');
@@ -62,9 +68,11 @@ export function HttpLoaderFactory(http: HttpClient) {
     RegisterComponent,
     ListUserComponent,
     ApiSearchComponent,
+    RestApiItemComponent,
     EditUserComponent,
     TranslatableComponent,
-    LinkProviderComponent
+    LinkProviderComponent,
+    StopPropagationDirective
   ],
   imports: [
     CommonModule,
@@ -74,6 +82,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     ReactiveFormsModule,
     AngularFireModule.initializeApp(environment.FIRE_CONFIG),
     AngularFireStorageModule,
+    AngularMaterialModule,
     HttpClientModule,
     FontAwesomeModule,
     TranslateModule.forRoot({
@@ -83,7 +92,9 @@ export function HttpLoaderFactory(http: HttpClient) {
         deps: [HttpClient]
       }
     }),
-    ToastrModule.forRoot()
+    ToastrModule.forRoot(),
+    BrowserAnimationsModule,
+    NgbModalModule
   ],
   providers: [AngularFireAuth, AuthService],
   bootstrap: [AppComponent]

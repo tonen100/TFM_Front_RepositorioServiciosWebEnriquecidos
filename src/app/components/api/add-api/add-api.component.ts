@@ -1,4 +1,4 @@
-import { Component, AfterViewInit } from '@angular/core';
+import { Component, AfterViewInit, OnInit } from '@angular/core';
 import { User } from '../../../models/user';
 import { Version } from '../../../models/version';
 import { API } from '../../../models/api';
@@ -10,6 +10,7 @@ import { ToastrService } from 'ngx-toastr';
 import { ImgStorageService } from 'src/app/services/img-storage.service';
 import { APIService } from 'src/app/services/api.service';
 import { VersionService } from 'src/app/services/version.service';
+import { businessModels } from '../business-models.enum';
 
 const snakeCase = (str) => {
   return str.replace(/\W+/g, ' ')
@@ -18,21 +19,12 @@ const snakeCase = (str) => {
     .join('_');
 };
 
-const businessModels = [
-  'Free',
-  'FreeWithLimitations',
-  'FreeTrialVersion',
-  'FlatRateAllInclusive',
-  'FlatRatesWithLimitations',
-  'Billing'
-];
-
 @Component({
   selector: 'app-add-api',
   templateUrl: './add-api.component.html',
   styleUrls: ['./add-api.component.css']
 })
-export class AddAPIComponent implements AfterViewInit {
+export class AddAPIComponent implements OnInit, AfterViewInit {
 
   currentUser: User;
   activeRole: string;
@@ -57,6 +49,10 @@ export class AddAPIComponent implements AfterViewInit {
     private apiService: APIService,
     private versionService: VersionService
     ) {
+
+  }
+
+  ngOnInit() {
     this.currentUser = this.authService.getCurrentUser();
     if (this.currentUser && this.authService.getIdToken()) {
       this.activeRole = this.currentUser.role.toString();
@@ -142,7 +138,9 @@ export class AddAPIComponent implements AfterViewInit {
       this.uploadDocument(fileBlob, (text) => {
         try {
           this.versionService.getMetadata(text).then(previewVersion => {
-            this.createAPIForm.value.originalDocumentation = previewVersion.originalDocumentation;
+            this.createAPIForm.patchValue({
+              originalDocumentation: previewVersion.originalDocumentation
+            });
             this.previewVersion = {
               originalDocumentation: previewVersion.originalDocumentation,
               oasDocumentation: previewVersion.oasDocumentation,
@@ -182,29 +180,49 @@ export class AddAPIComponent implements AfterViewInit {
         )
       ).then((downloadURL) => {
         this.createAPIForm.value.logoURL = downloadURL;
-        console.log(this.createAPIForm.value)
       });
     } catch(error) {
-      // TODO
+      this.showError('Impossible to request the server right now, wait a bit and retry');
     }
   }
 
   onCreateAPI() {
-    if(this.logo != null) {
-      this.storeLogo();
-    }
     const values = this.createAPIForm.value;
-    const newAPI = new API(values.name, values.logoURL, values.businessModels);
-    this.apiService.postApi(newAPI).then(api => {
-      console.log(JSON.stringify(api));
-      const newVersion = new Version(values.versionNb, values.originalDocumentation, values.versionSummary);
-      this.versionService.postVersion(api, newVersion).then(version => {
-        this.router.navigate(['api', api._id, 'provider', 'link']);
-      }).catch(err => {
-        this.apiService.deleteApi(api._id);
-        this.showError('Failed to create the version of the API, please check the validity of the informations (documentation...)');
-      }).catch(err => this.showError('Failed to create the REST API, please check the validity of the informations'));
-    });
+    this.apiService.getApisByName(values.name).then(result => {
+      if(result.length !== 0) {
+        this.showError('An API with this name already exists');
+      } else {
+        if(this.logo != null) {
+          this.storeLogo();
+        }
+        const newAPI = new API(values.name, values.logoURL, businessModels.filter(businessModel => values[businessModel]));
+        this.apiService.postApi(newAPI).then(api => {
+          const newVersion = new Version(values.versionNb, values.originalDocumentation, values.versionSummary);
+          this.versionService.postVersion(api, newVersion).then(version => {
+            this.router.navigate(['api', api._id, 'provider', 'link']);
+          }).catch(err => {
+            this.apiService.deleteApi(api._id);
+            this.showError('Failed to create the version of the API, please check the validity of the informations (documentation...)');
+          });
+        }).catch(err => {
+          switch(err.status) {
+            case 401:
+            case 403:
+              this.authService.logout();
+              this.router.navigate(['login'])
+              break;
+            case 404:
+              this.showError('Impossible to request the server right now, wait a bit and retry');
+              break;
+            case 422:
+              this.showError('Failed to create the REST API, please check the validity of the informations (your connexion)');
+              break;
+            default:
+              this.showError('Failed to extract the version of the API (Unexpected error)');
+          }
+        });
+      }
+    }).catch(err => this.showError('Impossible to request the server right now, wait a bit and retry'));
   }
 
   uploadDocument(pathFile: Blob, onLoad: any) {

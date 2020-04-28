@@ -42,7 +42,17 @@ export class ProviderService {
     const url = `${this.URL_API}/v1/providers`;
     const postProvider = JSON.parse(JSON.stringify(provider));
     delete postProvider._id;
-    return this.http.post<Provider>(url, postProvider).toPromise();
+
+    const idToken = this.authService.getIdToken();
+
+    console.log(idToken)
+    if(idToken != null) {
+      httpOptions.headers = httpOptions.headers.set('Authorization', idToken);
+    } else if(httpOptions.headers.get('Authorization') != null) {
+      httpOptions.headers = httpOptions.headers.delete('Authorization');
+    }
+
+    return this.http.post<Provider>(url, postProvider, httpOptions).toPromise();
   }
 
   getProvider(id: string) {
@@ -62,7 +72,10 @@ export class ProviderService {
 
     if(idToken != null) {
       httpOptions.headers = httpOptions.headers.set('Authorization', idToken);
+    } else if(httpOptions.headers.get('Authorization') != null) {
+      httpOptions.headers = httpOptions.headers.delete('Authorization');
     }
+
     this.http.put<Provider>(url, body, httpOptions).toPromise();
   }
 
@@ -74,7 +87,10 @@ export class ProviderService {
 
     if(idToken != null) {
       httpOptions.headers = httpOptions.headers.set('Authorization', idToken);
+    } else if(httpOptions.headers.get('Authorization') != null) {
+      httpOptions.headers = httpOptions.headers.delete('Authorization');
     }
+
     this.http.patch<Provider>(url, body, httpOptions).toPromise();
   }
 

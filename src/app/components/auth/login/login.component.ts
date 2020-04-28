@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, AfterViewInit } from '@angular/core';
 import { AuthService } from 'src/app/services/auth.service';
 import { Router } from '@angular/router';
 import { NgForm } from '@angular/forms';
@@ -8,14 +8,32 @@ import { NgForm } from '@angular/forms';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
-export class LoginComponent {
+export class LoginComponent implements AfterViewInit {
   name: string;
   errorMessage: string;
+  errorAlert: HTMLDivElement;
 
   constructor(public authService: AuthService, private router: Router) {
     if(this.authService.getCurrentUser() != null) {
       this.name = this.authService.getCurrentUser().username;
     }
+  }
+
+  ngAfterViewInit() {
+    this.errorAlert = document.getElementById('errorAlert') as HTMLDivElement;
+  }
+
+  showError(message: string) {
+    this.hideError();
+    this.errorMessage = message;
+    this.errorAlert.style.display = 'block';
+    this.errorAlert.classList.add('show');
+  }
+
+  hideError() {
+    this.errorMessage = null;
+    this.errorAlert.style.display = 'none';
+    this.errorAlert.classList.remove('show');
   }
 
   onLogin(form: NgForm) {
@@ -26,7 +44,7 @@ export class LoginComponent {
       this.name = name;
       this.errorMessage = data;
     }).catch((error) => {
-      console.log(error);
+      
       this.errorMessage = error;
     });
   }

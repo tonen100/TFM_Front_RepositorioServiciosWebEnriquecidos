@@ -4,12 +4,13 @@ import { Version } from './version';
 export class API extends Entity {
     name: string;
     // tslint:disable-next-line: ban-types
-    metadata: Object;
+    metadata: any;
     logoUrl: string;
     businessModels: Array<string>;
     blacklisted: boolean;
     versions: Array<Version>;
-    providerId: string;
+    // tslint:disable-next-line: variable-name
+    provider_id: string;
 
     constructor(
         name: string,

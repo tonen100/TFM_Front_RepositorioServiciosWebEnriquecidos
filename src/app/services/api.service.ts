@@ -45,11 +45,15 @@ export class APIService {
     return this.http.get<Array<API>>(url).toPromise();
   }
 
+  getApisByName(name: string) {
+    const url = `${this.URL_API}/v1/restApis?name=${name}`;
+    return this.http.get<Array<API>>(url).toPromise();
+  }
+
   postApi(api: API) {
     const url = `${this.URL_API}/v1/restApis`;
     const postApi = JSON.parse(JSON.stringify(api));
     delete postApi._id;
-    console.log(postApi)
     const idToken = this.authService.getIdToken();
 
     if(idToken != null) {
@@ -70,14 +74,13 @@ export class APIService {
     const url = `${this.URL_API}/v1/restApis/${api._id}`;
 
     const putApi = JSON.parse(JSON.stringify(api));
-    delete putApi.customToken;
 
     const body = JSON.stringify(putApi);
 
-    const user = this.authService.getCurrentUser();
+    const idToken = this.authService.getIdToken();
 
-    if(user != null) {
-      httpOptions.headers = httpOptions.headers.set('Authorization', user.customToken);
+    if(idToken != null) {
+      httpOptions.headers = httpOptions.headers.set('Authorization', idToken);
     } else if(httpOptions.headers.get('Authorization') != null) {
       httpOptions.headers = httpOptions.headers.delete('Authorization');
     }
@@ -89,10 +92,10 @@ export class APIService {
     const url = `${this.URL_API}/v1/restApis/${api._id}/blacklist`;
     const body = JSON.stringify({ blacklisted });
 
-    const user = this.authService.getCurrentUser();
+    const idToken = this.authService.getIdToken();
 
-    if(user != null) {
-      httpOptions.headers = httpOptions.headers.set('Authorization', user.customToken);
+    if(idToken != null) {
+      httpOptions.headers = httpOptions.headers.set('Authorization', idToken);
     } else if(httpOptions.headers.get('Authorization') != null) {
       httpOptions.headers = httpOptions.headers.delete('Authorization');
     }
@@ -107,10 +110,10 @@ export class APIService {
   linkApiToProvider(apiId: string, providerId: string) {
     const url = `${this.URL_API}/v1/restApis/${apiId}/link/${providerId}`;
 
-    const user = this.authService.getCurrentUser();
+    const idToken = this.authService.getIdToken();
 
-    if(user != null) {
-      httpOptions.headers = httpOptions.headers.set('Authorization', user.customToken);
+    if(idToken != null) {
+      httpOptions.headers = httpOptions.headers.set('Authorization', idToken);
     } else if(httpOptions.headers.get('Authorization') != null) {
       httpOptions.headers = httpOptions.headers.delete('Authorization');
     }
@@ -120,6 +123,15 @@ export class APIService {
 
   deleteApi(id: string) {
     const url = `${this.URL_API}/v1/restApis/${id}`;
+
+    const idToken = this.authService.getIdToken();
+
+    if(idToken != null) {
+      httpOptions.headers = httpOptions.headers.set('Authorization', idToken);
+    } else if(httpOptions.headers.get('Authorization') != null) {
+      httpOptions.headers = httpOptions.headers.delete('Authorization');
+    }
+
     return this.http.delete(url, httpOptions).toPromise();
   }
 }

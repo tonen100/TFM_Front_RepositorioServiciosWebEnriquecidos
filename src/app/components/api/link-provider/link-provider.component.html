@@ -5,18 +5,28 @@
 <form [formGroup]="linkProviderForm" (ngSubmit)="onLinkApiToProvider()" id="formLinkProvider" style="width: 90%;">
     <fieldset class="fieldsGroup container" style="width: 100%;max-width: 100%;">
         <legend style="text-align: left; height:17%; margin-top:2%; justify-content: flex-start; font-size: xxx-large;" class="centerVerticalBlock">Set REST API provider</legend>
-        <div class="centerVerticalBlock row" style="height: 75%;margin-top: 50px;">
+        <div class="centerVerticalBlock row" style="min-height: 75%;height: fit-content;margin-top: 50px;">
             <div class="col-5">
                 <div class="form-group has-danger row align-items-center" style="margin-bottom: 50px;">
                     <h3 style="margin: auto;">Existing provider</h3>
                 </div>
                 <div class="form-group has-danger row align-items-center">
+                                      
                     <div class="active-cyan-4 mb-4" style="width: 50%;margin: auto;">
-                        <input class="form-control" type="search" formControlName="existingProviderName" placeholder="Search provider..." aria-label="Search">
+                        <mat-form-field appearance="fill">
+                            <input type="search" placeholder="Search provider..." matInput [formControl]="searchControl" (keyup)="onSearching($event)"
+                                formControlName="existingProviderName" [matAutocomplete]="auto" class="form-control mdb-autocomplete" aria-label="Search">
+                               <mat-autocomplete #auto="matAutocomplete">
+                                 <mat-option *ngFor="let provider of listProviders" [value]="provider.name" (click)="selectProvider(provider)">
+                                    <img [src]="provider.logoUrl" width="30" height="30"/>
+                                    {{provider.name}}
+                                </mat-option>
+                            </mat-autocomplete>
+                        </mat-form-field>   
                     </div>
                 </div>
             </div>
-            <div class="col-1" style="height: 80%;align-items: center;"><div class="v-divider"></div></div>
+            <div class="col-1" style="display: flex;flex-wrap: wrap;"><div class="v-divider" style="height: 80%;align-items: center;"></div></div>
             <div class="col-5">
                 <div class="form-group has-danger row align-items-center" style="margin-bottom: 50px;">
                     <h3 style="margin: auto;">Add provider</h3>

@@ -1,0 +1,18 @@
+<div>
+    <div class="centerInlineBlock">
+        <img [src]="restApi.logoUrl" style="margin: auto; max-width: 150px; height: auto;"/>
+    </div>
+    <div class="centerVerticalBlock" style="margin-left: 2%;width: 73%;display: inline-block">
+        <div class="row">
+            <p style="font-size: xx-large;">{{ restApi.name }}</p>
+        </div>
+        <div class="row">
+            <p style="font-size: small;font-style: italic;">Ressources categories:
+                {{ extractCategories(restApi) }}
+            </p>
+        </div>
+        <div class="row">
+            <p class="shortenDescription" [innerHTML]="restApi.metadata.description"></p>
+        </div>
+    </div>
+</div>

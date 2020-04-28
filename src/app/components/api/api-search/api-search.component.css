@@ -1,0 +1,13 @@
+#loadingSpinner {
+    width: 12rem;
+    height: 12rem;
+    color:SkyBlue; 
+    position: absolute;
+    top: calc(50% - 6rem);
+    left: calc(50% - 6rem);
+    border-width: 2em;
+}
+
+app-rest-api-item:hover {
+    cursor: pointer;
+}
