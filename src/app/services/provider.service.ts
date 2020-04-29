@@ -33,8 +33,13 @@ export class ProviderService {
       });
   }
 
-  getAllProviders(name: string = null) {
-    const url = `${this.URL_API}/v1/providers` + (name != null ? `?name=${name}` : '');
+  getAllProviders() {
+    const url = `${this.URL_API}/v1/providers`;
+    return this.http.get<Array<Provider>>(url).toPromise();
+  }
+
+  getProvidersByName(name: string) {
+    const url = `${this.URL_API}/v1/providers?name=${name}`;
     return this.http.get<Array<Provider>>(url).toPromise();
   }
 
@@ -45,10 +50,9 @@ export class ProviderService {
 
     const idToken = this.authService.getIdToken();
 
-    console.log(idToken)
-    if(idToken != null) {
+    if (idToken != null) {
       httpOptions.headers = httpOptions.headers.set('Authorization', idToken);
-    } else if(httpOptions.headers.get('Authorization') != null) {
+    } else if (httpOptions.headers.get('Authorization') != null) {
       httpOptions.headers = httpOptions.headers.delete('Authorization');
     }
 
@@ -70,13 +74,27 @@ export class ProviderService {
 
     const idToken = this.authService.getIdToken();
 
-    if(idToken != null) {
+    if (idToken != null) {
       httpOptions.headers = httpOptions.headers.set('Authorization', idToken);
-    } else if(httpOptions.headers.get('Authorization') != null) {
+    } else if (httpOptions.headers.get('Authorization') != null) {
       httpOptions.headers = httpOptions.headers.delete('Authorization');
     }
 
-    this.http.put<Provider>(url, body, httpOptions).toPromise();
+    return this.http.put<Provider>(url, body, httpOptions).toPromise();
+  }
+
+  deleteProvider(id: string) {
+    const url = `${this.URL_API}/v1/providers/${id}`;
+
+    const idToken = this.authService.getIdToken();
+
+    if (idToken != null) {
+      httpOptions.headers = httpOptions.headers.set('Authorization', idToken);
+    } else if (httpOptions.headers.get('Authorization') != null) {
+      httpOptions.headers = httpOptions.headers.delete('Authorization');
+    }
+
+    return this.http.delete(url, httpOptions).toPromise();
   }
 
   blacklistProvider(provider: Provider, blacklisted: boolean = true) {
@@ -85,9 +103,9 @@ export class ProviderService {
 
     const idToken = this.authService.getIdToken();
 
-    if(idToken != null) {
+    if (idToken != null) {
       httpOptions.headers = httpOptions.headers.set('Authorization', idToken);
-    } else if(httpOptions.headers.get('Authorization') != null) {
+    } else if (httpOptions.headers.get('Authorization') != null) {
       httpOptions.headers = httpOptions.headers.delete('Authorization');
     }
 

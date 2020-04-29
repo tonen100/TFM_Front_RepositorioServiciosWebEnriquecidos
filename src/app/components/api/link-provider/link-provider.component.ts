@@ -1,12 +1,9 @@
-import { Component, AfterViewInit } from '@angular/core';
+import { Component, AfterViewInit, OnInit } from '@angular/core';
 import { User } from '../../../models/user';
-import { Version } from '../../../models/version';
-import { API } from '../../../models/api';
 import { AuthService } from 'src/app/services/auth.service';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
-import { ToastrService } from 'ngx-toastr';
 import { ImgStorageService } from 'src/app/services/img-storage.service';
 import { APIService } from 'src/app/services/api.service';
 import { ProviderService } from 'src/app/services/provider.service';
@@ -25,7 +22,7 @@ const snakeCase = (str) => {
   templateUrl: './link-provider.component.html',
   styleUrls: ['./link-provider.component.css']
 })
-export class LinkProviderComponent extends TranslatableComponent implements AfterViewInit {
+export class LinkProviderComponent extends TranslatableComponent implements OnInit, AfterViewInit {
 
   currentUser: User;
   activeRole: string;
@@ -46,7 +43,6 @@ export class LinkProviderComponent extends TranslatableComponent implements Afte
     private fb: FormBuilder,
     private router: Router,
     private activatedRoute: ActivatedRoute,
-    private toastr: ToastrService,
     private imgStorageService: ImgStorageService,
     private apiService: APIService,
     private providerService: ProviderService
@@ -56,12 +52,15 @@ export class LinkProviderComponent extends TranslatableComponent implements Afte
     if (this.currentUser && this.authService.getIdToken()) {
       this.activeRole = this.currentUser.role.toString();
       this.createForm();
-      this.activatedRoute.params.subscribe((params: Params) => {
-        this.apiId = params.id;
-      });
     } else {
       this.router.navigate(['login']);
     }
+  }
+
+  ngOnInit() {
+    this.activatedRoute.params.subscribe((params: Params) => {
+      this.apiId = params.id;
+    });
   }
 
   ngAfterViewInit() {
@@ -73,7 +72,6 @@ export class LinkProviderComponent extends TranslatableComponent implements Afte
         name: [''],
         logoURL: [''],
         description: [''],
-        externalsLinks: [''],
         providerId: [''],
         existingProviderName: [''],
         'link-0': [''],
@@ -97,8 +95,8 @@ export class LinkProviderComponent extends TranslatableComponent implements Afte
   alternateValidation(group: FormGroup) {
     if (group.get('providerId') && group.get('providerId').value) {
       return null;
-    } else if (group.get('logoURL') && group.get('logoURL')  && group.get('description') &&
-      group.get('logoURL').value && group.get('logoURL').value  && group.get('description').value) {
+    } else if (group.get('name') && group.get('logoURL')  && group.get('description') &&
+      group.get('name').value && group.get('logoURL').value  && group.get('description').value) {
       return null;
     } else {
       return { missingProvider: true } ;
@@ -121,7 +119,7 @@ export class LinkProviderComponent extends TranslatableComponent implements Afte
           (document.getElementById('imageLogo') as HTMLImageElement).src = imageUrl;
         }
       } catch (error) {
-        this.showError('Failed to load the image, the file might be a binary, corrupted or just unaccessible');
+        this.showError(this.translateService.instant('api.errors.unprocessable_file'));
       }
     });
   }
@@ -130,7 +128,7 @@ export class LinkProviderComponent extends TranslatableComponent implements Afte
     this.linkProviderForm.patchValue({ providerId: '' });
     const value = this.linkProviderForm.value.existingProviderName;
     if (value && value.length >= 2) {
-      this.providerService.getAllProviders(value).then(providers => {
+      this.providerService.getProvidersByName(value).then(providers => {
         this.listProviders = providers;
       });
     }
@@ -140,17 +138,17 @@ export class LinkProviderComponent extends TranslatableComponent implements Afte
     this.linkProviderForm.patchValue({ providerId: provider._id });
   }
 
-  storeLogo() {
+  async storeLogo() {
     try {
       const blobImg = (document.getElementById('logo') as HTMLInputElement).files[0];
-      this.imgStorageService.uploadImage(
+      await this.imgStorageService.uploadImage(
         blobImg,
         'Provider',
         snakeCase(this.linkProviderForm.value.name) + (
           blobImg.name.lastIndexOf('.') != null ? blobImg.name.slice(blobImg.name.lastIndexOf('.')) : ''
         )
       ).then((downloadURL) => {
-        this.linkProviderForm.value.logoURL = downloadURL;
+        this.linkProviderForm.patchValue({ logoURL: downloadURL });
         console.log(this.linkProviderForm.value);
       });
     } catch (error) {
@@ -160,20 +158,29 @@ export class LinkProviderComponent extends TranslatableComponent implements Afte
 
   linkApiToProvider(apiId: string, providerId: string) {
     this.apiService.linkApiToProvider(apiId, providerId).then(_ => this.router.navigate(['api', this.apiId]))
-      .catch(_ => this.showError('Failed to link the provider to the REST API'));
+      .catch(_ => this.showError(this.translateService.instant('provider.errors.fail_link_provider')));
   }
 
   onLinkApiToProvider() {
-    if (this.logo != null) {
-      this.storeLogo();
-    }
     const values = this.linkProviderForm.value;
     if (values.providerId) {
       this.linkApiToProvider(this.apiId, values.providerId);
     } else {
-      const newProvider = new Provider(values.name, values.logoURL, values.description, values.externalLinks);
-      this.providerService.postProvider(newProvider).then(provider => this.linkApiToProvider(this.apiId, provider._id))
-        .catch(_ => this.showError('Failed to create the provider, please check the validity of the informations'));
+      this.providerService.getProvidersByName(values.name).then(async result => {
+        if (result && result.filter(p => p.name === values.name).length !== 0) {
+          this.showError(this.translateService.instant('provider.errors.already_exist_name'));
+        } else {
+          if (this.logo != null) {
+            await this.storeLogo();
+          }
+          const linksProperties = Object.keys(values).filter(property => property.startsWith('link-'));
+          // tslint:disable-next-line: no-shadowed-variable tslint:disable-next-line: triple-equals
+          const links = linksProperties.map(linkProperty => values[linkProperty]).filter(link => link != '');
+          const newProvider = new Provider(values.name, values.logoURL, values.description, links);
+          this.providerService.postProvider(newProvider).then(provider => this.linkApiToProvider(this.apiId, provider._id))
+            .catch(_ => this.showError(this.translateService.instant('provider.errors.fail_create_provider')));
+        }
+      });
     }
   }
 

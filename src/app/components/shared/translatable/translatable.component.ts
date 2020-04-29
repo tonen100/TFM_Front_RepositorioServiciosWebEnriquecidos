@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-translatable',
@@ -19,6 +20,7 @@ export class TranslatableComponent implements OnInit {
 
   changeLanguage(language: string) {
     this.translate.use(language);
+    moment.locale(language);
     localStorage.setItem('language', language);
   }
 

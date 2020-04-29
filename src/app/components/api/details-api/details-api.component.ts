@@ -28,7 +28,7 @@ declare class NestedVersion {
   templateUrl: './details-api.component.html',
   styleUrls: ['./details-api.component.css']
 })
-export class DetailsAPIComponent extends TranslatableComponent implements OnInit, AfterViewInit {
+export class DetailsAPIComponent extends TranslatableComponent implements OnInit {
 
   currentUser: User;
   activeRole: string;
@@ -91,10 +91,6 @@ export class DetailsAPIComponent extends TranslatableComponent implements OnInit
     );
   }
 
-  ngAfterViewInit() {
-    setTimeout(() => document.getElementById('dl').click(), 1000);
-  }
-
   extractCategories(restApi: API) {
     return restApi.metadata.category != null ?
       typeof restApi.metadata.category === 'string' ?
@@ -113,8 +109,8 @@ export class DetailsAPIComponent extends TranslatableComponent implements OnInit
     return moment(this.lastContribution.date).fromNow();
   }
 
-  displayModalToS() {
-
+  popupToS() {
+    window.open(this.restApi.metadata.termsOfService);
   }
 
   downloadOriginalDocumentation() {
@@ -122,7 +118,11 @@ export class DetailsAPIComponent extends TranslatableComponent implements OnInit
   }
 
   redirectToAPIRoot() {
-    window.location.replace(this.restApi.versions[0].metadata.url);
+    if (typeof(this.restApi.metadata.url) === 'string') {
+      window.location.replace(this.restApi.metadata.url);
+    } else {
+      window.location.replace(this.restApi.metadata.url[0]);
+    }
   }
 
   goToEditAPI() {

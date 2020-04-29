@@ -16,6 +16,7 @@ import { LinkProviderComponent } from './components/api/link-provider/link-provi
 import { DetailsProviderComponent } from './components/provider/details-provider/details-provider.component';
 import { EditProviderComponent } from './components/provider/edit-provider/edit-provider.component';
 import { NotFoundComponent } from './components/shared/not-found/not-found.component';
+import { EditAPIComponent } from './components/api/edit-api/edit-api.component';
 
 
 const routes: Routes = [
@@ -30,7 +31,7 @@ const routes: Routes = [
   { path: 'apis/searchResults', component: ApiSearchComponent, runGuardsAndResolvers: 'always' },
   { path: 'api/add', component: AddAPIComponent },
   { path: 'api/:id', component: DetailsAPIComponent },
-  { path: 'api/:id/edit', component: EditUserComponent },
+  { path: 'api/:id/edit', component: EditAPIComponent },
   { path: 'api/:id/provider/link', component: LinkProviderComponent },
   { path: 'version/add', component: AddVersionComponent },
   { path: 'version/:id', component: DetailsVersionComponent },

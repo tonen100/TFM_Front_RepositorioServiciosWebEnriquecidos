@@ -7,6 +7,8 @@
         "email_label": "E-mail",
         "password_label": "Mot de passe",
         "confirm_password_label": "Confirmer mot de passe",
+        "name_placeholder": "Entrer votre pseudonyme",
+        "password_placeholder": "Entrer votre mot de passe",
         "log_in": "Connexion",
         "log_out": "Déconnexion",
         "sign_up": "Créer un compte",
@@ -14,14 +16,17 @@
         "have_account_question": "Déjà un compte ?",
         "success_connection": "Succès de la connexion !"
     }, "api": {
+        "title": "API REST",
         "browse_title": "Trouver une API REST",
         "our_api": "Notre API",
         "add_title": "Ajouter une API REST au dépôt",
+        "edit_title": "Mettre à jour",
         "name_label": "Nom",
         "logo_label": "URL du logo",
         "upload_label": "ou télécharger une image",
         "choose_file_label": "Choisir un fichier",
         "additional_information": "Information aditionnelle pour les métadonnées",
+        "description_placeholder": "Ecrire une présentation du fournisseur...",
         "add": "Ajouter une API",
         "categories": "Catégories de ressources",
         "business_models": {
@@ -58,21 +63,25 @@
         "cancel": "Annuler",
         "cant_undo_action": "Cette action est irréversible !",
         "delete_repository_question": "Êtes-vous sûr de vouloir supprimer cette API REST du dépôt ?",
+        "no_description": "Aucune description n'a été trouvée",
         "provided_by": "Fournie par",
-        "edit": "Editer",
+        "edit": "Modifier",
         "last_version": "Dernière version",
         "terms_of_service": "Conditions d'utilisation",
         "original_documentation": "Documentation originelle",
         "api_url": "URL racine de l'API",
         "errors": {
-            "unprocessable_file": "Le chargement de l'image a échoué. Le fichier est peut être corrompu, ou bien un fichier binaire, ou tout simplement inaccessible",
+            "unprocessable_file": "Le chargement du fichier a échoué. Le fichier est peut être corrompu, ou bien un fichier binaire, ou tout simplement inaccessible",
             "server_inaccessible": "Impossible d'accéder au serveur pour le moment, veuillez réessayer plus tard",
             "fail_create_api": " La création de l'API REST a échoué, veuillez s'il vous plait vérifier la validité des informations",
-            "already_exist_name": "Il existe déjà una API avec ce nom"
+            "fail_edit_api": " La modification de l'API REST a échoué, veuillez s'il vous plait vérifier la validité des informations",
+            "already_exist_name": "Il existe déjà une API avec ce nom"
         }
     }, "provider": {
+        "title": "Fournisseur",
         "link_title": "Définir le fournisseur de l'API REST",
         "existing_title": "Fournisseur existant",
+        "edit_title": "Modifier",
         "search_placeholder": "Chercher un fournisseur...",
         "add_title": "Ajouter fournisseur",
         "name_label": "Nom",
@@ -82,6 +91,26 @@
         "description_label": "Descripion",
         "description_placeholder": "Ecrire une présentation du fournisseur...",
         "related_links_label": "Liens annexes (URLs)",
-        "finalize": "Finaliser l'API"
+        "finalize": "Finaliser l'API",
+        "delete": "Supprimer",
+        "cancel": "Annuler",
+        "edit": "Modifier",
+        "cant_undo_action": "Cette action est irréversible !",
+        "delete_repository_question": "Êtes-vous sûr de vouloir supprimer ce fournisseur d'APIs du dépôt ?",
+        "no_description": "Aucune description n'a été trouvée",
+        "display_columns": "Colonnes",
+        "display_table": "Table",
+        "apis_provided": "REST APIs fournies",
+        "see": "Voir",
+        "errors": {
+            "fail_create_provider": "La création du fournisseur a échoué, veuillez s'il vous plait vérifier la validité des informations",
+            "fail_edit_provider": "La modification du fournisseur a échoué, veuillez s'il vous plait vérifier la validité des informations",
+            "fail_link_provider": "La liaison entre le fournisseur et l'API REST n'a pas pu être faite",
+            "already_exist_name": "Il existe déjà un fournisseur avec ce nom"
+        }
+    }, "contribution": {
+        "ADD_by": "Ajouté par",
+        "EDIT_by": "Mis à jour par",
+        "DELETE_by": "Supprimé par"
     }
 }

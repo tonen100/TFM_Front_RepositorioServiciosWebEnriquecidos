@@ -6,12 +6,11 @@ import { AuthService } from 'src/app/services/auth.service';
 import { Router } from '@angular/router';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
-import { ToastrService } from 'ngx-toastr';
 import { ImgStorageService } from 'src/app/services/img-storage.service';
 import { APIService } from 'src/app/services/api.service';
 import { VersionService } from 'src/app/services/version.service';
-import { businessModels } from '../business-models.enum';
 import { TranslatableComponent } from '../../shared/translatable/translatable.component';
+import { businessModels } from '../business-models.enum';
 
 const snakeCase = (str) => {
   return str.replace(/\W+/g, ' ')
@@ -171,17 +170,17 @@ export class AddAPIComponent extends TranslatableComponent implements OnInit, Af
     }
   }
 
-  storeLogo() {
+  async storeLogo() {
     try {
       const blobImg = (document.getElementById('logo') as HTMLInputElement).files[0];
-      this.imgStorageService.uploadImage(
+      await this.imgStorageService.uploadImage(
         blobImg,
         'RestAPI',
         snakeCase(this.createAPIForm.value.name) + (
           blobImg.name.lastIndexOf('.') != null ? blobImg.name.slice(blobImg.name.lastIndexOf('.')) : ''
         )
       ).then((downloadURL) => {
-        this.createAPIForm.value.logoURL = downloadURL;
+        this.createAPIForm.patchValue({ logoURL: downloadURL });
       });
     } catch (error) {
       this.showError(this.translateService.instant('api.errors.server_inaccessible'));
@@ -190,12 +189,12 @@ export class AddAPIComponent extends TranslatableComponent implements OnInit, Af
 
   onCreateAPI() {
     const values = this.createAPIForm.value;
-    this.apiService.getApisByName(values.name).then(result => {
+    this.apiService.getApisByName(values.name).then(async result => {
       if (result.length !== 0) {
         this.showError(this.translateService.instant('api.errors.already_exist_name'));
       } else {
         if (this.logo != null) {
-          this.storeLogo();
+          await this.storeLogo();
         }
         const newAPI = new API(values.name, values.logoURL, businessModels.filter(businessModel => values[businessModel]));
         this.apiService.postApi(newAPI).then(api => {

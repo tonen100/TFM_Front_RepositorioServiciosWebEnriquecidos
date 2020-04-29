@@ -7,6 +7,8 @@
         "email_label": "Correo electronico",
         "password_label": "Contraseña",
         "confirm_password_label": "Confirmar la contraseña",
+        "name_placeholder": "Entrar vuestro nombre",
+        "password_placeholder": "Entrar vuestra contraseña",
         "log_in": "Conectarse",
         "log_out": "Desconectarse",
         "sign_up": "Crear una cuenta",
@@ -14,14 +16,17 @@
         "have_account_question": "¿Ya tienes una cuenta?",
         "success_connection": "¡Conectado con excito!"
     }, "api": {
+        "title": "API REST",
         "browse_title": "Buscar una API REST",
         "our_api": "Nuestra API",
         "add_title": "Añadir una API REST al repositorio",
+        "edit_title": "Actualizar",
         "name_label": "Nombre",
         "logo_label": "URL del logo",
         "upload_label": "o descargar una imagen",
         "choose_file_label": "Seleccionar un fichero",
         "additional_information": "Información adicional para los metadatos",
+        "description_placeholder": "Escribir algo aqui...",
         "add": "Añadir una API",
         "categories": "Categorías de recursos",
         "business_models": {
@@ -58,21 +63,25 @@
         "cancel": "Cancelar",
         "cant_undo_action": "Esta acción es irreversible !",
         "delete_repository_question": "¿Estás seguro de que quieres borrar esta API de REST del repositorio?",
+        "no_description": "No hay descripción",
         "provided_by": "Proporcionado por",
-        "edit": "Editar",
+        "edit": "Modificar",
         "last_version": "Última versión",
         "terms_of_service": "Términos de servicio",
         "original_documentation": "Documentación original",
         "api_url": "URL Raíz de la API",
         "errors": {
-            "unprocessable_file": "No se ha podido cargar la imagen, el archivo puede ser un binario, corrupto o simplemente inaccesible",
+            "unprocessable_file": "No se ha podido cargar el fichero el archivo puede ser un binario, corrupto o simplemente inaccesible",
             "server_inaccessible": "Imposible solicitar el servidor ahora mismo, espera un poco y vuelve a intentarlo.",
             "fail_create_api": "Falló al crear la REST API, por favor, compruebe la validez de las informaciones",
+            "fail_edit_api": "Falló al modificar la REST API, por favor, compruebe la validez de las informaciones",
             "already_exist_name": "Ya existe una API con este nombre"
         }
     }, "provider": {
+        "title": "Proveedor",
         "link_title": "Definir el proveedor de la API",
         "existing_title": "Proveedor existente",
+        "edit_title": "Actualizar",
         "search_placeholder": "Buscar un proveedor...",
         "add_title": "Nuevo proveedor",
         "name_label": "Nombre",
@@ -82,6 +91,26 @@
         "description_label": "Descripción",
         "description_placeholder": "Escribir algo aqui...",
         "related_links_label": "Enlaces relacionados (URLs)",
-        "finalize": "Finalizar la API"
+        "finalize": "Finalizar la API",
+        "delete": "Soprimir",
+        "cancel": "Cancelar",
+        "edit": "Modificar",
+        "cant_undo_action": "Esta acción es irreversible !",
+        "delete_repository_question": "¿Estás seguro de que quieres borrar este proveedor de APIs del repositorio?",
+        "no_description": "No hay descripción",
+        "display_columns": "Columnas",
+        "display_table": "Tabla",
+        "apis_provided": "REST APIs proporcionadas",
+        "see": "Ver",
+        "errors": {
+            "fail_create_provider": "Falló al crear el proveedor, por favor, compruebe la validez de las informaciones",
+            "fail_edit_provider": "Falló al modificar el proveedor, por favor, compruebe la validez de las informaciones",
+            "fail_link_provider": "Falló al liesgar el proveedor al API REST",
+            "already_exist_name": "Ya existe un proveedor con este nombre"
+        }
+    }, "contribution": {
+        "ADD_by": "Añadido por",
+        "EDIT_by": "Actualizado por",
+        "DELETE_by": "Soprimido por"
     }
 }

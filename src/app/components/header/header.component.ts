@@ -62,9 +62,11 @@ export class HeaderComponent extends TranslatableComponent implements OnInit {
   }
 
   searchAPIs() {
-    this.router.navigate(['/apis/searchResults'], {
-      queryParams: { keywords: this.keywords }
-    });
+    if (this.keywords.length >= 2) {
+      this.router.navigate(['/apis/searchResults'], {
+        queryParams: { keywords: this.keywords }
+      });
+    }
   }
 
 }
