@@ -1,12 +1,13 @@
 {
     "auth": {
-        "sign_in_title": "Connectarse",
+        "sign_in_title": "Conectarse",
         "sign_up_title": "Registrarse",
         "login_label": "Nombre de usuario o correo",
         "name_label": "Nombre",
         "email_label": "Correo electronico",
         "password_label": "Contraseña",
         "confirm_password_label": "Confirmar la contraseña",
+        "role_label": "Rol",
         "name_placeholder": "Entrar vuestro nombre",
         "password_placeholder": "Entrar vuestra contraseña",
         "log_in": "Conectarse",
@@ -14,13 +15,21 @@
         "sign_up": "Crear una cuenta",
         "no_account_question": "¿No tienes cuenta ya?",
         "have_account_question": "¿Ya tienes una cuenta?",
-        "success_connection": "¡Conectado con excito!"
+        "succes_registration": "¡Vuestra cuenta ha sido creado!",
+        "success_connection": "¡Conectado con excito!",
+        "success_disconnection": "Has sido desconectado",
+        "add_user_title": "Añadir usuario",
+        "wrong_login_or_password": "Credentiales inválidos",
+        "forbidden": "Prohibido"
     }, "api": {
         "title": "API REST",
         "browse_title": "Buscar una API REST",
         "our_api": "Nuestra API",
         "add_title": "Añadir una API REST al repositorio",
         "edit_title": "Actualizar",
+        "link_provider": "Cambiar proveedor",
+        "blacklist": "Blacklist",
+        "unblacklist": "Unblacklist",
         "name_label": "Nombre",
         "logo_label": "URL del logo",
         "upload_label": "o descargar una imagen",
@@ -28,6 +37,7 @@
         "additional_information": "Información adicional para los metadatos",
         "description_placeholder": "Escribir algo aqui...",
         "add": "Añadir una API",
+        "add_version": "Añadir nueva versión",
         "categories": "Categorías de recursos",
         "business_models": {
             "title": "Modelos de negocio",
@@ -39,11 +49,15 @@
             "Billing": "Facturación"
         }, "version": {
             "title": "Versión",
+            "add_title": "Añadir versión a la API",
+            "add": "Add nueva version",
+            "cancel": "Cancelar",
             "doc_label": "Documentación",
             "supported_types": "Tipos de documento soportados: OAS (Swagger o v3), RAML (v1), API Blueprint",
             "root_url_api_label": "URL raíz de la API",
             "url_doc_label": "URL de la documentación" ,
             "summary_label": "Resumen de la versión",
+            "number_placeholder": "Numero de versión",
             "initial": "Inicial",
             "metadata": "Metadatos",
             "details": "Detalles de la versión",
@@ -54,7 +68,8 @@
                 "wrong_file_type": "No se ha cargado la documentación, no pudimos reconocer el tipo de archivo",
                 "generate_unexpected": "No se pudieron extraer los metadatos (Error imprevisto)",
                 "load_doc_unexpected": "No se ha cargado la documentación (Error imprevisto)",
-                "unexpected": "No se pudo extraer la versión de la API (Error imprevisto)"
+                "unexpected": "No se pudo extraer la versión de la API (Error imprevisto)",
+                "already_exist_number": "Ya existe una version de la API con este nombre"
             }
         },
         "filter_by_business_model": "Filtrar por modelo de negocio",
@@ -62,7 +77,9 @@
         "delete": "Soprimir",
         "cancel": "Cancelar",
         "cant_undo_action": "Esta acción es irreversible !",
-        "delete_repository_question": "¿Estás seguro de que quieres borrar esta API de REST del repositorio?",
+        "delete_repository_question": "¿Estás seguro de que quieres borrar esta API REST del repositorio?",
+        "blacklist_repository_question": "¿Estás seguro de que quieres añadir a la lista negra esta API REST?",
+        "unblacklist_repository_question": "¿Estás seguro de que quieres retirar de la lista negra esta API REST?",
         "no_description": "No hay descripción",
         "provided_by": "Proporcionado por",
         "edit": "Modificar",
@@ -73,6 +90,7 @@
         "errors": {
             "unprocessable_file": "No se ha podido cargar el fichero el archivo puede ser un binario, corrupto o simplemente inaccesible",
             "server_inaccessible": "Imposible solicitar el servidor ahora mismo, espera un poco y vuelve a intentarlo.",
+            "load_logo_unexpected": "No se ha cargado la imagen (Error imprevisto)",
             "fail_create_api": "Falló al crear la REST API, por favor, compruebe la validez de las informaciones",
             "fail_edit_api": "Falló al modificar la REST API, por favor, compruebe la validez de las informaciones",
             "already_exist_name": "Ya existe una API con este nombre"
@@ -95,8 +113,12 @@
         "delete": "Soprimir",
         "cancel": "Cancelar",
         "edit": "Modificar",
+        "blacklist": "Blacklist",
+        "unblacklist": "Unblacklist",
         "cant_undo_action": "Esta acción es irreversible !",
         "delete_repository_question": "¿Estás seguro de que quieres borrar este proveedor de APIs del repositorio?",
+        "blacklist_repository_question": "¿Estás seguro de que quieres añadir a la lista negra este proveedor?",
+        "unblacklist_repository_question": "¿Estás seguro de que quieres retirar de la lista negra este proveedor?",
         "no_description": "No hay descripción",
         "display_columns": "Columnas",
         "display_table": "Tabla",
@@ -109,8 +131,41 @@
             "already_exist_name": "Ya existe un proveedor con este nombre"
         }
     }, "contribution": {
+        "title": "Histórico de las contribuciones",
+        "deleted": "Este recurso fue soprimido",
+        "ADD_RestAPI": "Ha añadido la API",
+        "EDIT_RestAPI": "Ha actualizado la API",
+        "DELETE_RestAPI": "Ha soprimido la API",
+        "ADD_Version": "Ha añadido una version a la API",
+        "EDIT_Version": "Ha actualizado una version de la API",
+        "DELETE_Version": "Ha soprimido una version de la API",
+        "ADD_Provider": "Ha añadido el proveedor",
+        "EDIT_Provider": "Ha actualizado el proveedor",
+        "DELETE_Provider": "Ha soprimido el proveedor",
         "ADD_by": "Añadido por",
         "EDIT_by": "Actualizado por",
         "DELETE_by": "Soprimido por"
+    }, "user": {
+        "ban": "Excluir",
+        "cancel": "Cancelar",
+        "edit": "Modificar",
+        "cant_undo_action": "Esta acción es irreversible !",
+        "ban_repository_question": "¿Estás seguro de que quieres excluir este usuario?",
+        "no_description": "No hay descripción",
+        "edit_title": "Actualizar el perfil",
+        "name_label": "Nombre",
+        "logo_label": "URL del logo",
+        "upload_label": "o descargar una imagen",
+        "choose_file_label": "Selecionar un fichero",
+        "description_label": "Descripción",
+        "description_placeholder": "Escribir algo aqui...",
+        "errors": {
+            "server_inaccessible": "Imposible solicitar el servidor ahora mismo, espera un poco y vuelve a intentarlo.",
+            "fail_create_user": "Falló al crear el usuario, por favor, compruebe la validez de las informaciones",
+            "fail_edit_user": "Falló al modificar el usuario, por favor, compruebe la validez de las informaciones",
+            "already_exist_name": "Ya existe un usuario con este nombre",
+            "already_exist_email": "Ya existe un usuario con este correo",
+            "success_create_fail_connect": "Vuestra cuenta ha sido creado pero no se pudo connectarte despues automaticamente"
+        }
     }
 }

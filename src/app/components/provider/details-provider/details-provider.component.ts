@@ -8,11 +8,11 @@ import { UserService } from 'src/app/services/user.service';
 import { APIService } from 'src/app/services/api.service';
 import { TranslatableComponent } from '../../shared/translatable/translatable.component';
 import { User } from 'src/app/models/user';
-import * as moment from 'moment';
 import { Provider } from 'src/app/models/provider';
 import { HistoryContribution } from 'src/app/models/historyContribution';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { API } from 'src/app/models/api';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-details-provider',

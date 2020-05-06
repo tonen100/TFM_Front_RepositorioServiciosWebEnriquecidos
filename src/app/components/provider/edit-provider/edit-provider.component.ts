@@ -8,6 +8,8 @@ import { User } from 'src/app/models/user';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { AuthService } from 'src/app/services/auth.service';
 import { ImgStorageService } from 'src/app/services/img-storage.service';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { Ng2ImgMaxService } from 'ng2-img-max';
 
 const snakeCase = (str) => {
   return str.replace(/\W+/g, ' ')
@@ -38,10 +40,12 @@ export class EditProviderComponent extends TranslatableComponent implements OnIn
     public translateService: TranslateService,
     private router: Router,
     private fb: FormBuilder,
+    private modalService: NgbModal,
     private imgStorageService: ImgStorageService,
     private activatedRoute: ActivatedRoute,
     private providerService: ProviderService,
-    private authService: AuthService
+    private authService: AuthService,
+    private imgMaxService: Ng2ImgMaxService
     ) {
     super(translateService);
     this.currentUser = this.authService.getCurrentUser();
@@ -116,35 +120,26 @@ export class EditProviderComponent extends TranslatableComponent implements OnIn
   }
 
   onLoadLogoFile() {
-    const imageUrl = URL.createObjectURL((document.getElementById('logo') as HTMLInputElement).files[0]);
-    this.uploadDocument((document.getElementById('logo') as HTMLInputElement).files[0], (img) => {
-      try {
-        if (img != null) {
-          this.logo = img;
-          (document.getElementById('imageLogo') as HTMLImageElement).src = imageUrl;
-        }
-      } catch (error) {
-        this.showError(this.translateService.instant('api.errors.unprocessable_file'));
+    this.imgMaxService.compressImage((document.getElementById('logo') as HTMLInputElement).files[0], 0.1).subscribe(img => {
+      if (img != null) {
+        const imageUrl = URL.createObjectURL(img);
+        this.logo = img;
+        setTimeout(() => (document.getElementById('imageLogo') as HTMLImageElement).src = imageUrl, 500);
       }
-    });
+    }, err => this.showError(this.translateService.instant('api.errors.unprocessable_file')));
   }
 
   async storeLogo() {
-    try {
-      const blobImg = (document.getElementById('logo') as HTMLInputElement).files[0];
-      await this.imgStorageService.uploadImage(
-        blobImg,
-        'Provider',
-        snakeCase(this.editProviderForm.value.name) + (
-          blobImg.name.lastIndexOf('.') != null ? blobImg.name.slice(blobImg.name.lastIndexOf('.')) : ''
-        )
-      ).then((downloadURL) => {
-        this.editProviderForm.patchValue({ logoURL: downloadURL });
-      });
-    } catch (error) {
-      console.log(error);
-      // TODO
-    }
+    const blobImg = this.logo;
+    await this.imgStorageService.uploadImage(
+      blobImg,
+      'Provider',
+      snakeCase(this.editProviderForm.value.name) + (
+        blobImg.name.lastIndexOf('.') != null ? blobImg.name.slice(blobImg.name.lastIndexOf('.')) : ''
+      )
+    ).then((downloadURL) => {
+      this.editProviderForm.patchValue({ logoURL: downloadURL });
+    });
   }
 
   uploadDocument(pathFile: Blob, onLoad: any) {
@@ -165,8 +160,37 @@ export class EditProviderComponent extends TranslatableComponent implements OnIn
     }
   }
 
+  blacklistProvider() {
+    this.providerService.blacklistProvider(this.provider);
+    this.modalService.dismissAll();
+    this.router.navigate(['']);
+  }
+
+  unblacklistProvider() {
+    this.providerService.unblacklistProvider(this.provider);
+    this.modalService.dismissAll();
+    this.router.navigate(['provider', this.provider._id]);
+  }
+
+  openModal(content) {
+    this.modalService.open(content, { centered: true });
+  }
+
   goToProvider() {
     this.router.navigate(['provider', this.provider._id]);
+  }
+
+  editProvider() {
+    const values = this.editProviderForm.value;
+    const linksProperties = Object.keys(values).filter(property => property.startsWith('link-'));
+    // tslint:disable-next-line: no-shadowed-variable tslint:disable-next-line: triple-equals
+    const links = linksProperties.map(linkProperty => values[linkProperty]).filter(link => link != '');
+    this.provider.name = values.name;
+    this.provider.logoUrl = values.logoURL;
+    this.provider.description = values.description;
+    this.provider.externalLinks = links;
+    this.providerService.updateProvider(this.provider).then(_ => this.goToProvider())
+      .catch(_ => this.showError(this.translateService.instant('provider.errors.fail_edit_provider')));
   }
 
   onEditProvider() {
@@ -176,17 +200,11 @@ export class EditProviderComponent extends TranslatableComponent implements OnIn
         this.showError(this.translateService.instant('provider.errors.already_exist_name'));
       } else {
         if (this.logo != null) {
-          await this.storeLogo();
+          await this.storeLogo().then(_ => this.editProvider())
+          .catch(_ => this.showError(this.translateService.instant('api.errors.load_logo_unexpected')));
+        } else {
+          this.editProvider();
         }
-        const linksProperties = Object.keys(values).filter(property => property.startsWith('link-'));
-        // tslint:disable-next-line: no-shadowed-variable tslint:disable-next-line: triple-equals
-        const links = linksProperties.map(linkProperty => values[linkProperty]).filter(link => link != '');
-        this.provider.name = values.name;
-        this.provider.logoUrl = values.logoURL;
-        this.provider.description = values.description;
-        this.provider.externalLinks = links;
-        this.providerService.updateProvider(this.provider).then(_ => this.goToProvider())
-          .catch(_ => this.showError(this.translateService.instant('provider.errors.fail_edit_provider')));
       }
     });
   }

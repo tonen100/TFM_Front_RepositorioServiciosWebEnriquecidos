@@ -9,6 +9,7 @@ import { APIService } from 'src/app/services/api.service';
 import { ProviderService } from 'src/app/services/provider.service';
 import { Provider } from 'src/app/models/provider';
 import { TranslatableComponent } from '../../shared/translatable/translatable.component';
+import { Ng2ImgMaxService } from 'ng2-img-max';
 
 const snakeCase = (str) => {
   return str.replace(/\W+/g, ' ')
@@ -45,7 +46,8 @@ export class LinkProviderComponent extends TranslatableComponent implements OnIn
     private activatedRoute: ActivatedRoute,
     private imgStorageService: ImgStorageService,
     private apiService: APIService,
-    private providerService: ProviderService
+    private providerService: ProviderService,
+    private imgMaxService: Ng2ImgMaxService
     ) {
     super(translateService);
     this.currentUser = this.authService.getCurrentUser();
@@ -111,17 +113,13 @@ export class LinkProviderComponent extends TranslatableComponent implements OnIn
   }
 
   onLoadLogoFile() {
-    const imageUrl = URL.createObjectURL((document.getElementById('logo') as HTMLInputElement).files[0]);
-    this.uploadDocument((document.getElementById('logo') as HTMLInputElement).files[0], (img) => {
-      try {
-        if (img != null) {
-          this.logo = img;
-          (document.getElementById('imageLogo') as HTMLImageElement).src = imageUrl;
-        }
-      } catch (error) {
-        this.showError(this.translateService.instant('api.errors.unprocessable_file'));
+    this.imgMaxService.compressImage((document.getElementById('logo') as HTMLInputElement).files[0], 0.1).subscribe(img => {
+      if (img != null) {
+        const imageUrl = URL.createObjectURL(img);
+        this.logo = img;
+        setTimeout(() => (document.getElementById('imageLogo') as HTMLImageElement).src = imageUrl, 500);
       }
-    });
+    }, err => this.showError(this.translateService.instant('api.errors.unprocessable_file')));
   }
 
   onSearching(event: any) {
@@ -139,26 +137,31 @@ export class LinkProviderComponent extends TranslatableComponent implements OnIn
   }
 
   async storeLogo() {
-    try {
-      const blobImg = (document.getElementById('logo') as HTMLInputElement).files[0];
-      await this.imgStorageService.uploadImage(
-        blobImg,
-        'Provider',
-        snakeCase(this.linkProviderForm.value.name) + (
-          blobImg.name.lastIndexOf('.') != null ? blobImg.name.slice(blobImg.name.lastIndexOf('.')) : ''
-        )
-      ).then((downloadURL) => {
-        this.linkProviderForm.patchValue({ logoURL: downloadURL });
-        console.log(this.linkProviderForm.value);
-      });
-    } catch (error) {
-      // TODO
-    }
+    const blobImg = this.logo;
+    await this.imgStorageService.uploadImage(
+      blobImg,
+      'Provider',
+      snakeCase(this.linkProviderForm.value.name) + (
+        blobImg.name.lastIndexOf('.') != null ? blobImg.name.slice(blobImg.name.lastIndexOf('.')) : ''
+      )
+    ).then((downloadURL) => {
+      this.linkProviderForm.patchValue({ logoURL: downloadURL });
+    });
   }
 
   linkApiToProvider(apiId: string, providerId: string) {
     this.apiService.linkApiToProvider(apiId, providerId).then(_ => this.router.navigate(['api', this.apiId]))
       .catch(_ => this.showError(this.translateService.instant('provider.errors.fail_link_provider')));
+  }
+
+  createProvider() {
+    const values = this.linkProviderForm.value;
+    const linksProperties = Object.keys(values).filter(property => property.startsWith('link-'));
+    // tslint:disable-next-line: no-shadowed-variable tslint:disable-next-line: triple-equals
+    const links = linksProperties.map(linkProperty => values[linkProperty]).filter(link => link != '');
+    const newProvider = new Provider(values.name, values.logoURL, values.description, links);
+    this.providerService.postProvider(newProvider).then(provider => this.linkApiToProvider(this.apiId, provider._id))
+      .catch(_ => this.showError(this.translateService.instant('provider.errors.fail_create_provider')));
   }
 
   onLinkApiToProvider() {
@@ -171,14 +174,11 @@ export class LinkProviderComponent extends TranslatableComponent implements OnIn
           this.showError(this.translateService.instant('provider.errors.already_exist_name'));
         } else {
           if (this.logo != null) {
-            await this.storeLogo();
+            await this.storeLogo().then(_ => this.createProvider())
+            .catch(_ => this.showError(this.translateService.instant('api.errors.load_logo_unexpected')));
+          } else {
+            this.createProvider();
           }
-          const linksProperties = Object.keys(values).filter(property => property.startsWith('link-'));
-          // tslint:disable-next-line: no-shadowed-variable tslint:disable-next-line: triple-equals
-          const links = linksProperties.map(linkProperty => values[linkProperty]).filter(link => link != '');
-          const newProvider = new Provider(values.name, values.logoURL, values.description, links);
-          this.providerService.postProvider(newProvider).then(provider => this.linkApiToProvider(this.apiId, provider._id))
-            .catch(_ => this.showError(this.translateService.instant('provider.errors.fail_create_provider')));
         }
       });
     }

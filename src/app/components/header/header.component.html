@@ -1,6 +1,10 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="navbar-collapse" id="navbarSupportedContent" style="min-height: 100px;">
         <div style="width: 36%;">
+            <div *ngIf="currentUser != null" class="btn" style="display: block;margin-right: 0;width: fit-content;margin-left: auto;" [routerLink]="'/user/' + currentUser._id">
+                <img *ngIf="currentUser.logoUrl != null" class="profilePicture" [src]="currentUser.logoUrl"/>
+                <fa-icon *ngIf="!currentUser.logoUrl" [icon]="faUserCircle" size="6x"></fa-icon>
+            </div>
         </div>
         <form class="form-inline mx-auto" style="padding: 0; margin: 0; width: 28%;">
             <div class="col">
@@ -32,23 +36,24 @@
                   <li><span class="lang-sm lang-lbl" (click)="changeLanguage('fr')" lang="fr"></span></li>
                 </ul>
             </div>
-            <ng-container *ngIf="this.authService.getCurrentUser() == null; else logout">
-                <div class="col align-items-center">
+            <div class="col align-items-center">
+                <ng-container *ngIf="this.authService.getCurrentUser() == null; else logout">
                     <div class="row justify-content-center">
                         <button type="button" class="btn btn-primary smallAuthButton" routerLink="/login">{{ translateService.instant('auth.sign_in_title') }}</button>
                     </div>
                     <div class="row justify-content-center">
                         <button type="button" class="btn btn-primary smallAuthButton" routerLink="/register">{{ translateService.instant('auth.sign_up_title') }}</button>
                     </div>
-                </div>
-            </ng-container>
-            <ng-template #logout>
-                <div class="col align-items-center">
-                    <div class="row justify-content-center" style="height:100%">
+                </ng-container>
+                <ng-template #logout>
+                    <div class="row justify-content-center">
                         <button type="button" class="btn btn-danger smallAuthButton" (click)="onLogout()">{{ translateService.instant('auth.log_out') }}</button>
                     </div>
-                </div>
-            </ng-template>
+                    <div *ngIf="activeRole == 'Administrator'" class="row justify-content-center">
+                        <button type="button" class="btn btn-primary smallAuthButton" routerLink="/register">{{ translateService.instant('auth.add_user_title') }}</button>
+                    </div>
+                </ng-template>
+            </div>
         </ul>
     </div>
 </nav>

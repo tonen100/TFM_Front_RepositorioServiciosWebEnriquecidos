@@ -8,4 +8,6 @@ export class HistoryContribution extends Entity {
     date: Date;
     action: string;
     typeContribution: string;
+    name: string;
+    number: string;
 }

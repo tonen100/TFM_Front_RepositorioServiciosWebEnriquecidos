@@ -3,7 +3,6 @@ import { Routes, RouterModule } from '@angular/router';
 import { HomeComponent } from './components/home/home.component';
 import { DetailsUserComponent } from './components/user/details-user/details-user.component';
 import { ListUserComponent } from './components/user/list-user/list-user.component';
-import { AddUserComponent } from './components/user/add-user/add-user.component';
 import { DetailsAPIComponent } from './components/api/details-api/details-api.component';
 import { AddAPIComponent } from './components/api/add-api/add-api.component';
 import { EditUserComponent } from './components/user/edit-user/edit-user.component';
@@ -25,7 +24,6 @@ const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'users', component: ListUserComponent },
-  { path: 'user/add', component: AddUserComponent },
   { path: 'user/:id', component: DetailsUserComponent },
   { path: 'user/:id/edit', component: EditUserComponent },
   { path: 'apis/searchResults', component: ApiSearchComponent, runGuardsAndResolvers: 'always' },
@@ -33,7 +31,7 @@ const routes: Routes = [
   { path: 'api/:id', component: DetailsAPIComponent },
   { path: 'api/:id/edit', component: EditAPIComponent },
   { path: 'api/:id/provider/link', component: LinkProviderComponent },
-  { path: 'version/add', component: AddVersionComponent },
+  { path: 'api/:id/version/add', component: AddVersionComponent },
   { path: 'version/:id', component: DetailsVersionComponent },
   { path: 'provider/:id', component: DetailsProviderComponent },
   { path: 'provider/:id/edit', component: EditProviderComponent },

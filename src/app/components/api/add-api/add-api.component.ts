@@ -11,6 +11,7 @@ import { APIService } from 'src/app/services/api.service';
 import { VersionService } from 'src/app/services/version.service';
 import { TranslatableComponent } from '../../shared/translatable/translatable.component';
 import { businessModels } from '../business-models.enum';
+import { Ng2ImgMaxService } from 'ng2-img-max';
 
 const snakeCase = (str) => {
   return str.replace(/\W+/g, ' ')
@@ -46,7 +47,8 @@ export class AddAPIComponent extends TranslatableComponent implements OnInit, Af
     private router: Router,
     private imgStorageService: ImgStorageService,
     private apiService: APIService,
-    private versionService: VersionService
+    private versionService: VersionService,
+    private imgMaxService: Ng2ImgMaxService
     ) {
       super(translateService);
   }
@@ -110,17 +112,14 @@ export class AddAPIComponent extends TranslatableComponent implements OnInit, Af
   }
 
   onLoadLogoFile() {
-    const imageUrl = URL.createObjectURL((document.getElementById('logo') as HTMLInputElement).files[0]);
-    this.uploadDocument((document.getElementById('logo') as HTMLInputElement).files[0], (img) => {
-      try {
-        if (img != null) {
-          this.logo = img;
-          (document.getElementById('imageLogo') as HTMLImageElement).src = imageUrl;
-        }
-      } catch (error) {
-        this.showError(this.translateService.instant('api.errors.unprocessable_file'));
+    const imgFile = (document.getElementById('logo') as HTMLInputElement).files[0];
+    this.imgMaxService.compressImage(imgFile, 0.1).subscribe(img => {
+      if (img != null) {
+        const imageUrl = URL.createObjectURL(img);
+        this.logo = img;
+        setTimeout(() => (document.getElementById('imageLogo') as HTMLImageElement).src = imageUrl, 500);
       }
-    });
+    }, err => this.showError(this.translateService.instant('api.errors.unprocessable_file')));
   }
 
   switchDocumentPreview(documentName: string) {
@@ -152,77 +151,80 @@ export class AddAPIComponent extends TranslatableComponent implements OnInit, Af
           }).catch(err => {
             switch (err.status) {
               case 422:
-                this.showError(this.translateService.instant('api.errors.version.fail_generate_oas_doc'));
+                this.showError(this.translateService.instant('api.version.errors.fail_generate_oas_doc'));
                 break;
               case 424:
-                this.showError(this.translateService.instant('api.errors.version.fail_generate_metadata'));
+                this.showError(this.translateService.instant('api.version.errors.fail_generate_metadata'));
                 break;
               default:
-                this.showError(this.translateService.instant('api.errors.version.generate_unexpected'));
+                this.showError(this.translateService.instant('api.version.errors.generate_unexpected'));
             }
           });
         } catch (error) {
-          this.showError(this.translateService.instant('api.errors.version.load_doc_unexpected'));
+          this.showError(this.translateService.instant('api.version.errors.load_doc_unexpected'));
         }
       });
     } else {
-      this.showError(this.translateService.instant('api.errors.version.wrong_file_type'));
+      this.showError(this.translateService.instant('api.version.errors.wrong_file_type'));
     }
   }
 
   async storeLogo() {
-    try {
-      const blobImg = (document.getElementById('logo') as HTMLInputElement).files[0];
-      await this.imgStorageService.uploadImage(
-        blobImg,
-        'RestAPI',
-        snakeCase(this.createAPIForm.value.name) + (
-          blobImg.name.lastIndexOf('.') != null ? blobImg.name.slice(blobImg.name.lastIndexOf('.')) : ''
-        )
-      ).then((downloadURL) => {
-        this.createAPIForm.patchValue({ logoURL: downloadURL });
+    const blobImg = this.logo;
+    await this.imgStorageService.uploadImage(
+      blobImg,
+      'RestAPI',
+      snakeCase(this.createAPIForm.value.name) + (
+        blobImg.name.lastIndexOf('.') != null ? blobImg.name.slice(blobImg.name.lastIndexOf('.')) : ''
+      )
+    ).then((downloadURL) => {
+      this.createAPIForm.patchValue({ logoURL: downloadURL });
+    });
+  }
+
+  createAPI() {
+    const values = this.createAPIForm.value;
+    const newAPI = new API(values.name, values.logoURL, businessModels.filter(businessModel => values[businessModel]));
+    this.apiService.postApi(newAPI).then(api => {
+      // tslint:disable-next-line: max-line-length
+      const newVersion = new Version(values.versionNb, values.originalDocumentation, values.versionSummary, values.urlDoc, values.rootUrlApi);
+      this.versionService.postVersion(api, newVersion).then(version => {
+        this.router.navigate(['api', api._id, 'provider', 'link']);
+      }).catch(err => {
+        this.apiService.deleteApi(api._id);
+        this.showError(this.translateService.instant('api.version.errors.fail_create_version'));
       });
-    } catch (error) {
-      this.showError(this.translateService.instant('api.errors.server_inaccessible'));
-    }
+    }).catch(err => {
+      switch (err.status) {
+        case 401:
+        case 403:
+          this.authService.logout();
+          this.router.navigate(['login']);
+          break;
+        case 404:
+          this.showError(this.translateService.instant('api.errors.server_inaccessible'));
+          break;
+        case 422:
+          this.showError(this.translateService.instant('api.errors.fail_create_api'));
+          break;
+        default:
+          this.showError(this.translateService.instant('api.version.errors.unexpected'));
+      }
+    });
   }
 
   onCreateAPI() {
     const values = this.createAPIForm.value;
-    this.apiService.getApisByName(values.name).then(async result => {
+    this.apiService.getApisByName(values.name).then(result => {
       if (result.length !== 0) {
         this.showError(this.translateService.instant('api.errors.already_exist_name'));
       } else {
         if (this.logo != null) {
-          await this.storeLogo();
+          this.storeLogo().then(res => this.createAPI())
+          .catch(err => this.showError(this.translateService.instant('api.errors.load_logo_unexpected')));
+        } else {
+          this.createAPI();
         }
-        const newAPI = new API(values.name, values.logoURL, businessModels.filter(businessModel => values[businessModel]));
-        this.apiService.postApi(newAPI).then(api => {
-          // tslint:disable-next-line: max-line-length
-          const newVersion = new Version(values.versionNb, values.originalDocumentation, values.versionSummary, values.urlDoc, values.rootUrlApi);
-          this.versionService.postVersion(api, newVersion).then(version => {
-            this.router.navigate(['api', api._id, 'provider', 'link']);
-          }).catch(err => {
-            this.apiService.deleteApi(api._id);
-            this.showError(this.translateService.instant('api.version.errors.fail_create_version'));
-          });
-        }).catch(err => {
-          switch (err.status) {
-            case 401:
-            case 403:
-              this.authService.logout();
-              this.router.navigate(['login']);
-              break;
-            case 404:
-              this.showError(this.translateService.instant('api.errors.server_inaccessible'));
-              break;
-            case 422:
-              this.showError(this.translateService.instant('api.errors.fail_create_api'));
-              break;
-            default:
-              this.showError(this.translateService.instant('api.version.errors.unexpected'));
-          }
-        });
       }
     }).catch(err => this.showError(this.translateService.instant('api.errors.server_inaccessible')));
   }

@@ -28,7 +28,6 @@ import { EditProviderComponent } from './components/provider/edit-provider/edit-
 import { DetailsProviderComponent } from './components/provider/details-provider/details-provider.component';
 import { DetailsVersionComponent } from './components/version/details-version/details-version.component';
 import { AddVersionComponent } from './components/version/add-version/add-version.component';
-import { AddUserComponent } from './components/user/add-user/add-user.component';
 import { DetailsUserComponent } from './components/user/details-user/details-user.component';
 import { LoginComponent } from './components/auth/login/login.component';
 import { RegisterComponent } from './components/auth/register/register.component';
@@ -42,6 +41,8 @@ import { TranslatableComponent } from './components/shared/translatable/translat
 import { environment } from 'src/environments/environment';
 import { LinkProviderComponent } from './components/api/link-provider/link-provider.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MarkdownModule } from 'ngx-markdown';
+import { Ng2ImgMaxModule } from 'ng2-img-max';
 
 registerLocaleData(localeEs, 'es');
 registerLocaleData(localeFr, 'fr');
@@ -62,7 +63,6 @@ export function HttpLoaderFactory(http: HttpClient) {
     DetailsProviderComponent,
     DetailsVersionComponent,
     AddVersionComponent,
-    AddUserComponent,
     DetailsUserComponent,
     LoginComponent,
     RegisterComponent,
@@ -94,7 +94,9 @@ export function HttpLoaderFactory(http: HttpClient) {
     }),
     ToastrModule.forRoot(),
     BrowserAnimationsModule,
-    NgbModalModule
+    NgbModalModule,
+    Ng2ImgMaxModule,
+    MarkdownModule.forRoot({ loader: HttpClient })
   ],
   providers: [AngularFireAuth, AuthService],
   bootstrap: [AppComponent]

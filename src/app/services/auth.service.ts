@@ -32,16 +32,8 @@ export class AuthService {
   register(user: User) {
     return new Promise<any>((resolve, reject) => {
       this.userService.postUser(user).then(newUser => {
-        this.fireAuth.auth.signInWithCustomToken(newUser.customToken)
-        .then(_ => {
-          this.currentUser = newUser;
-          this.storageService.setItem('currentUser', JSON.stringify(this.currentUser));
-          resolve(this.currentUser);
-        }).catch(error => {
-          this.fireAuth.auth.currentUser.delete();
-          reject(error);
-        });
-      });
+        return this.login(user.username, user.password).then(res => resolve(res)).catch(err => reject(err));
+      }).catch(err => reject(err));
     });
   }
 
@@ -49,17 +41,17 @@ export class AuthService {
     return new Promise<any>((resolve, reject) => {
       this.userService.postLogin(login, password).then(user => {
         this.fireAuth.auth.signInWithCustomToken(user.customToken)
-        .then(_ => {
+        .then(_1 => {
           this.currentUser = user;
           this.storageService.setItem('currentUser', JSON.stringify(this.currentUser));
           this.fireAuth.auth.currentUser.getIdToken().then(idToken => {
             this.idToken = idToken;
             this.storageService.setItem('idToken', idToken);
-            resolve(this.currentUser);
-          });
-        }).catch(error => {
-          reject(error);
-        });
+            resolve(idToken);
+          }, _ => resolve(''));
+        }, _2 => resolve(''));
+      }).catch(error => {
+        reject(error);
       });
     });
   }
@@ -80,6 +72,10 @@ export class AuthService {
 
   getCurrentUser() {
     return this.currentUser;
+  }
+
+  setCurrentUser(user: User) {
+    this.currentUser = user;
   }
 
   loadIdToken() {

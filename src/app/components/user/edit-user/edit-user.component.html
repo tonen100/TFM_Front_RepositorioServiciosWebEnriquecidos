@@ -1,1 +1,45 @@
-<p>edit-user works!</p>
+<div class="alert alert-danger alert-dismissible fade in" style="width: 100%; display: none;" id="errorAlert">
+    <p style="margin: auto;text-align: center;">{{ errorMessage }}<span (click)="hideError()" aria-label="close" style="float: right;">&times;</span></p>
+</div>
+
+<form [formGroup]="editUserForm" (ngSubmit)="onEditUser()" id="editUserForm" style="width: 90%;">
+    <fieldset class="fieldsGroup container" style="width: 100%;max-width: 100%;height: fit-content;">
+        <legend style="text-align: left; height:17%; margin-top:2%; justify-content: flex-start; font-size: xxx-large;margin-left:10%;" class="centerVerticalBlock">{{ translateService.instant('user.edit_title') }}</legend>
+        <div class="row" style="min-height: 75%;height: fit-content;margin-top: 50px;">
+            <div style="display: inline-block;width: 25%;">
+                <div class="form-group has-danger row align-items-center">
+                    <img *ngIf="logo != null" id="imageLogo" style="margin: auto; width: 200px; max-width: 90%; height: auto;"/>
+                    <img *ngIf="logo == null && this.editUserForm.value.logoURL" id="imageLogo" [src]="this.editUserForm.value.logoURL" style="margin: auto; width: 200px; max-width: 90%; height: auto;"/>
+                    <fa-icon *ngIf="logo == null && !this.editUserForm.value.logoURL" [icon]="faUserCircle" size="10x" style="margin: auto;"></fa-icon>
+                </div>
+                <div class="form-group has-danger row align-items-center">
+                    <label for="logoURL" class="form-control-label col-4">{{ translateService.instant('user.logo_label') }} :</label>
+                    <span class="col-1"></span>
+                    <input type="text" id="logoURL" formControlName="logoURL" class="form-control col-7" (change)="onLoadLogoURL()"/>
+                </div>
+                <div class="form-group has-danger row align-items-center">
+                    <label for="logo" class="form-control-label col-4">({{ translateService.instant('user.upload_label') }}) :</label>
+                    <span class="col-1"></span>
+                    <input type="file" class="form-control col-7" accept="image/*" id="logo" name="logo" aria-describedby="fileHelp" (change)="onLoadLogoFile()">
+                </div>
+            </div>
+            <div style="display: inline-block;width: 3%;"></div>
+            <div style="display: inline-block;width: 72%;">
+                <div class="form-group has-danger row align-items-center">
+                    <input type="text" formControlName="name" [placeholder]="translateService.instant('user.name_label')" class="form-control col-6" style="font-size: x-large; padding-left: 10px;">
+                </div>
+                <div class="form-group has-danger row align-items-center shadow-textarea">
+                    <textarea class="form-control z-depth-1" formControlName="description" id="description" rows="8" [placeholder]="translateService.instant('user.description_placeholder')"></textarea>
+                </div>
+            </div>
+        </div>
+        <div class="centerVerticalBlock" style="max-width: 500px;"> 
+            <button class="btn btn-primary" style="font-size: large;height: 50px;width: 200px;margin-right: 50px;" (click)="goToUser()">
+                {{ translateService.instant('user.cancel') }}
+            </button>
+            <button type="submit" class="btn btn-primary" style="font-size: large;height: 50px;width: 200px;margin-left: 50px;" [disabled]="!editUserForm.valid">
+                {{ translateService.instant('user.edit') }}
+            </button>
+        </div>
+    </fieldset>
+</form>

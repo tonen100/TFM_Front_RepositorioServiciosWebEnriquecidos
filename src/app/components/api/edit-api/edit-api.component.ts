@@ -9,6 +9,8 @@ import { User } from 'src/app/models/user';
 import { API } from 'src/app/models/api';
 import { APIService } from 'src/app/services/api.service';
 import { businessModels } from '../business-models.enum';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { Ng2ImgMaxService } from 'ng2-img-max';
 
 const snakeCase = (str) => {
   return str.replace(/\W+/g, ' ')
@@ -35,12 +37,14 @@ export class EditAPIComponent extends TranslatableComponent implements OnInit, A
 
   constructor(
     public translateService: TranslateService,
+    private modalService: NgbModal,
     private router: Router,
     private fb: FormBuilder,
     private imgStorageService: ImgStorageService,
     private activatedRoute: ActivatedRoute,
     private apiService: APIService,
-    private authService: AuthService
+    private authService: AuthService,
+    private imgMaxService: Ng2ImgMaxService
     ) {
     super(translateService);
     this.currentUser = this.authService.getCurrentUser();
@@ -118,35 +122,26 @@ export class EditAPIComponent extends TranslatableComponent implements OnInit, A
   }
 
   onLoadLogoFile() {
-    const imageUrl = URL.createObjectURL((document.getElementById('logo') as HTMLInputElement).files[0]);
-    this.uploadDocument((document.getElementById('logo') as HTMLInputElement).files[0], (img) => {
-      try {
-        if (img != null) {
-          this.logo = img;
-          (document.getElementById('imageLogo') as HTMLImageElement).src = imageUrl;
-        }
-      } catch (error) {
-        this.showError(this.translateService.instant('api.errors.unprocessable_file'));
+    this.imgMaxService.compressImage((document.getElementById('logo') as HTMLInputElement).files[0], 0.1).subscribe(img => {
+      if (img != null) {
+        const imageUrl = URL.createObjectURL(img);
+        this.logo = img;
+        setTimeout(() => (document.getElementById('imageLogo') as HTMLImageElement).src = imageUrl, 500);
       }
-    });
+    }, err => this.showError(this.translateService.instant('api.errors.unprocessable_file')));
   }
 
   async storeLogo() {
-    try {
-      const blobImg = (document.getElementById('logo') as HTMLInputElement).files[0];
-      await this.imgStorageService.uploadImage(
-        blobImg,
-        'RestAPI',
-        snakeCase(this.editAPIForm.value.name) + (
-          blobImg.name.lastIndexOf('.') != null ? blobImg.name.slice(blobImg.name.lastIndexOf('.')) : ''
-        )
-      ).then((downloadURL) => {
-        this.editAPIForm.patchValue({ logoURL: downloadURL });
-      });
-    } catch (error) {
-      console.log(error);
-      // TODO
-    }
+    const blobImg = this.logo;
+    await this.imgStorageService.uploadImage(
+      blobImg,
+      'RestAPI',
+      snakeCase(this.editAPIForm.value.name) + (
+        blobImg.name.lastIndexOf('.') != null ? blobImg.name.slice(blobImg.name.lastIndexOf('.')) : ''
+      )
+    ).then((downloadURL) => {
+      this.editAPIForm.patchValue({ logoURL: downloadURL });
+    });
   }
 
   uploadDocument(pathFile: Blob, onLoad: any) {
@@ -157,8 +152,48 @@ export class EditAPIComponent extends TranslatableComponent implements OnInit, A
     fileReader.readAsText(pathFile);
   }
 
+  blacklistAPI() {
+    this.apiService.blacklistApi(this.restApi, true);
+    this.modalService.dismissAll();
+    this.router.navigate(['']);
+  }
+
+  unblacklistAPI() {
+    this.apiService.blacklistApi(this.restApi, false);
+    this.modalService.dismissAll();
+    this.router.navigate(['api', this.restApi._id]);
+  }
+
+  deleteAPI() {
+    this.apiService.deleteApi(this.restApi._id);
+    this.modalService.dismissAll();
+    this.router.navigate(['']);
+  }
+
+  openModal(content) {
+    this.modalService.open(content, { centered: true });
+  }
+
   goToRestAPI() {
     this.router.navigate(['api', this.restApi._id]);
+  }
+
+  goToLinkProvider() {
+    this.router.navigate(['api', this.restApi._id, 'provider', 'link']);
+  }
+
+  goToAddVersion() {
+    this.router.navigate(['api', this.restApi._id, 'version', 'add']);
+  }
+
+  editAPI() {
+    const values = this.editAPIForm.value;
+    this.restApi.name = values.name;
+    this.restApi.logoUrl = values.logoURL;
+    this.restApi.metadata.description = values.description;
+    this.restApi.businessModels =  businessModels.filter(businessModel => values[businessModel]);
+    this.apiService.updateApi(this.restApi).then(_ => this.goToRestAPI())
+      .catch(_ => this.showError(this.translateService.instant('api.errors.fail_edit_api')));
   }
 
   onEditAPI() {
@@ -168,14 +203,11 @@ export class EditAPIComponent extends TranslatableComponent implements OnInit, A
         this.showError(this.translateService.instant('api.errors.already_exist_name'));
       } else {
         if (this.logo != null) {
-          await this.storeLogo();
+          await this.storeLogo().then(_ => this.editAPI())
+          .catch(_ => this.showError(this.translateService.instant('api.errors.load_logo_unexpected')));
+        } else {
+          this.editAPI();
         }
-        this.restApi.name = values.name;
-        this.restApi.logoUrl = values.logoURL;
-        this.restApi.metadata.description = values.description;
-        this.restApi.businessModels =  businessModels.filter(businessModel => values[businessModel]);
-        this.apiService.updateApi(this.restApi).then(_ => this.goToRestAPI())
-          .catch(_ => this.showError(this.translateService.instant('api.errors.fail_edit_api')));
       }
     });
   }

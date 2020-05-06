@@ -1,1 +1,45 @@
-<p>add-version works!</p>
+<div class="alert alert-danger alert-dismissible fade in" style="width: 100%; display: none;" id="errorAlert">
+    <p style="margin: auto;text-align: center;">{{ errorMessage }}<span (click)="hideError()" aria-label="close" style="float: right;">&times;</span></p>
+</div>
+
+<form [formGroup]="createVersionForm" (ngSubmit)="onCreateVersion()" id="formCreateVersion" style="width: 90%;">
+    <fieldset class="fieldsGroup container" style="width: 100%;max-width: 100%;">
+        <legend style="text-align: left; height:17%; margin-top:2%; justify-content: flex-start; font-size: xxx-large;margin-left: 17%;width: 80%;" class="centerVerticalBlock">{{ translateService.instant('api.version.add_title') }} {{ restApi.name }}</legend>
+        <div class="centerVerticalBlock row align-items-center" style="min-height: 75%;">
+            <div class="form-group has-danger row align-items-center" style="height: 50px; width: 95%">
+                <label for="versionNb" class="form-control-label col-1">{{ translateService.instant('api.version.title') }} :</label>
+                <input type="text" formControlName="versionNb" class="form-control col-2" [placeholder]="translateService.instant('api.version.number_placeholder')">
+                <label for="documentation" class="form-control-label col-2">{{ translateService.instant('api.version.doc_label') }} :</label>
+                <input formControlName="documentation" type="file" class="form-control col-2" accept=".md,.json,.yml,.yaml,.markdown,text/markdown,application/json,application/x-yaml"
+                    id="documentation" name="documentation" aria-describedby="fileHelp" (change)="onLoadDocumentation()">
+                <small class="col-4" style="font-style: italic;">{{ translateService.instant('api.version.supported_types') }}</small>
+            </div>
+            <div id="documents" class="form-group align-items-center">
+                <nav class="nav nav-pills flex-column flex-sm-row justify-content-end" class="position: initial;">
+                    <span id="originalDocumentation" class="flex-sm-fill text-sm-center nav-link active" (click)="switchDocumentPreview('originalDocumentation')">{{ translateService.instant('api.version.initial') }}</span>
+                    <span id="oasDocumentation" class="flex-sm-fill text-sm-center nav-link" (click)="switchDocumentPreview('oasDocumentation')">OAS v3</span>
+                    <span id="metadata" class="flex-sm-fill text-sm-center nav-link" (click)="switchDocumentPreview('metadata')">{{ translateService.instant('api.version.metadata') }}</span>
+                </nav>
+                <pre></pre>
+            </div>
+            <div class="form-group has-danger row align-items-center" style="height: 50px;width: 100%">
+                <label for="rootUrlApi" class="form-control-label col-2" style="font-size:medium;">{{ translateService.instant('api.version.root_url_api_label') }} :</label>
+                <input type="text" formControlName="rootUrlApi" class="form-control col-3" id="rootUrlApi" [placeholder]="translateService.instant('api.additional_information')" style="font-size:small;">
+                <label for="urlDoc" class="form-control-label col-2" style="font-size:medium;">{{ translateService.instant('api.version.url_doc_label') }}:</label>
+                <input formControlName="urlDoc" type="text" class="form-control col-3" id="urlDoc" [placeholder]="translateService.instant('api.additional_information')" style="font-size:small;">
+            </div>
+            <div class="form-group has-danger row align-items-center" style="height: 50px; width: 80%; margin: auto;">
+                <label for="versionSummary" class="form-control-label col-4">{{ translateService.instant('api.version.summary_label') }} :</label>
+                <input type="text" formControlName="versionSummary" class="form-control col-6">
+            </div>
+        </div>
+        <div class="centerVerticalBlock" style="max-width: 500px;margin: 50px auto;"> 
+            <button class="btn btn-outline-secondary" style="height: 60px;margin-right: 10%;" (click)="goToAPI()">
+                {{ translateService.instant('api.version.cancel') }}
+            </button>
+            <button type="submit" class="btn btn-primary" style="height: 60px;margin-left: 10%;" [disabled]="!createVersionForm.valid">
+                {{ translateService.instant('api.version.add') }}
+            </button>
+        </div>
+    </fieldset>
+</form>

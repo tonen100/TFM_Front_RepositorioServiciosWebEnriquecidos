@@ -1,0 +1,117 @@
+.ng-valid.ng-dirty:not(form) {
+    border: solid 2px lightgreen;
+}
+
+.ng-invalid.ng-dirty:not(form), .ng-invalid:not(form).form-submitted {
+    border: solid 2px lightcoral;
+}
+
+.fieldsGroup {
+    height: calc(100vh - 150px);
+}
+
+.centerVerticalBlock {
+    display: flex;
+    justify-content: center;
+}
+
+.centerHorizontalBlock {
+    display: inline-block;
+}
+
+.fieldsGroup > * {
+    margin: auto;
+}
+
+#formCreateVersion {
+    width: 100%;
+    height: fit-content;
+    vertical-align: middle;
+    margin: auto;
+}
+
+.row {
+    vertical-align: middle;
+}
+
+.row > input {
+    text-align: start;
+    margin: 0;
+    padding: 0px;
+    margin-left: 20px;
+}
+
+.row > input[type="file"] {
+    height: fit-content;
+}
+
+.row > .form-control-label {
+    text-align: end;
+    margin: 0;
+    padding: 0px;
+    font-size: large;
+}
+
+.smallAuthButton {
+    height: 35px;
+    width: 90px;
+    font-size: medium;
+}
+
+#documents {
+    height: 500px;
+    width: 70%;
+    margin: auto;
+    padding: 15px;
+    text-align: center;
+    font-family: Consolas,monaco,monospace;
+    font-weight: 400;
+    font-size: 13px;
+    line-height: 1.42857143;
+    color: #333;
+    word-break: break-all;
+    word-wrap: break-word;
+    background-color: #f5f5f5;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+#documents > nav {
+    display: none;
+    position: absolute;
+    right: 50px;
+}
+
+#documents > pre {
+    height: 100%;
+    width: 100%;
+    text-align: start;
+    overflow-y: auto;
+    scrollbar-color: grey #F5F5F5;
+}
+
+#documents > pre::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.1);
+    background-color: #F5F5F5;
+    border-radius: 10px;
+}
+
+#documents > pre::-webkit-scrollbar {
+    width: 12px;
+    background-color: #F5F5F5;
+    width: 6px;
+}
+    
+#documents > pre::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.1);
+    background-color:grey;
+}
+
+#errorAlert > p > span:hover {
+    cursor: pointer;
+}
+
+#versionFields > .row {
+    margin-bottom: 0;
+}

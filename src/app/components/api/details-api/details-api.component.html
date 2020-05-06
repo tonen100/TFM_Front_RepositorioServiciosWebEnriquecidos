@@ -1,19 +1,4 @@
 <div style="margin: 50px;">
-    <ng-template #deleteModalContent let-modal>
-        <div class="modal-header">
-          <h4 class="modal-title">{{ translateService.instant('api.delete') }} {{ restApi.name }}</h4>
-          <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <p><span style="font-weight: 500;" >{{ translateService.instant('api.cant_undo_action') }}</span> {{ translateService.instant('api.delete_repository_question') }}</p>
-        </div>
-        <div class="modal-footer">
-            <button type="button" class="btn btn-danger" (click)="deleteAPI()">{{ translateService.instant('api.delete') }}</button>
-            <button type="button" class="btn btn-light" (click)="modal.close('Close click')">{{ translateService.instant('api.cancel') }}</button>
-        </div>
-    </ng-template>
     <div *ngIf="restApi">
         <div class="centerInlineBlock">
             <img [src]="restApi.logoUrl" style="margin: auto; width:250px; max-width: 90%; height: auto;"/>
@@ -46,7 +31,9 @@
                 </p>
             </div>
             <div class="row" style="min-height: 100px;">
-                <p *ngIf="restApi.metadata && restApi.metadata.description; else noDescriptionAlt" style="font-size: medium;" [innerHTML]="restApi.metadata.description" ></p>
+                <div *ngIf="restApi.metadata && restApi.metadata.description; else noDescriptionAlt">
+                    <p style="font-size: medium;" [innerHTML]="restApi.metadata.description"></p>
+                </div>
                 <ng-template #noDescriptionAlt style="font-size: medium;">{{ translateService.instant('provider.no_description') }}</ng-template>
             </div>
         </div>
@@ -54,7 +41,6 @@
             <button *ngIf="restApi.metadata.termsOfService" type="button" class="btn btn-light referenceLink" (click)="popupToS()">{{ translateService.instant('api.terms_of_service') }}</button>
             <button *ngIf="apiDocName" type="button" (click)="downloadOriginalDocumentation()" class="btn btn-light referenceLink">{{ translateService.instant('api.original_documentation') }}</button>
             <button *ngIf="restApi.metadata.url" type="button" class="btn btn-light referenceLink" (click)="redirectToAPIRoot()">{{ translateService.instant('api.api_url') }}</button>
-            <button *ngIf="activeRole == 'Contributor' || activeRole == 'Administrator'" type="button" class="btn btn-outline-danger" style="margin-left: auto;font-size: x-large;" (click)="openModalDeleteAPI(deleteModalContent)">{{ translateService.instant('api.delete') }}</button>
         </div>
     </div>
     <div style="height: auto;margin-top: 50px;" *ngIf="versions">
@@ -62,15 +48,40 @@
             <div style="display:inline-block; width: 400px; vertical-align: top;">
                 <p style="font-size: xx-large; text-align: center; margin-right: 50px;">{{ translateService.instant('api.version.details') }}</p>
                 <div class="row versionList">
-                    <div *ngFor="let v of versions" class="row versionRow">
-                        <div class="versionMenuDropDown">
-                            <fa-icon [icon]="faCaretSquareDown"></fa-icon>
+                    <div *ngFor="let major of versions">
+                        <div class="row versionRow">
+                            <div class="versionMenuDropDown">
+                                <fa-icon [icon]="major.toogled ? faCaretSquareRight : faCaretSquareDown" (click)="major.toogled = !major.toogled"></fa-icon>
+                            </div>
+                            <div class="versionSelect" (click)="selectVersion(major.version)" style="border-bottom-color: teal;border-bottom-style: solid;border-bottom-width: 1px;">
+                                <p style="font-weight: bold; text-align: center;">{{ major.version.number }}</p>
+                                <p style=" text-align: justify;">{{ major.version.description }}</p>
+                            </div>
                         </div>
-                        <div class="versionSelect">
-                            <p style="font-weight: bold; text-align: center;">{{ v.version.number }}</p>
-                            <p style=" text-align: justify;">{{ v.version.description }}</p>
+                        <div *ngFor="let minor of major.subVersions">
+                            <div *ngIf="major.toogled">
+                                <div class="row versionRow">
+                                    <div class="versionMenuDropDown" style="background-color: lightgray;">
+                                        <fa-icon [icon]="minor.toogled ? faCaretSquareRight : faCaretSquareDown" (click)="minor.toogled = !minor.toogled"></fa-icon>
+                                    </div>
+                                    <div class="versionSelect" (click)="selectVersion(minor.version)" style="border-bottom-color: gray ;border-bottom-style: solid;border-bottom-width: 1px;">
+                                        <p style="font-weight: bold; text-align: center;">{{ minor.version.number }}</p>
+                                        <p style=" text-align: justify;">{{ minor.version.description }}</p>
+                                    </div>
+                                </div>
+                                <div *ngFor="let patch of minor.subVersions">
+                                    <div *ngIf="minor.toogled" class="row versionRow">
+                                        <div class="versionMenuDropDown" style="background-color: lightgray;"></div>
+                                        <div class="versionSelect" (click)="selectVersion(patch.version)">
+                                            <p style="font-weight: bold; text-align: center;">{{ patch.version.number }}</p>
+                                            <p style=" text-align: justify;">{{ patch.version.description }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
+                   
                 </div>
             </div>
             <app-details-version *ngIf="selectedVersion" [version]=selectedVersion></app-details-version>

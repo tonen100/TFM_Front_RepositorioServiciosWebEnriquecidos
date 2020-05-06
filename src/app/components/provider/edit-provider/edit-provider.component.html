@@ -1,7 +1,36 @@
 <div class="alert alert-danger alert-dismissible fade in" style="width: 100%; display: none;" id="errorAlert">
     <p style="margin: auto;text-align: center;">{{ errorMessage }}<span (click)="hideError()" aria-label="close" style="float: right;">&times;</span></p>
 </div>
-
+<ng-template #blacklistModalContent let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title">{{ translateService.instant('provider.blacklist') }} {{ provider.name }}</h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <p>{{ translateService.instant('provider.blacklist_repository_question') }}</p>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-danger" (click)="blacklistProvider()">{{ translateService.instant('provider.blacklist') }}</button>
+        <button type="button" class="btn btn-light" (click)="modal.close('Close click')">{{ translateService.instant('provider.cancel') }}</button>
+    </div>
+</ng-template>
+<ng-template #unblacklistModalContent let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title">{{ translateService.instant('provider.unblacklist') }} {{ provider.name }}</h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <p>{{ translateService.instant('provider.unblacklist_repository_question') }}</p>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-danger" (click)="unblacklistProvider()">{{ translateService.instant('provider.unblacklist') }}</button>
+        <button type="button" class="btn btn-light" (click)="modal.close('Close click')">{{ translateService.instant('provider.cancel') }}</button>
+    </div>
+</ng-template>
 <form [formGroup]="editProviderForm" (ngSubmit)="onEditProvider()" id="editProviderForm" style="width: 90%;">
     <fieldset class="fieldsGroup container" style="width: 100%;max-width: 100%;height: fit-content;">
         <legend style="text-align: left; height:17%; margin-top:2%; justify-content: flex-start; font-size: xx-large;" class="centerVericalBlock">{{ translateService.instant('provider.edit_title') }} {{ provider.name }} ({{ translateService.instant('provider.title') }})</legend>
@@ -25,6 +54,8 @@
             <div style="display: inline-block;width: 72%;">
                 <div class="form-group has-danger row align-items-center">
                     <input type="text" formControlName="name" [placeholder]="translateService.instant('provider.name_label')" class="form-control col-6" style="font-size: x-large;">
+                    <button *ngIf="activeRole == 'Administrator' && provider && provider.blacklisted" type="button" class="btn btn-outline-danger" style="margin-left: auto;font-size: x-large;" (click)="openModal(unblacklistModalContent)">{{ translateService.instant('api.unblacklist') }}</button>
+                    <button *ngIf="activeRole == 'Administrator' && provider && !provider.blacklisted" type="button" class="btn btn-outline-danger" style="margin-left: auto;font-size: x-large;" (click)="openModal(blacklistModalContent)">{{ translateService.instant('api.blacklist') }}</button>
                 </div>
                 <div class="form-group has-danger row align-items-center shadow-textarea">
                     <textarea class="form-control z-depth-1" formControlName="description" id="description" rows="8" [placeholder]="translateService.instant('provider.description_placeholder')"></textarea>

@@ -50,6 +50,16 @@ export class UserService {
     return this.http.get<User>(url).toPromise();
   }
 
+  getUserByName(name: string) {
+    const url = `${this.URL_API}/v1/users?username=` + name;
+    return this.http.get<User[]>(url).toPromise();
+  }
+
+  getUserByEmail(email: string) {
+    const url = `${this.URL_API}/v1/users?email=` + email;
+    return this.http.get<User[]>(url).toPromise();
+  }
+
   updateProfile(user: User, idToken: string) {
     const url = `${this.URL_API}/v1/users/${user._id}`;
 
@@ -58,6 +68,11 @@ export class UserService {
 
     const body = JSON.stringify(putUser);
     httpOptions.headers = httpOptions.headers.set('Authorization', idToken);
-    this.http.put<User>(url, body, httpOptions).toPromise();
+    return this.http.put<User>(url, body, httpOptions).toPromise();
+  }
+
+  banUser(id: string, banned: boolean) {
+    const url = `${this.URL_API}/v1/users/${id}/ban`;
+    return this.http.patch<User>(url, { banned }).toPromise();
   }
 }

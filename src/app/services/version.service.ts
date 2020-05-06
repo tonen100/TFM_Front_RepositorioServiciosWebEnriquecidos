@@ -54,8 +54,14 @@ export class VersionService {
     return this.http.post<Version>(url, postVersion, httpOptions).toPromise();
   }
 
-  getVersion(id: string, version: Version) {
-    const url = `${this.URL_API}/v1/restApis/${id}/versions/${version._id}`;
+  // tslint:disable-next-line: variable-name
+  getVersionsByNumber(api: API, number: string) {
+    const url = `${this.URL_API}/v1/restApis/${api._id}/versions?number=${number}`;
+    return this.http.get<Array<Version>>(url).toPromise();
+  }
+
+  getVersion(api: API, id: string) {
+    const url = `${this.URL_API}/v1/restApis/${api._id}/versions/${id}`;
     return this.http.get<Version>(url).toPromise();
   }
 

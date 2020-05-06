@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { TranslatableComponent } from '../../shared/translatable/translatable.component';
 import { TranslateService } from '@ngx-translate/core';
 import { APIService } from 'src/app/services/api.service';
@@ -13,14 +13,15 @@ import { Provider } from 'src/app/models/provider';
 import { UserService } from 'src/app/services/user.service';
 import { HistoryContributionService } from 'src/app/services/historyContribution.service';
 import { HistoryContribution } from 'src/app/models/historyContribution';
-import { faCaretSquareDown } from '@fortawesome/free-solid-svg-icons';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { faCaretSquareDown, faCaretSquareRight } from '@fortawesome/free-solid-svg-icons';
+import * as clone from 'clone';
 import * as moment from 'moment';
 import * as fileDownload from 'js-file-download';
 
 declare class NestedVersion {
   version: Version;
   subVersions: NestedVersion[];
+  toogled: boolean;
 }
 
 @Component({
@@ -29,6 +30,9 @@ declare class NestedVersion {
   styleUrls: ['./details-api.component.css']
 })
 export class DetailsAPIComponent extends TranslatableComponent implements OnInit {
+
+  faCaretSquareDown = faCaretSquareDown;
+  faCaretSquareRight = faCaretSquareRight;
 
   currentUser: User;
   activeRole: string;
@@ -44,11 +48,8 @@ export class DetailsAPIComponent extends TranslatableComponent implements OnInit
   apiDocName: string;
   linkBlobDoc: string;
 
-  faCaretSquareDown = faCaretSquareDown;
-
   constructor(
     public translateService: TranslateService,
-    private modalService: NgbModal,
     private activatedRoute: ActivatedRoute,
     private router: Router,
     private authService: AuthService,
@@ -73,8 +74,10 @@ export class DetailsAPIComponent extends TranslatableComponent implements OnInit
           } else {
             this.restApi = api;
             this.providerService.getProvider(this.restApi.provider_id).then(provider => this.provider = provider);
-            this.selectedVersion = this.restApi.versions[0];
-            this.versionService.getAllVersions(this.restApi).then(versions => this.versions = this.nestSubVersions(versions));
+            this.versionService.getAllVersions(this.restApi).then(versions => {
+              this.versions = this.nestSubVersions(versions);
+              this.selectVersion(this.versions[0].version);
+            });
             this.apiDocName = this.restApi.name + '-documentation.txt';
             this.historyContributionService.getAllhistoryContributionsByContribution(this.restApi._id, 'RestAPI')
             .then(contributions => {
@@ -117,6 +120,13 @@ export class DetailsAPIComponent extends TranslatableComponent implements OnInit
     fileDownload.default(this.restApi.versions[0].originalDocumentation, this.apiDocName);
   }
 
+  isMarkdown(document: string) {
+    console.log(document)
+    return document.match(/^\#/) != null ||
+    document.match(/\[[^]]+\]\(https?:\/\/\S+\)/) != null ||
+    document.match(/\s(__|\*\*)(?!\s)(.(?!\1))+(?!\s(?=\1))/) != null;
+  }
+
   redirectToAPIRoot() {
     if (typeof(this.restApi.metadata.url) === 'string') {
       window.location.replace(this.restApi.metadata.url);
@@ -129,37 +139,48 @@ export class DetailsAPIComponent extends TranslatableComponent implements OnInit
     this.router.navigate(['api', this.restApi._id, 'edit']);
   }
 
-  deleteAPI() {
-    this.apiService.deleteApi(this.restApi._id);
-    this.router.navigate(['']);
-  }
-
-  openModalDeleteAPI(content) {
-    this.modalService.open(content, { centered: true });
+  selectVersion(version: Version) {
+    if (!version.oasDocumentation) {
+      this.versionService.getVersion(this.restApi, version._id).then(v => {
+        version.oasDocumentation = v.oasDocumentation;
+        this.selectedVersion = version;
+      });
+    } else {
+      this.selectedVersion = version;
+    }
   }
 
   nestSubVersions(versions: Version[]): NestedVersion[] {
     const result: NestedVersion[] = [];
+    versions.forEach(version => version.createdAt = new Date(version.createdAt));
     versions.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime()).forEach(version => {
       if (version.number.match(/^v[0-9]+\.[0-9]+\.[0-9]+$/)) {
         const nestedVersion = result.find(
           v => v.version.number.slice(0, v.version.number.indexOf('.')) === version.number.slice(0, version.number.indexOf('.'))
         );
         if (nestedVersion) {
-          const subNestedVersion = result.find(
-            v => v.version.number.slice(0, v.version.number.lastIndexOf('.')) === version.number.slice(0, version.number.lastIndexOf('.'))
-          );
-          if (subNestedVersion) {
-            subNestedVersion.subVersions.push({ version, subVersions: null });
-          } else {
-            nestedVersion.subVersions.push({ version, subVersions: [] });
-          }
+          nestedVersion.subVersions.push({ version, subVersions: [], toogled: false });
         } else {
-          result.push({ version, subVersions: [] });
+          result.push({ version, subVersions: [], toogled: false });
         }
       } else {
-        result.push({ version, subVersions: [] });
+        result.push({ version, subVersions: [], toogled: false });
       }
+    });
+    result.forEach(version => {
+      // tslint:disable-next-line: max-line-length
+      const subVersions = clone<NestedVersion[]>(version.subVersions.sort((a, b) => b.version.createdAt.getTime() - a.version.createdAt.getTime()));
+      subVersions.forEach(subVersion => {
+        const nestedVersion = version.subVersions.find(
+          v => v.version._id !== subVersion.version._id &&
+            // tslint:disable-next-line: max-line-length
+            v.version.number.slice(0, v.version.number.lastIndexOf('.')) === subVersion.version.number.slice(0, subVersion.version.number.lastIndexOf('.'))
+        );
+        if (nestedVersion) {
+          nestedVersion.subVersions.push({ version: subVersion.version, subVersions: [], toogled: false });
+          version.subVersions = version.subVersions.filter(v => v.version._id !== subVersion.version._id);
+        }
+      });
     });
     return result;
   }

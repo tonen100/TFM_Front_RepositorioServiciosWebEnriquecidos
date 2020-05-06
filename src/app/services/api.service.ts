@@ -56,9 +56,9 @@ export class APIService {
     delete postApi._id;
     const idToken = this.authService.getIdToken();
 
-    if(idToken != null) {
+    if (idToken != null) {
       httpOptions.headers = httpOptions.headers.set('Authorization', idToken);
-    } else if(httpOptions.headers.get('Authorization') != null) {
+    } else if (httpOptions.headers.get('Authorization') != null) {
       httpOptions.headers = httpOptions.headers.delete('Authorization');
     }
 
@@ -79,9 +79,9 @@ export class APIService {
 
     const idToken = this.authService.getIdToken();
 
-    if(idToken != null) {
+    if (idToken != null) {
       httpOptions.headers = httpOptions.headers.set('Authorization', idToken);
-    } else if(httpOptions.headers.get('Authorization') != null) {
+    } else if (httpOptions.headers.get('Authorization') != null) {
       httpOptions.headers = httpOptions.headers.delete('Authorization');
     }
 
@@ -94,9 +94,9 @@ export class APIService {
 
     const idToken = this.authService.getIdToken();
 
-    if(idToken != null) {
+    if (idToken != null) {
       httpOptions.headers = httpOptions.headers.set('Authorization', idToken);
-    } else if(httpOptions.headers.get('Authorization') != null) {
+    } else if (httpOptions.headers.get('Authorization') != null) {
       httpOptions.headers = httpOptions.headers.delete('Authorization');
     }
 
@@ -112,9 +112,9 @@ export class APIService {
 
     const idToken = this.authService.getIdToken();
 
-    if(idToken != null) {
+    if (idToken != null) {
       httpOptions.headers = httpOptions.headers.set('Authorization', idToken);
-    } else if(httpOptions.headers.get('Authorization') != null) {
+    } else if (httpOptions.headers.get('Authorization') != null) {
       httpOptions.headers = httpOptions.headers.delete('Authorization');
     }
 
@@ -126,9 +126,9 @@ export class APIService {
 
     const idToken = this.authService.getIdToken();
 
-    if(idToken != null) {
+    if (idToken != null) {
       httpOptions.headers = httpOptions.headers.set('Authorization', idToken);
-    } else if(httpOptions.headers.get('Authorization') != null) {
+    } else if (httpOptions.headers.get('Authorization') != null) {
       httpOptions.headers = httpOptions.headers.delete('Authorization');
     }
 

@@ -39,7 +39,7 @@
             <div id="versionFields" class="col-7" style="height: 100%;">
                 <div class="form-group has-danger row align-items-center" style="height: 50px;">
                     <label for="versionNb" class="form-control-label col-2">{{ translateService.instant('api.version.title') }} :</label>
-                    <input type="text" formControlName="versionNb" class="form-control col-3">
+                    <input type="text" formControlName="versionNb" class="form-control col-3" [placeholder]="translateService.instant('api.version.number_placeholder')">
                     <label for="documentation" class="form-control-label col-3">{{ translateService.instant('api.version.doc_label') }} :</label>
                     <input formControlName="documentation" type="file" class="form-control col-3" accept=".md,.json,.yml,.yaml,.markdown,text/markdown,application/json,application/x-yaml"
                         id="documentation" name="documentation" aria-describedby="fileHelp" (change)="onLoadDocumentation()">

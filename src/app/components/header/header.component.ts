@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { faSearch } from '@fortawesome/free-solid-svg-icons';
+import { faSearch, faUserCircle } from '@fortawesome/free-solid-svg-icons';
 import { TranslateService } from '@ngx-translate/core';
 import { TranslatableComponent } from '../shared/translatable/translatable.component';
 import { AuthService } from 'src/app/services/auth.service';
 import { User } from '../../models/user';
 import { ToastrService } from 'ngx-toastr';
 import { environment } from 'src/environments/environment';
-import { Router } from '@angular/router';
+import { Router, NavigationEnd } from '@angular/router';
 
 @Component({
   selector: 'app-header',
@@ -16,6 +16,7 @@ import { Router } from '@angular/router';
 export class HeaderComponent extends TranslatableComponent implements OnInit {
 
   faSearch = faSearch;
+  faUserCircle = faUserCircle;
 
   idMainAPI = environment.ID_MAIN_API_IN_API;
   lang: string;
@@ -38,9 +39,19 @@ export class HeaderComponent extends TranslatableComponent implements OnInit {
     if (this.currentUser) {
       this.activeRole = this.currentUser.role.toString();
     }
+    this.router.events.subscribe(event => {
+      if (event instanceof NavigationEnd && event.url === '/') {
+        console.log(event.url);
+        this.currentUser = this.authService.getCurrentUser();
+        if (this.currentUser) {
+          this.activeRole = this.currentUser.role.toString();
+        }
+      }
+    });
   }
 
   nOnInit(): void {
+
   }
 
   changeLanguage(language: string) {
@@ -56,7 +67,7 @@ export class HeaderComponent extends TranslatableComponent implements OnInit {
           this.token = null;
           localStorage.removeItem('idToken');
           this.router.navigate(['']);
-          this.toastr.success(this.translateService.instant('auth.success_connection'));
+          this.toastr.success(this.translateService.instant('auth.success_disconnection'));
         }
       );
   }
