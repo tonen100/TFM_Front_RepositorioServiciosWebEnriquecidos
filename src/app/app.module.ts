@@ -4,7 +4,7 @@ import { AngularMaterialModule } from './angular-material.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { AngularFireModule } from '@angular/fire';
-import { AngularFireAuth } from '@angular/fire/auth';
+import { AngularFireAuth, AngularFireAuthModule } from '@angular/fire/auth';
 import { AngularFireStorageModule } from '@angular/fire/storage';
 import { HttpClientModule, HttpClient } from '@angular/common/http';
 import { TranslateModule, TranslateLoader, TranslateService  } from '@ngx-translate/core';
@@ -85,6 +85,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     FormsModule,
     ReactiveFormsModule,
     AngularFireModule.initializeApp(environment.FIRE_CONFIG),
+    AngularFireAuthModule,
     AngularFireStorageModule,
     AngularMaterialModule,
     HttpClientModule,
@@ -103,7 +104,6 @@ export function HttpLoaderFactory(http: HttpClient) {
     MarkdownModule.forRoot({ loader: HttpClient })
   ],
   providers: [
-    AngularFireAuth,
     AuthService,
     APIService,
     VersionService,
