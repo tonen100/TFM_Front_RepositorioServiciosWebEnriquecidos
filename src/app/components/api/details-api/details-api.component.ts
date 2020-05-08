@@ -73,6 +73,7 @@ export class DetailsAPIComponent extends TranslatableComponent implements OnInit
             this.router.navigate(['404']);
           } else {
             this.restApi = api;
+            document.getElementById('metadata').innerHTML = JSON.stringify(api.metadata);
             this.providerService.getProvider(this.restApi.provider_id).then(provider => this.provider = provider);
             this.versionService.getAllVersions(this.restApi).then(versions => {
               this.versions = this.nestSubVersions(versions);
