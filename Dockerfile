@@ -1,4 +1,4 @@
-FROM node:13-alpine as builder
+FROM node:13.14 as builder
 COPY package.json ./
 RUN yarn install && mkdir /generator && mv ./node_modules ./generator
 WORKDIR /generator
