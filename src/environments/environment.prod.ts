@@ -1,6 +1,6 @@
 export const environment = {
   production: true,
-  URL_API: process.env.URL_API,
+  URL_API: 'https://tfm-api-repositorio.herokuapp.com',
   DEFAULT_LANG: 'en-US',
   FIRE_CONFIG: {
     apiKey: 'AIzaSyDLqZG0zNK1rZB7S_D_QVRI-KKDPmxNk8g',
