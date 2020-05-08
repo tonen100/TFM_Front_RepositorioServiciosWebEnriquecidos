@@ -7,15 +7,13 @@ import { AngularFireModule } from '@angular/fire';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFireStorageModule } from '@angular/fire/storage';
 import { HttpClientModule, HttpClient } from '@angular/common/http';
-import { TranslateModule, TranslateLoader  } from '@ngx-translate/core';
+import { TranslateModule, TranslateLoader, TranslateService  } from '@ngx-translate/core';
 import { ToastrModule } from 'ngx-toastr';
 import { registerLocaleData } from '@angular/common';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
 import localeEs from '@angular/common/locales/es';
 import localeFr from '@angular/common/locales/fr';
-
-import { StopPropagationDirective } from './directives/stop-propagation.directive';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -43,6 +41,13 @@ import { LinkProviderComponent } from './components/api/link-provider/link-provi
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MarkdownModule } from 'ngx-markdown';
 import { Ng2ImgMaxModule } from 'ng2-img-max';
+import { APIService } from './services/api.service';
+import { VersionService } from './services/version.service';
+import { UserService } from './services/user.service';
+import { StorageService } from './services/local-storage.service';
+import { ProviderService } from './services/provider.service';
+import { ImgStorageService } from './services/img-storage.service';
+import { HistoryContributionService } from './services/historyContribution.service';
 
 registerLocaleData(localeEs, 'es');
 registerLocaleData(localeFr, 'fr');
@@ -71,8 +76,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     RestApiItemComponent,
     EditUserComponent,
     TranslatableComponent,
-    LinkProviderComponent,
-    StopPropagationDirective
+    LinkProviderComponent
   ],
   imports: [
     CommonModule,
@@ -98,7 +102,19 @@ export function HttpLoaderFactory(http: HttpClient) {
     Ng2ImgMaxModule,
     MarkdownModule.forRoot({ loader: HttpClient })
   ],
-  providers: [AngularFireAuth, AuthService],
+  providers: [
+    AngularFireAuth,
+    AuthService,
+    APIService,
+    VersionService,
+    ProviderService,
+    HistoryContributionService,
+    UserService,
+    AuthService,
+    ImgStorageService,
+    StorageService,
+    TranslateService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
