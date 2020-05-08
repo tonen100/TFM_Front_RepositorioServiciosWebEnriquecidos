@@ -1,0 +1,92 @@
+.centerInlineBlock {
+    width: 25%;
+    display: inline-block;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.centerVerticalBlock {
+    display: flex;
+    align-items: center;
+    vertical-align: middle;
+}
+
+.referenceLink {
+    color: coral;
+    font-weight: bold;
+    margin: auto;
+}
+
+.referenceLink:hover {
+    cursor: pointer;
+}
+
+.versionList {
+    width: 350px;
+    max-height: 85vh;
+    border-width: 5px;
+    border-style: solid;
+    border-radius: 5px;
+    border-color: darkslategray;
+    overflow: scroll;
+    -ms-overflow-style: none;
+}
+
+.versionList::-webkit-scrollbar {
+    display: none;
+}
+
+.versionRow {
+    width: 340px;
+    height: 125px;
+    margin: 0;
+}
+
+.versionSelect {
+    width: 290px;
+    padding: 10px;
+    background: gainsboro;
+    max-height: 125px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+.versionSelect:hover {
+    cursor: pointer;
+}
+
+.versionMenuDropDown {
+    width: 50px;
+    background: teal;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.versionMenuDropDown > fa-icon {
+    width: 90%;
+    color: darkseagreen;
+    font-size: xx-large;
+}
+
+.versionMenuDropDown > fa-icon:hover {
+    cursor: pointer;
+}
+
+app-details-version {
+    display:inline-block;
+    width: calc(100% - 400px);
+    max-height: 90vh;
+    border-width: 3px;
+    border-style: solid;
+    border-color: teal;
+    border-radius: 20px;
+    background: mintcream;
+    overflow: scroll;
+    -ms-overflow-style: none;
+}
+
+app-details-version::-webkit-scrollbar {
+    display: none;
+}

@@ -1,0 +1,59 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="navbar-collapse" id="navbarSupportedContent" style="min-height: 100px;">
+        <div style="width: 36%;">
+            <div *ngIf="currentUser != null" class="btn" style="display: block;margin-right: 0;width: fit-content;margin-left: auto;" [routerLink]="'/user/' + currentUser._id">
+                <img *ngIf="currentUser.logoUrl != null" class="profilePicture" [src]="currentUser.logoUrl"/>
+                <fa-icon *ngIf="!currentUser.logoUrl" [icon]="faUserCircle" size="6x"></fa-icon>
+            </div>
+        </div>
+        <form class="form-inline mx-auto" style="padding: 0; margin: 0; width: 28%;">
+            <div class="col">
+                <span class="row justify-content-center">
+                    <h2>{{ translateService.instant('api.browse_title') }}</h2>
+                </span>
+                <span class="row justify-content-center">
+                    <input class="form-control mr-sm-2" type="search" placeholder="Twitter, AWS..." [value]="keywords" (input)="keywords = $event.target.value" (keyup.enter)="searchAPIs()" aria-label="Search">
+                    <button class="btn btn-outline-success my-2 my-sm-0 search-icon" type="submit" [disabled]="keywords == ''" (click)="searchAPIs()"><fa-icon [icon]="faSearch"></fa-icon></button>
+                </span>
+            </div>
+        </form>
+        <ul class="navbar-nav" style="height: 100px; width: 26%">
+            <div class="col text-center textButtonCol">
+                <button type="button" class="btn btn-light textButton" routerLink="/api/add">{{ translateService.instant('api.add') }}</button>
+            </div>
+            <div class="col text-center textButtonCol">
+                <button type="button" class="btn btn-light textButton" [routerLink]="['api', idMainAPI]">{{ translateService.instant('api.our_api') }}</button>
+            </div>
+        </ul>
+        <ul class="navbar-nav justify-content-center" style="min-height: 100px;padding-right: 0px; width: 10%">
+            <div class="btn-group dropdown">
+                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                  <span class="lang-sm lang" [lang]="this.lang"></span> <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" role="menu">
+                  <li><span class="lang-sm lang-lbl" (click)="changeLanguage('en')" lang="en"></span></li>
+                  <li><span class="lang-sm lang-lbl" (click)="changeLanguage('es')" lang="es"></span></li>
+                  <li><span class="lang-sm lang-lbl" (click)="changeLanguage('fr')" lang="fr"></span></li>
+                </ul>
+            </div>
+            <div class="col align-items-center">
+                <ng-container *ngIf="this.authService.getCurrentUser() == null; else logout">
+                    <div class="row justify-content-center">
+                        <button type="button" class="btn btn-primary smallAuthButton" routerLink="/login">{{ translateService.instant('auth.sign_in_title') }}</button>
+                    </div>
+                    <div class="row justify-content-center">
+                        <button type="button" class="btn btn-primary smallAuthButton" routerLink="/register">{{ translateService.instant('auth.sign_up_title') }}</button>
+                    </div>
+                </ng-container>
+                <ng-template #logout>
+                    <div class="row justify-content-center">
+                        <button type="button" class="btn btn-danger smallAuthButton" (click)="onLogout()">{{ translateService.instant('auth.log_out') }}</button>
+                    </div>
+                    <div *ngIf="activeRole == 'Administrator'" class="row justify-content-center">
+                        <button type="button" class="btn btn-primary smallAuthButton" routerLink="/register">{{ translateService.instant('auth.add_user_title') }}</button>
+                    </div>
+                </ng-template>
+            </div>
+        </ul>
+    </div>
+</nav>

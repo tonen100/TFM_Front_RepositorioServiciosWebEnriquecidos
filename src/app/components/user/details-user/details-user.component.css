@@ -1,0 +1,77 @@
+.centerInlineBlock {
+    width: 25%;
+    display: inline-block;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.centerVerticalBlock {
+    display: flex;
+    align-items: center;
+    vertical-align: middle;
+}
+
+.referenceLink {
+    color: coral;
+    font-weight: bold;
+    margin: auto;
+}
+
+.referenceLink:hover {
+    cursor: pointer;
+}
+
+.externalLink {
+    border-left-width: 1px !important;
+    flex-grow: 1;
+    text-align: center;
+}
+
+.api-item {
+    width:400px;
+    height: 600px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    border-color: teal;
+    border-width: 10px;
+    border-style: solid;
+    border-radius: 50px;    
+}
+
+.api-item:hover {
+    cursor: pointer;
+}
+
+.api-item > p, .api-item > ng-div {
+    background-color: floralwhite;
+    padding:15px;
+}
+
+.api-list-item:hover {
+    background-color: cadetblue;
+    color: white;
+}
+
+.contributionLine {
+    width: 100%;
+    height: 100%;
+    padding: 0;
+}
+
+.contributionLine > p {
+    display: inline-block;
+    font-size: larger;
+    width: 90%;
+    text-align: center;
+    padding: .75rem 1.25rem;
+}
+
+.contributionLine > fa-icon {
+    width: 10%;
+    display: inline-block;
+    vertical-align: middle;
+    color: white;
+    height: 100%;
+    margin: 0;
+    padding: 1.3em;
+}

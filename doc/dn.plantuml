@@ -1,0 +1,57 @@
+@startuml
+class "Home" <<(P,IndianRed) page>>
+class "API search results" <<(P,IndianRed) page>>
+class "Details API" <<(P,IndianRed) page>>
+class "Sign up" <<(P,IndianRed) form>>
+class "Sign in" <<(P,IndianRed) form>>
+class "Details provider" <<(P,IndianRed) page>>
+class "REST APIs list" <<(C,RoyalBlue) component>>
+class "REST APIs list " <<(C,RoyalBlue) component>>
+class "REST API" <<(C,RoyalBlue) component>>
+class "Versions list" <<(C,RoyalBlue) component>>
+class "Version" <<(C,RoyalBlue) component>>
+class "Provider" <<(C,RoyalBlue) component>>
+class "User profile" <<(P,IndianRed) page>>
+class "Edit profile" <<(P,IndianRed) form>>
+class "Contributions list" <<(C,RoyalBlue) component>>
+class "Link provider" <<(P,IndianRed) form>>
+class "Add provider" <<(C,RoyalBlue) component>>
+class "Edit provider" <<(P,IndianRed) form>>
+class "Contribution" <<(C,RoyalBlue) component>>
+class "Add API" <<(P,IndianRed) form>>
+class "Edit API" <<(P,IndianRed) form>>
+class "Add version" <<(P,IndianRed) form>>
+class "Users list" <<(P,IndianRed) page>>
+
+"Home" --> "API search results": <<process>>\nsearch
+"Home" --> "Sign up": <<link>>
+"Home" --> "Sign in": <<link>>
+"Sign in" --> "Home": <<process>>\nlog in
+"Home" -left-> "User profile": <<link>>\n(if logged)
+"User profile" -left-> "Edit profile": <<link>>
+"Edit profile" -right-> "User profile": <<process>>\nedit
+"User profile" *-- "Contributions list"
+"Home" -right-> "Add API": <<link>>\n(if logged)
+"Add API" --> "Link provider": <<link>>\n
+"Link provider" o-- "Add provider"
+"Link provider" --> "Home": <<process>>\ncreate\nAPI
+"API search results" --> "Details API": <<link>>
+"API search results" *-- "REST APIs list "
+"Details API" --> "Details provider": <<link>>
+"Details API" *-- "REST API"
+"Details API" --> "Edit API": <<link>>\n(if logged)
+"Edit API" --> "Details API": <<process>>\nedit
+"Edit API" --> "Add version": <<link>>
+"Add version" --> "Details API": <<process>>\nedit
+"Details API" *-up- "Contributions list"
+"REST API" *-- "Versions list"
+"Versions list" *-- "Version"
+"Contributions list" *-left- "Contribution"
+"Details provider" *-left- "Provider"
+"Details provider" *-- "REST APIs list"
+"Details provider" --> "Details API": <<link>>
+"Details provider" --> "Edit provider": <<link>>\n(if logged)
+"Edit provider" --> "Details provider": <<process>>\nedit
+"Home" -up-> "Users list": <<link>>\n(if admin)
+"Users list" --> "User profile": <<link>>\n(if admin)
+@enduml

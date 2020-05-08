@@ -1,0 +1,107 @@
+<div class="alert alert-danger alert-dismissible fade in" style="width: 100%; display: none;" id="errorAlert">
+    <p style="margin: auto;text-align: center;">{{ errorMessage }}<span (click)="hideError()" aria-label="close" style="float: right;">&times;</span></p>
+</div>
+<form [formGroup]="editAPIForm" (ngSubmit)="onEditAPI()" id="editAPIForm" style="width: 90%;">
+    <ng-template #deleteModalContent let-modal>
+        <div class="modal-header">
+          <h4 class="modal-title">{{ translateService.instant('api.delete') }} {{ restApi.name }}</h4>
+          <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p><span style="font-weight: 500;" >{{ translateService.instant('api.cant_undo_action') }}</span> {{ translateService.instant('api.delete_repository_question') }}</p>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-danger" (click)="deleteAPI()">{{ translateService.instant('api.delete') }}</button>
+            <button type="button" class="btn btn-light" (click)="modal.close('Close click')">{{ translateService.instant('api.cancel') }}</button>
+        </div>
+    </ng-template>
+    <ng-template #blacklistModalContent let-modal>
+        <div class="modal-header">
+          <h4 class="modal-title">{{ translateService.instant('api.blacklist') }} {{ restApi.name }}</h4>
+          <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p>{{ translateService.instant('api.blacklist_repository_question') }}</p>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-danger" (click)="blacklistAPI()">{{ translateService.instant('api.blacklist') }}</button>
+            <button type="button" class="btn btn-light" (click)="modal.close('Close click')">{{ translateService.instant('api.cancel') }}</button>
+        </div>
+    </ng-template>
+    <ng-template #unblacklistModalContent let-modal>
+        <div class="modal-header">
+          <h4 class="modal-title">{{ translateService.instant('api.unblacklist') }} {{ restApi.name }}</h4>
+          <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p>{{ translateService.instant('api.unblacklist_repository_question') }}</p>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-danger" (click)="unblacklistAPI()">{{ translateService.instant('api.unblacklist') }}</button>
+            <button type="button" class="btn btn-light" (click)="modal.close('Close click')">{{ translateService.instant('api.cancel') }}</button>
+        </div>
+    </ng-template>
+    <fieldset class="fieldsGroup container" style="width: 100%;max-width: 100%;height: fit-content;">
+        <div style=" height:17%; margin-top:2%;" class="row align-items-center">
+            <div class="col-8">
+                <legend style="text-align: left;justify-content: flex-start; font-size: xx-large;" class="centerVerticalBlock">{{ translateService.instant('api.edit_title') }} {{ restApi.name }} ({{ translateService.instant('api.title') }})</legend>
+            </div>
+            <div class="col-4" style="text-align: end;">
+                <button *ngIf="activeRole == 'Contributor' || activeRole == 'Administrator'" type="button" class="btn btn-info" style="margin-left: auto;font-size: x-large;" (click)="goToAddVersion()">{{ translateService.instant('api.add_version') }}</button>
+            </div>
+        </div>
+        <div class="row" style="min-height: 75%;height: fit-content;margin-top: 50px;">
+            <div style="display: inline-block;width: 25%;">
+                <div class="form-group has-danger row align-items-center">
+                    <img id="imageLogo" style="width: 90%; height: auto;"/>
+                </div>
+                <div class="form-group has-danger row align-items-center">
+                    <label for="logoURL" class="form-control-label col-4">{{ translateService.instant('api.logo_label') }} :</label>
+                    <span class="col-1"></span>
+                    <input type="text" id="logoURL" formControlName="logoURL" class="form-control col-7" (change)="onLoadLogoURL()"/>
+                </div>
+                <div class="form-group has-danger row align-items-center">
+                    <label for="logo" class="form-control-label col-4">({{ translateService.instant('api.upload_label') }}) :</label>
+                    <span class="col-1"></span>
+                    <input type="file" class="form-control col-7" accept="image/*" id="logo" name="logo" aria-describedby="fileHelp" (change)="onLoadLogoFile()">
+                </div>
+            </div>
+            <div style="display: inline-block;width: 3%;"></div>
+            <div style="display: inline-block;width: 72%;">
+                <div class="form-group has-danger row align-items-center">
+                    <input type="text" formControlName="name" [placeholder]="translateService.instant('api.name_label')" class="form-control col-4" style="font-size: x-large;">
+                    <button class="btn btn-info" style="font-size: large;height: 50px;width: 200px;margin-left: auto;" (click)="goToLinkProvider()">{{ translateService.instant('api.link_provider') }}</button>
+                    <button *ngIf="activeRole == 'Administrator' && restApi && restApi.blacklisted" type="button" class="btn btn-outline-danger" style="margin-left: 50px;font-size: x-large;" (click)="openModal(unblacklistModalContent)">{{ translateService.instant('api.unblacklist') }}</button>
+                    <button *ngIf="activeRole == 'Administrator' && restApi && !restApi.blacklisted" type="button" class="btn btn-outline-danger" style="margin-left: 50px;font-size: x-large;" (click)="openModal(blacklistModalContent)">{{ translateService.instant('api.blacklist') }}</button>
+                    <button *ngIf="activeRole == 'Contributor' || activeRole == 'Administrator'" type="button" class="btn btn-outline-danger" style="margin-left: 50px;font-size: x-large;" (click)="openModal(deleteModalContent)">{{ translateService.instant('api.delete') }}</button>
+                </div>
+                <div class="form-group has-danger row align-items-center shadow-textarea">
+                    <textarea class="form-control z-depth-1" formControlName="description" id="description" rows="8" [placeholder]="translateService.instant('api.description_placeholder')"></textarea>
+                </div>
+                <div class="custom-control custom-checkbox form-group has-danger row align-items-center" style="margin: auto;width: fit-content;">
+                    <div class="form-control-label" style="text-align: start;font-weight: 500;">{{ translateService.instant('api.business_models.title') }}</div>
+                    <ul>
+                        <li *ngFor="let businessModel of businessModels">
+                            <input [formControlName]="businessModel" [name]="businessModel" type="checkbox" class="custom-control-input" [id]="businessModel">
+                            <label class="custom-control-label" [for]="businessModel">{{ translateService.instant('api.business_models.' + businessModel) }}</label>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="centerVerticalBlock" style="max-width: 500px;"> 
+            <button class="btn btn-primary" style="font-size: large;height: 50px;width: 200px;margin-right: 50px;" (click)="goToRestAPI()">
+                {{ translateService.instant('api.cancel') }}
+            </button>
+            <button type="submit" class="btn btn-primary" style="font-size: large;height: 50px;width: 200px;margin-left: 50px;" [disabled]="!editAPIForm.valid">
+                {{ translateService.instant('api.edit') }}
+            </button>
+        </div>
+    </fieldset>
+</form>

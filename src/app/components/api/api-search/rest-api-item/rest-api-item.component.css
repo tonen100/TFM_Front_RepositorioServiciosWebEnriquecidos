@@ -1,0 +1,23 @@
+.centerInlineBlock {
+    width: 25%;
+    display: inline-block;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.centerVerticalBlock {
+    display: flex;
+    align-items: center;
+    vertical-align: middle;
+}
+
+.shortenDescription {
+    font-size: medium;
+    max-height: 210px;
+    overflow: hidden;
+    text-align: justify;
+    text-overflow: ellipsis;
+    -ms-text-overflow: ellipsis;
+    -o-text-overflow: ellipsis;
+    display: -webkit-box;
+}

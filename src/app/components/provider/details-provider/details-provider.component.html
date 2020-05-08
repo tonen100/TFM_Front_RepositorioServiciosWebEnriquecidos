@@ -1,0 +1,83 @@
+<div style="margin: 50px;">
+    <ng-template #deleteModalContent let-modal>
+        <div class="modal-header">
+          <h4 class="modal-title">{{ translateService.instant('provider.delete') }} {{ provider.name }}</h4>
+          <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p><span style="font-weight: 500;" >{{ translateService.instant('provider.cant_undo_action') }}</span> {{ translateService.instant('provider.delete_repository_question') }}</p>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-danger" (click)="deleteProvider()">{{ translateService.instant('provider.delete') }}</button>
+            <button type="button" class="btn btn-light" (click)="modal.close('Close click')">{{ translateService.instant('provider.cancel') }}</button>
+        </div>
+    </ng-template>
+    <div *ngIf="provider">
+        <div class="centerInlineBlock">
+            <img [src]="provider.logoUrl" style="margin: auto; width:250px; max-width: 90%; height: auto;"/>
+        </div>
+        <div class="centerVerticalBlock" style="margin-left: 2%;width: 73%;display: inline-block">
+            <div class="row" style="line-height: 100px;margin-right: 0;">
+                <span style="font-size: xxx-large;">{{ provider.name }}</span>
+                <span *ngIf="activeRole == 'Contributor' || activeRole == 'Administrator'" style="margin-left: auto;margin-right: 50px;">
+                    <button type="button" class="btn btn-info" style="font-size: x-large;" (click)="goToEditProvider()">{{ translateService.instant('provider.edit') }}</button>
+                </span>
+                <span *ngIf="activeRole == 'Administrator'" style="margin-right: 50px;">
+                    <button type="button" class="btn btn-outline-danger" style="margin-left: auto;font-size: x-large;" (click)="openModalDeleteProvider(deleteModalContent)">{{ translateService.instant('provider.delete') }}</button>
+                </span>
+            </div>
+            <div class="row">
+                <p style="font-size: medium;font-weight: 500; width: 100%;">
+                    <span *ngIf="lastContributor != null" style="margin-right: 10%;">{{ translateService.instant('contribution.' + lastContribution.action + '_by') }}
+                        <button type="button" class="btn btn-light" style="color: coral;font-weight: 500;" (click)="goToContributor()">{{ lastContributor.username }}</button>
+                        <span> {{ getMomentFromNow() }}</span>
+                    </span>
+                </p>
+            </div>
+            <div class="row" style="min-height: 100px;">
+                <p *ngIf="provider && provider.description; else noDescriptionAlt" style="font-size: medium;">{{ provider.description }}</p>
+                <ng-template #noDescriptionAlt style="font-size: medium;">{{ translateService.instant('provider.no_description') }}</ng-template>
+            </div>
+            <div *ngIf="provider.externalLinks.length > 0" class="row">
+                <div class="col-1" style="font-size: x-large;">{{ translateService.instant('provider.see') }} :</div>
+                <div class="col-11">
+                    <ul class="list-group list-group-horizontal" style="flex-wrap: wrap;">
+                        <li *ngFor="let link of provider.externalLinks" class="list-group-item externalLink"><a [href]="link">{{ link }}</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div>
+        <div style="margin-top: 50px; margin-bottom: 50px;">
+            <span style="font-size: xx-large;margin-left: 100px;">{{ translateService.instant('provider.apis_provided') }}</span>
+            <span style="margin-right: 50px;float: right;">
+                <div class="custom-control custom-radio custom-control-inline">
+                    <input type="radio" class="custom-control-input" id="columns" value="columns" checked name="APIsDisplayMode" [(ngModel)]="displayMode">
+                    <label class="custom-control-label" for="columns">{{ translateService.instant('provider.display_columns') }}</label>
+                </div>
+                <div class="custom-control custom-radio custom-control-inline">
+                    <input type="radio" class="custom-control-input" id="table" value="table" name="APIsDisplayMode" [(ngModel)]="displayMode">
+                    <label class="custom-control-label" for="table">{{ translateService.instant('provider.display_table') }}</label>
+                </div>
+            </span>
+        </div>
+        <div *ngIf="displayMode == 'columns'" style="display: flex; flex-direction: row; flex-wrap: wrap;justify-content: space-evenly;">
+            <div *ngFor="let restApi of restApis" class="api-item" (click)="goToAPI(restApi)">
+                <p style="font-size: xx-large;text-align: center;">{{ restApi.name }}</p>
+                <div style="margin: auto;width: fit-content;">
+                    <img [src]="restApi.logoUrl" style="height: 150px;"/>
+                </div>
+                <p *ngIf="restApi.metadata.description; else noDescriptionAPIAlt" style="font-size: medium;text-align: justify;height: -webkit-fill-available;" [innerHTML]="restApi.metadata.description"></p>
+                <ng-template #noDescriptionAPIAlt><p style="font-size: medium;text-align: center;height: -webkit-fill-available;">{{ translateService.instant('provider.no_description') }}</p></ng-template>
+            </div>
+        </div>
+        <div *ngIf="displayMode == 'table'" class="list-group" style="width: fit-content;min-width: 600px;margin: auto;">
+            <div *ngFor="let restApi of restApis" class="list-group-item btn btn-light api-list-item" (click)="goToAPI(restApi)">
+                <p style="font-size: x-large;text-align: center;margin-top: 0.5rem;margin-bottom: 0.5rem;">{{ restApi.name }}</p>
+            </div>
+        </div>
+    </div>
+</div>

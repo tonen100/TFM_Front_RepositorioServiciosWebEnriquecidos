@@ -1,0 +1,90 @@
+<div style="margin: 50px;">
+    <div *ngIf="restApi">
+        <div class="centerInlineBlock">
+            <img [src]="restApi.logoUrl" style="margin: auto; width:250px; max-width: 90%; height: auto;"/>
+        </div>
+        <div class="centerVerticalBlock" style="margin-left: 2%;width: 73%;display: inline-block">
+            <div class="row" style="line-height: 100px;margin-right: 0;">
+                <span style="font-size: xxx-large;">{{ restApi.name }}</span>
+                <span *ngIf="provider != null" style="font-size: x-large;margin-left: 10%;">{{ translateService.instant('api.provided_by') }}
+                    <button type="button" class="btn btn-light" style="font-size: x-large;color: coral;font-weight: 500;" (click)="goToProvider()">{{ provider.name }}</button>
+                </span>
+                <span *ngIf="activeRole == 'Contributor' || activeRole == 'Administrator'" style="margin-left: auto;margin-right: 50px;">
+                    <button type="button" class="btn btn-info" style="font-size: x-large;" (click)="goToEditAPI()">{{ translateService.instant('api.edit') }}</button>
+                </span>
+            </div>
+            <div class="row">
+                <p style="font-size: medium;font-weight: 500; width: 100%;">
+                    <span *ngIf="lastContributor != null" style="margin-right: 10%;">{{ translateService.instant('contribution.' + lastContribution.action + '_by') }}
+                        <button type="button" class="btn btn-light" style="color: coral;font-weight: 500;" (click)="goToContributor()">{{ lastContributor.username }}</button>
+                        <span> {{ getMomentFromNow() }}</span>
+                    </span>
+                    <span></span>
+                </p>
+            </div>
+            <div class="row">
+                <p style="font-size: small;font-style: italic; width: 100%;">
+                    <span style="margin-right: 10%;">{{ translateService.instant('api.last_version') }} :
+                        <span style="font-weight: bold;">{{ restApi.versions[0].number }}</span>
+                    </span>
+                    <span *ngIf="restApi.metadata.category">{{ translateService.instant('api.categories') }} : {{ extractCategories(restApi) }}</span>
+                </p>
+            </div>
+            <div class="row" style="min-height: 100px;">
+                <div *ngIf="restApi.metadata && restApi.metadata.description; else noDescriptionAlt">
+                    <p style="font-size: medium;" [innerHTML]="restApi.metadata.description"></p>
+                </div>
+                <ng-template #noDescriptionAlt style="font-size: medium;">{{ translateService.instant('provider.no_description') }}</ng-template>
+            </div>
+        </div>
+        <div class="row" style="margin-left: 25%; margin-right: 50px;font-size: large;">
+            <button *ngIf="restApi.metadata.termsOfService" type="button" class="btn btn-light referenceLink" (click)="popupToS()">{{ translateService.instant('api.terms_of_service') }}</button>
+            <button *ngIf="apiDocName" type="button" (click)="downloadOriginalDocumentation()" class="btn btn-light referenceLink">{{ translateService.instant('api.original_documentation') }}</button>
+            <button *ngIf="restApi.metadata.url" type="button" class="btn btn-light referenceLink" (click)="redirectToAPIRoot()">{{ translateService.instant('api.api_url') }}</button>
+        </div>
+    </div>
+    <div style="height: auto;margin-top: 50px;" *ngIf="versions">
+        <div>
+            <div style="display:inline-block; width: 400px; vertical-align: top;">
+                <p style="font-size: xx-large; text-align: center; margin-right: 50px;">{{ translateService.instant('api.version.details') }}</p>
+                <div class="row versionList">
+                    <div *ngFor="let major of versions">
+                        <div class="row versionRow">
+                            <div class="versionMenuDropDown">
+                                <fa-icon [icon]="major.toogled ? faCaretSquareRight : faCaretSquareDown" (click)="major.toogled = !major.toogled"></fa-icon>
+                            </div>
+                            <div class="versionSelect" (click)="selectVersion(major.version)" style="border-bottom-color: teal;border-bottom-style: solid;border-bottom-width: 1px;">
+                                <p style="font-weight: bold; text-align: center;">{{ major.version.number }}</p>
+                                <p style=" text-align: justify;">{{ major.version.description }}</p>
+                            </div>
+                        </div>
+                        <div *ngFor="let minor of major.subVersions">
+                            <div *ngIf="major.toogled">
+                                <div class="row versionRow">
+                                    <div class="versionMenuDropDown" style="background-color: lightgray;">
+                                        <fa-icon [icon]="minor.toogled ? faCaretSquareRight : faCaretSquareDown" (click)="minor.toogled = !minor.toogled"></fa-icon>
+                                    </div>
+                                    <div class="versionSelect" (click)="selectVersion(minor.version)" style="border-bottom-color: gray ;border-bottom-style: solid;border-bottom-width: 1px;">
+                                        <p style="font-weight: bold; text-align: center;">{{ minor.version.number }}</p>
+                                        <p style=" text-align: justify;">{{ minor.version.description }}</p>
+                                    </div>
+                                </div>
+                                <div *ngFor="let patch of minor.subVersions">
+                                    <div *ngIf="minor.toogled" class="row versionRow">
+                                        <div class="versionMenuDropDown" style="background-color: lightgray;"></div>
+                                        <div class="versionSelect" (click)="selectVersion(patch.version)">
+                                            <p style="font-weight: bold; text-align: center;">{{ patch.version.number }}</p>
+                                            <p style=" text-align: justify;">{{ patch.version.description }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                   
+                </div>
+            </div>
+            <app-details-version *ngIf="selectedVersion" [version]=selectedVersion></app-details-version>
+        </div>
+    </div>
+</div>

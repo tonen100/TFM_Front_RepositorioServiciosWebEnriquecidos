@@ -1,0 +1,94 @@
+.ng-valid.ng-dirty:not(form) {
+    border: solid 2px lightgreen;
+}
+
+.ng-invalid.ng-dirty:not(form), .ng-invalid:not(form).form-submitted {
+    border: solid 2px lightcoral;
+}
+
+.fieldsGroup {
+    height: calc(100vh - 150px);
+}
+
+.centerVerticalBlock {
+    display: flex;
+    justify-content: center;
+}
+
+.centerHorizontalBlock {
+    display: inline-block;
+}
+
+.fieldsGroup > * {
+    margin: auto;
+}
+
+#formLinkProvider {
+    width: 100%;
+    height: fit-content;
+    vertical-align: middle;
+    margin: auto;
+}
+
+.row {
+    vertical-align: middle;
+}
+
+.row > input {
+    text-align: start;
+    margin: 0;
+    padding: 0px;
+}
+
+.row > input[type="file"] {
+    height: fit-content;
+}
+
+.row > label {
+    text-align: end;
+    margin: 0;
+    padding: 0px;
+    font-size: large;
+}
+
+.smallAuthButton {
+    height: 35px;
+    width: 90px;
+    font-size: medium;
+}
+
+#imageLogo {
+    width: 90%;
+    height: auto;
+    max-width: 150px;
+    text-align: center;
+    margin: auto;
+}
+
+#errorAlert > p > span:hover {
+    cursor: pointer;
+}
+
+#versionFields > .row {
+    margin-bottom: 0;
+}
+
+.active-cyan-4 input[type=text]:focus:not([readonly]) {
+    border: 1px solid #4dd0e1;
+    box-shadow: 0 0 0 1px #4dd0e1;
+}
+
+.v-divider{
+    max-width: 2px;
+    margin: auto;
+    width:2px;
+    height:100%;
+    border-left:2px solid black;
+}
+
+.shadow-textarea textarea.form-control::placeholder {
+    font-weight: 300;
+}
+.shadow-textarea textarea.form-control {
+    padding-left: 0.8rem;
+}

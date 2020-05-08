@@ -1,0 +1,57 @@
+<div style="margin: 50px;">    
+    <ng-template #banModalContent let-modal>
+        <div *ngIf="activeRole == 'Administrator'">
+            <div class="modal-header">
+            <h4 class="modal-title">{{ translateService.instant('user.delete') }} {{ user.username }}</h4>
+            <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            </div>
+            <div class="modal-body">
+            <p><span style="font-weight: 500;" >{{ translateService.instant('user.cant_undo_action') }}</span> {{ translateService.instant('user.ban_repository_question') }}</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" (click)="banUser()">{{ translateService.instant('user.ban') }}</button>
+                <button type="button" class="btn btn-light" (click)="modal.close('Close click')">{{ translateService.instant('user.cancel') }}</button>
+            </div>
+        </div>
+    </ng-template>
+    <div *ngIf="user">
+        <div class="centerInlineBlock">
+            <img *ngIf="user.logoUrl" [src]="user.logoUrl" style="margin: auto; width:250px; max-width: 90%; height: auto;"/>
+            <fa-icon *ngIf="!user.logoUrl" [icon]="faUserCircle" size="6x"></fa-icon>
+        </div>
+        <div class="centerVerticalBlock" style="margin-left: 2%;width: 73%;display: inline-block">
+            <div class="row" style="line-height: 100px;margin-right: 0;">
+                <span style="font-size: xxx-large;">{{ user.username }}</span>
+                <span *ngIf="(activeRole == 'Contributor' && currentUser._id == user._id) || activeRole == 'Administrator'" style="margin-left: auto;margin-right: 50px;">
+                    <button type="button" class="btn btn-info" style="font-size: x-large;" (click)="goToEditUser()">{{ translateService.instant('user.edit') }}</button>
+                </span>
+                <span *ngIf="activeRole == 'Administrator'" style="margin-right: 50px;">
+                    <button type="button" class="btn btn-outline-danger" style="margin-left: auto;font-size: x-large;" (click)="openModalBanUser(banModalContent)">{{ translateService.instant('user.ban') }}</button>
+                </span>
+            </div>
+            <div class="row" style="min-height: 100px;">
+                <p *ngIf="user && user.description; else noDescriptionAlt" style="font-size: medium;">{{ user.description }}</p>
+                <ng-template #noDescriptionAlt style="font-size: medium;">{{ translateService.instant('user.no_description') }}</ng-template>
+            </div>
+        </div>
+    </div>
+    <div style="width: fit-content;min-width: 800px;margin: auto;">
+        <fa-icon [icon]="showContributions ? faEye : faEyeSlash" size="3x" style="text-align: center;display: inline-block;width: 10%;vertical-align: middle;" (click)="switchDisplayContributions()"></fa-icon>
+        <p style="text-align: start;font-size: xx-large;display: inline-block;width: 80%; margin-left: 10px;">{{ translateService.instant('contribution.title') }}</p>
+        <div *ngIf="showContributions" class="list-group">
+            <div *ngFor="let contribution of contributions">
+                <div *ngIf="contribution.name" class="list-group-item btn btn-light api-list-item contributionLine" (click)="goToContribution(contribution)">
+                    <fa-icon [icon]="getIconContribution(contribution)" size="2x" [style]="'background-color:' + getColorContribution(contribution)"></fa-icon>
+                    <p>
+                        {{ translateService.instant('contribution.' + contribution.action + '_' + contribution.typeContribution) }}
+                        {{ contribution.name }}
+                        <span *ngIf="contribution.number">({{ contribution.number }})</span>
+                        {{ getMomentFromNow(contribution) }}
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
