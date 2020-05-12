@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, PLATFORM_ID, Inject } from '@angular/core';
 import { APIService } from 'src/app/services/api.service';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { API } from 'src/app/models/api';
 import { businessModels } from '../business-models.enum';
 import { TranslatableComponent } from '../../shared/translatable/translatable.component';
 import { TranslateService } from '@ngx-translate/core';
+import { isPlatformBrowser } from '@angular/common';
 declare var jQuery: any;
 
 @Component({
@@ -23,22 +24,25 @@ export class ApiSearchComponent extends TranslatableComponent implements OnInit 
     public translateService: TranslateService,
     private activatedRoute: ActivatedRoute,
     private router: Router,
-    public apiService: APIService
+    public apiService: APIService,
+    @Inject(PLATFORM_ID) private platformId
     ) {
       super(translateService);
   }
 
   ngOnInit(): void {
-    this.activatedRoute.queryParams.subscribe((params: Params) => {
-      this.keywords = params.keywords;
-      this.apiService.searchApis(this.keywords, 0, null)
-      .then(restApis => {
-        document.getElementById('loadingSpinner').style.display = 'none';
-        this.restApis = restApis;
-        jQuery('#SelectPicker').selectpicker();
-      })
-      .catch(err => document.getElementById('loadingSpinner').style.display = 'none');
-    });
+    if (isPlatformBrowser(this.platformId)) {
+      this.activatedRoute.queryParams.subscribe((params: Params) => {
+        this.keywords = params.keywords;
+        this.apiService.searchApis(this.keywords, 0, null)
+        .then(restApis => {
+          document.getElementById('loadingSpinner').style.display = 'none';
+          this.restApis = restApis;
+          jQuery('#SelectPicker').selectpicker();
+        })
+        .catch(err => document.getElementById('loadingSpinner').style.display = 'none');
+      });
+    }
   }
 
   filterByBusinessModel(api: API): boolean {

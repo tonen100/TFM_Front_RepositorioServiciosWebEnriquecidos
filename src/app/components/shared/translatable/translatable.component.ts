@@ -7,9 +7,11 @@ import * as moment from 'moment';
   templateUrl: './translatable.component.html',
   styleUrls: ['./translatable.component.css']
 })
-export class TranslatableComponent implements OnInit {
+export class TranslatableComponent {
 
-  constructor(private translate: TranslateService) {
+  constructor(private translate: TranslateService) {}
+
+  initTranslate() {
     let lang = localStorage.getItem('language');
     if (lang === 'null') {
       lang = 'en';
@@ -26,9 +28,6 @@ export class TranslatableComponent implements OnInit {
 
   getLanguage() {
     return localStorage.getItem('language');
-  }
-
-  ngOnInit(): void {
   }
 
 }

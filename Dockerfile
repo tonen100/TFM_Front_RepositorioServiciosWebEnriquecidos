@@ -3,7 +3,7 @@ COPY package.json ./
 RUN yarn install && mkdir /api-repository && mv ./node_modules ./api-repository
 WORKDIR /api-repository
 COPY . .
-RUN yarn run build --prod --build-optimizer
+RUN yarn run build:ssr
 
 FROM nginx:1.13.9-alpine
 COPY ./nginx.conf /etc/nginx/conf.d/default.conf

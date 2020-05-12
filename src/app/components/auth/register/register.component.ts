@@ -1,4 +1,4 @@
-import { Component, AfterViewInit } from '@angular/core';
+import { Component, AfterViewInit, Inject, PLATFORM_ID } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
@@ -10,6 +10,7 @@ import { StorageService } from 'src/app/services/local-storage.service';
 import { TranslatableComponent } from '../../shared/translatable/translatable.component';
 import { User } from 'src/app/models/user';
 import { UserService } from 'src/app/services/user.service';
+import { isPlatformBrowser } from '@angular/common';
 
 @Component({
   selector: 'app-register',
@@ -32,7 +33,8 @@ export class RegisterComponent extends TranslatableComponent implements AfterVie
     private router: Router,
     private toastr: ToastrService,
     private fireAuth: AngularFireAuth,
-    private userService: UserService
+    private userService: UserService,
+    @Inject(PLATFORM_ID) private platformId
     ) {
       super(translateService);
       this.createForm();
@@ -46,7 +48,9 @@ export class RegisterComponent extends TranslatableComponent implements AfterVie
   }
 
   ngAfterViewInit() {
-    this.errorAlert = document.getElementById('errorAlert') as HTMLDivElement;
+    if (isPlatformBrowser(this.platformId)) {
+      this.errorAlert = document.getElementById('errorAlert') as HTMLDivElement;
+    }
   }
 
   createForm() {
@@ -93,12 +97,9 @@ export class RegisterComponent extends TranslatableComponent implements AfterVie
             if (users2.length === 0) {
               this.authService.register(this.registrationForm.value)
               .then(res => {
-                console.log("1");
-
                 this.registrationForm.reset();
                 this.router.navigate(['']);
                 this.toastr.success(this.translateService.instant('auth.succes_registration'));
-                console.log("2");
               }, error => this.showError(this.translateService.instant('user.errors.fail_create_user')));
             } else { this.showError(this.translateService.instant('user.errors.already_exist_email')); }
           }).catch(_ => this.showError(this.translateService.instant('user.errors.server_inaccessible')));

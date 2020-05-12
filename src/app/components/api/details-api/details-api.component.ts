@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, PLATFORM_ID, Inject } from '@angular/core';
 import { TranslatableComponent } from '../../shared/translatable/translatable.component';
 import { TranslateService } from '@ngx-translate/core';
 import { APIService } from 'src/app/services/api.service';
@@ -17,6 +17,8 @@ import { faCaretSquareDown, faCaretSquareRight } from '@fortawesome/free-solid-s
 import * as clone from 'clone';
 import * as moment from 'moment';
 import * as fileDownload from 'js-file-download';
+import { Title, Meta } from '@angular/platform-browser';
+import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 
 declare class NestedVersion {
   version: Version;
@@ -49,6 +51,8 @@ export class DetailsAPIComponent extends TranslatableComponent implements OnInit
   linkBlobDoc: string;
 
   constructor(
+    private title: Title,
+    private meta: Meta,
     public translateService: TranslateService,
     private activatedRoute: ActivatedRoute,
     private router: Router,
@@ -57,14 +61,18 @@ export class DetailsAPIComponent extends TranslatableComponent implements OnInit
     private providerService: ProviderService,
     private versionService: VersionService,
     private historyContributionService: HistoryContributionService,
-    private userService: UserService) {
+    private userService: UserService,
+    @Inject(PLATFORM_ID) private platformId
+    ) {
       super(translateService);
     }
 
   ngOnInit(): void {
-    this.currentUser = this.authService.getCurrentUser();
-    if (this.currentUser && this.authService.getIdToken()) {
-      this.activeRole = this.currentUser.role.toString();
+    if (isPlatformBrowser(this.platformId)) {
+      this.currentUser = this.authService.getCurrentUser();
+      if (this.currentUser && this.authService.getIdToken()) {
+        this.activeRole = this.currentUser.role.toString();
+      }
     }
     this.activatedRoute.params.subscribe(
       (params: Params) =>
@@ -73,21 +81,24 @@ export class DetailsAPIComponent extends TranslatableComponent implements OnInit
             this.router.navigate(['404']);
           } else {
             this.restApi = api;
-            document.getElementById('metadata').innerHTML = JSON.stringify(api.metadata);
-            this.providerService.getProvider(this.restApi.provider_id).then(provider => this.provider = provider);
-            this.versionService.getAllVersions(this.restApi).then(versions => {
-              this.versions = this.nestSubVersions(versions);
-              this.selectVersion(this.versions[0].version);
-            });
-            this.apiDocName = this.restApi.name + '-documentation.txt';
-            this.historyContributionService.getAllhistoryContributionsByContribution(this.restApi._id, 'RestAPI')
-            .then(contributions => {
-              contributions.forEach(contribution => contribution.date = new Date(contribution.date));
-              this.contributions = contributions;
-              this.lastContribution = contributions.sort((a, b) => b.date.getTime() - a.date.getTime())[0];
-              this.userService.getUser(this.lastContribution.contributor_id)
-              .then(contributor => this.lastContributor = contributor);
-            });
+            this.title.setTitle(this.restApi.name);
+            this.meta.addTag({name: 'description', content: this.restApi.metadata ? this.restApi.metadata.description : '' });
+            if (isPlatformBrowser(this.platformId)) {
+              this.providerService.getProvider(this.restApi.provider_id).then(provider => this.provider = provider);
+              this.versionService.getAllVersions(this.restApi).then(versions => {
+                this.versions = this.nestSubVersions(versions);
+                this.selectVersion(this.versions[0].version);
+              });
+              this.apiDocName = this.restApi.name + '-documentation.txt';
+              this.historyContributionService.getAllhistoryContributionsByContribution(this.restApi._id, 'RestAPI')
+              .then(contributions => {
+                contributions.forEach(contribution => contribution.date = new Date(contribution.date));
+                this.contributions = contributions;
+                this.lastContribution = contributions.sort((a, b) => b.date.getTime() - a.date.getTime())[0];
+                this.userService.getUser(this.lastContribution.contributor_id)
+                .then(contributor => this.lastContributor = contributor);
+              });
+            }
           }
         }, err => {
           this.router.navigate(['404']);
@@ -122,7 +133,6 @@ export class DetailsAPIComponent extends TranslatableComponent implements OnInit
   }
 
   isMarkdown(document: string) {
-    console.log(document)
     return document.match(/^\#/) != null ||
     document.match(/\[[^]]+\]\(https?:\/\/\S+\)/) != null ||
     document.match(/\s(__|\*\*)(?!\s)(.(?!\1))+(?!\s(?=\1))/) != null;

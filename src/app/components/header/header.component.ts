@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, PLATFORM_ID, Inject } from '@angular/core';
 import { faSearch, faUserCircle } from '@fortawesome/free-solid-svg-icons';
 import { TranslateService } from '@ngx-translate/core';
 import { TranslatableComponent } from '../shared/translatable/translatable.component';
 import { AuthService } from 'src/app/services/auth.service';
+import { isPlatformBrowser } from "@angular/common";
 import { User } from '../../models/user';
 import { ToastrService } from 'ngx-toastr';
 import { environment } from 'src/environments/environment';
@@ -31,27 +32,30 @@ export class HeaderComponent extends TranslatableComponent implements OnInit {
     public authService: AuthService,
     private toastr: ToastrService,
     private router: Router,
+    @Inject(PLATFORM_ID) private platformId
   ) {
     super(translateService);
-    this.lang = super.getLanguage();
-    this.token = this.authService.loadIdToken();
-    this.currentUser = this.authService.getCurrentUser();
-    if (this.currentUser) {
-      this.activeRole = this.currentUser.role.toString();
-    }
-    this.router.events.subscribe(event => {
-      if (event instanceof NavigationEnd && event.url === '/') {
-        console.log(event.url);
-        this.currentUser = this.authService.getCurrentUser();
-        if (this.currentUser) {
-          this.activeRole = this.currentUser.role.toString();
-        }
-      }
-    });
   }
 
-  nOnInit(): void {
-
+  ngOnInit() {
+    if (isPlatformBrowser(this.platformId)) {
+      this.initTranslate();
+      this.lang = super.getLanguage();
+      this.authService.init();
+      this.token = this.authService.loadIdToken();
+      this.currentUser = this.authService.getCurrentUser();
+      if (this.currentUser) {
+        this.activeRole = this.currentUser.role.toString();
+      }
+      this.router.events.subscribe(event => {
+        if (event instanceof NavigationEnd && event.url === '/') {
+          this.currentUser = this.authService.getCurrentUser();
+          if (this.currentUser) {
+            this.activeRole = this.currentUser.role.toString();
+          }
+        }
+      });
+    }
   }
 
   changeLanguage(language: string) {

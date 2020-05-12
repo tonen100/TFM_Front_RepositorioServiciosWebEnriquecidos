@@ -1,4 +1,4 @@
-import { Component, AfterViewInit, OnInit } from '@angular/core';
+import { Component, AfterViewInit, OnInit, PLATFORM_ID, Inject } from '@angular/core';
 import { User } from '../../../models/user';
 import { Version } from '../../../models/version';
 import { API } from '../../../models/api';
@@ -12,6 +12,7 @@ import { VersionService } from 'src/app/services/version.service';
 import { TranslatableComponent } from '../../shared/translatable/translatable.component';
 import { businessModels } from '../business-models.enum';
 import { Ng2ImgMaxService } from 'ng2-img-max';
+import { isPlatformBrowser } from '@angular/common';
 
 const snakeCase = (str) => {
   return str.replace(/\W+/g, ' ')
@@ -48,23 +49,28 @@ export class AddAPIComponent extends TranslatableComponent implements OnInit, Af
     private imgStorageService: ImgStorageService,
     private apiService: APIService,
     private versionService: VersionService,
-    private imgMaxService: Ng2ImgMaxService
+    private imgMaxService: Ng2ImgMaxService,
+    @Inject(PLATFORM_ID) private platformId
     ) {
       super(translateService);
   }
 
   ngOnInit() {
-    this.currentUser = this.authService.getCurrentUser();
-    if (this.currentUser && this.authService.getIdToken()) {
-      this.activeRole = this.currentUser.role.toString();
-      this.createForm();
-    } else {
-      this.router.navigate(['login']);
+    if (isPlatformBrowser(this.platformId)) {
+      this.currentUser = this.authService.getCurrentUser();
+      if (this.currentUser && this.authService.getIdToken()) {
+        this.activeRole = this.currentUser.role.toString();
+        this.createForm();
+      } else {
+        this.router.navigate(['login']);
+      }
     }
   }
 
   ngAfterViewInit() {
-    this.errorAlert = document.getElementById('errorAlert') as HTMLDivElement;
+    if (isPlatformBrowser(this.platformId)) {
+      this.errorAlert = document.getElementById('errorAlert') as HTMLDivElement;
+    }
   }
 
   createForm() {

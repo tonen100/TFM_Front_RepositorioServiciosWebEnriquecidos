@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, Inject, PLATFORM_ID } from '@angular/core';
 import { TranslatableComponent } from '../../shared/translatable/translatable.component';
 import { TranslateService } from '@ngx-translate/core';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
@@ -11,6 +11,7 @@ import { APIService } from 'src/app/services/api.service';
 import { businessModels } from '../business-models.enum';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Ng2ImgMaxService } from 'ng2-img-max';
+import { isPlatformBrowser } from '@angular/common';
 
 const snakeCase = (str) => {
   return str.replace(/\W+/g, ' ')
@@ -44,7 +45,8 @@ export class EditAPIComponent extends TranslatableComponent implements OnInit, A
     private activatedRoute: ActivatedRoute,
     private apiService: APIService,
     private authService: AuthService,
-    private imgMaxService: Ng2ImgMaxService
+    private imgMaxService: Ng2ImgMaxService,
+    @Inject(PLATFORM_ID) private platformId
     ) {
     super(translateService);
     this.currentUser = this.authService.getCurrentUser();
@@ -57,33 +59,37 @@ export class EditAPIComponent extends TranslatableComponent implements OnInit, A
   }
 
   ngOnInit(): void {
-    this.activatedRoute.params.subscribe(
-      (params: Params) =>
-        this.apiService.getApi(params.id).then(api =>  {
-          if (!api) {
+    if (isPlatformBrowser(this.platformId)) {
+      this.activatedRoute.params.subscribe(
+        (params: Params) =>
+          this.apiService.getApi(params.id).then(api =>  {
+            if (!api) {
+              this.router.navigate(['404']);
+            } else {
+              this.restApi = api;
+              this.editAPIForm.patchValue({
+                name: api.name,
+                description: api.metadata.description,
+                logoURL: api.logoUrl
+              });
+              this.restApi.businessModels.forEach(businessModel => {
+                const val = {};
+                val[businessModel] = true;
+                this.editAPIForm.patchValue(val);
+              });
+              this.onLoadLogoURL();
+            }
+          }, err => {
             this.router.navigate(['404']);
-          } else {
-            this.restApi = api;
-            this.editAPIForm.patchValue({
-              name: api.name,
-              description: api.metadata.description,
-              logoURL: api.logoUrl
-            });
-            this.restApi.businessModels.forEach(businessModel => {
-              const val = {};
-              val[businessModel] = true;
-              this.editAPIForm.patchValue(val);
-            });
-            this.onLoadLogoURL();
-          }
-        }, err => {
-          this.router.navigate(['404']);
-        })
-    );
+          })
+      );
+    }
   }
 
   ngAfterViewInit() {
-    this.errorAlert = document.getElementById('errorAlert') as HTMLDivElement;
+    if (isPlatformBrowser(this.platformId)) {
+      this.errorAlert = document.getElementById('errorAlert') as HTMLDivElement;
+    }
   }
 
   createForm() {

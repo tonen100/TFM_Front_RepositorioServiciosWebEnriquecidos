@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, Inject, PLATFORM_ID } from '@angular/core';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { TranslatableComponent } from '../../shared/translatable/translatable.component';
 import { User } from 'src/app/models/user';
@@ -10,6 +10,7 @@ import { ImgStorageService } from 'src/app/services/img-storage.service';
 import { VersionService } from 'src/app/services/version.service';
 import { API } from 'src/app/models/api';
 import { Version } from 'src/app/models/version';
+import { isPlatformBrowser } from '@angular/common';
 
 @Component({
   selector: 'app-add-version',
@@ -38,28 +39,33 @@ export class AddVersionComponent extends TranslatableComponent implements OnInit
     private activatedRoute: ActivatedRoute,
     private imgStorageService: ImgStorageService,
     private apiService: APIService,
-    private versionService: VersionService
+    private versionService: VersionService,
+    @Inject(PLATFORM_ID) private platformId
     ) {
       super(translateService);
   }
 
   ngOnInit() {
-    this.currentUser = this.authService.getCurrentUser();
-    if (this.currentUser && this.authService.getIdToken()) {
-      this.activeRole = this.currentUser.role.toString();
-      this.activatedRoute.params.subscribe(
-        (params: Params) => this.apiService.getApi(params.id).then(api => {
-          this.restApi = api;
-          this.createForm();
-        }).catch(_ => this.router.navigate(['404']))
-      );
-    } else {
-      this.router.navigate(['login']);
+    if (isPlatformBrowser(this.platformId)) {
+      this.currentUser = this.authService.getCurrentUser();
+      if (this.currentUser && this.authService.getIdToken()) {
+        this.activeRole = this.currentUser.role.toString();
+        this.activatedRoute.params.subscribe(
+          (params: Params) => this.apiService.getApi(params.id).then(api => {
+            this.restApi = api;
+            this.createForm();
+          }).catch(_ => this.router.navigate(['404']))
+        );
+      } else {
+        this.router.navigate(['login']);
+      }
     }
   }
 
   ngAfterViewInit() {
-    this.errorAlert = document.getElementById('errorAlert') as HTMLDivElement;
+    if (isPlatformBrowser(this.platformId)) {
+      this.errorAlert = document.getElementById('errorAlert') as HTMLDivElement;
+    }
   }
 
   createForm() {

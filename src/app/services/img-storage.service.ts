@@ -16,7 +16,6 @@ export class ImgStorageService {
     if (img.name) { img.name = name; }
     const imageRef = this.storageRef.child(path + '/images/' + name);
     const snapshot = await imageRef.put(img);
-    console.log('Uploaded a blob or file!');
     return imageRef.getDownloadURL();
   }
 }
