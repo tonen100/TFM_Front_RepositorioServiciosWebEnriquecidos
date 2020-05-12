@@ -1,12 +1,10 @@
-import { Component, AfterViewInit, Inject, PLATFORM_ID } from '@angular/core';
+import { Component, AfterViewInit, Inject, PLATFORM_ID, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 import { AuthService } from '../../../services/auth.service';
 import { TranslateService } from '@ngx-translate/core';
 import { ToastrService } from 'ngx-toastr';
-import { AngularFireAuth } from '@angular/fire/auth';
-import { StorageService } from 'src/app/services/local-storage.service';
 import { TranslatableComponent } from '../../shared/translatable/translatable.component';
 import { User } from 'src/app/models/user';
 import { UserService } from 'src/app/services/user.service';
@@ -17,7 +15,7 @@ import { isPlatformBrowser } from '@angular/common';
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.css']
 })
-export class RegisterComponent extends TranslatableComponent implements AfterViewInit {
+export class RegisterComponent extends TranslatableComponent implements OnInit, AfterViewInit {
 
   currentUser: User;
   activeRole: string;
@@ -32,19 +30,21 @@ export class RegisterComponent extends TranslatableComponent implements AfterVie
     private fb: FormBuilder,
     private router: Router,
     private toastr: ToastrService,
-    private fireAuth: AngularFireAuth,
     private userService: UserService,
     @Inject(PLATFORM_ID) private platformId
     ) {
       super(translateService);
-      this.createForm();
-      this.currentUser = this.authService.getCurrentUser();
-      if (this.currentUser) {
-        this.activeRole = this.currentUser.role.toString();
-        if (this.activeRole === 'Contributor') {
-          router.navigate(['']);
-        }
+  }
+
+  ngOnInit() {
+    this.createForm();
+    this.currentUser = this.authService.getCurrentUser();
+    if (this.currentUser) {
+      this.activeRole = this.currentUser.role.toString();
+      if (this.activeRole === 'Contributor') {
+        this.router.navigate(['']);
       }
+    }
   }
 
   ngAfterViewInit() {
@@ -85,8 +85,8 @@ export class RegisterComponent extends TranslatableComponent implements AfterVie
   }
 
   onRegister() {
-    if (this.currentUser) {
-      this.userService.postUser(this.registrationForm.value).then((_) => {
+    if (this.currentUser && this.activeRole === 'Adminitrator') {
+      this.userService.postUserByAdmin(this.registrationForm.value).then((_) => {
         this.registrationForm.reset();
         this.router.navigate(['']);
       });

@@ -1,4 +1,4 @@
-FROM node:12.16 as builder
+FROM node:12.16.3 as builder
 COPY package.json ./
 RUN yarn install && mkdir /api-repository && mv ./node_modules ./api-repository
 WORKDIR /api-repository

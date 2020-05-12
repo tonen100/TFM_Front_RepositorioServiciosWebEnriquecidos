@@ -45,6 +45,13 @@ export class UserService {
     return this.http.post<User>(url, postUser).toPromise();
   }
 
+  postUserByAdmin(user: User) {
+    const url = `${this.URL_API}/v1/users/admin`;
+    const postUser = JSON.parse(JSON.stringify(user));
+    delete postUser._id;
+    return this.http.post<User>(url, postUser).toPromise();
+  }
+
   getUser(id: string) {
     const url = `${this.URL_API}/v1/users/${id}`;
     return this.http.get<User>(url).toPromise();
