@@ -12,10 +12,7 @@ export class TranslatableComponent {
   constructor(private translate: TranslateService) {}
 
   initTranslate() {
-    let lang = localStorage.getItem('language');
-    if (lang === 'null') {
-      lang = 'en';
-    }
+    const lang = localStorage.getItem('language') ? localStorage.getItem('language') : 'en' ;
     this.translate.setDefaultLang(lang);
     this.changeLanguage(lang);
   }
