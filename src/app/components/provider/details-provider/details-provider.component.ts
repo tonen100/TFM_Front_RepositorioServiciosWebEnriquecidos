@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject, PLATFORM_ID } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { ActivatedRoute, Router, Params } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
@@ -13,6 +13,7 @@ import { HistoryContribution } from 'src/app/models/historyContribution';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { API } from 'src/app/models/api';
 import * as moment from 'moment';
+import { isPlatformBrowser } from '@angular/common';
 
 @Component({
   selector: 'app-details-provider',
@@ -39,38 +40,42 @@ export class DetailsProviderComponent extends TranslatableComponent implements O
     private providerService: ProviderService,
     private apiService: APIService,
     private historyContributionService: HistoryContributionService,
-    private userService: UserService) {
+    private userService: UserService,
+    @Inject(PLATFORM_ID) private platformId
+    ) {
       super(translateService);
     }
 
   ngOnInit(): void {
-    this.currentUser = this.authService.getCurrentUser();
-    if (this.currentUser && this.authService.getIdToken()) {
-      this.activeRole = this.currentUser.role.toString();
-    }
-    this.activatedRoute.params.subscribe(
-      (params: Params) =>
-        this.providerService.getProvider(params.id).then(provider =>  {
-          if (!provider) {
+    if (isPlatformBrowser(this.platformId)) {
+      this.currentUser = this.authService.getCurrentUser();
+      if (this.currentUser && this.authService.getIdToken()) {
+        this.activeRole = this.currentUser.role.toString();
+      }
+      this.activatedRoute.params.subscribe(
+        (params: Params) =>
+          this.providerService.getProvider(params.id).then(provider =>  {
+            if (!provider) {
+              this.router.navigate(['404']);
+            } else {
+              this.provider = provider;
+              this.historyContributionService.getAllhistoryContributionsByContribution(this.provider._id, 'Provider')
+              .then(contributions => {
+                contributions.forEach(contribution => contribution.date = new Date(contribution.date));
+                this.contributions = contributions;
+                this.lastContribution = contributions.sort((a, b) => b.date.getTime() - a.date.getTime())[0];
+                this.userService.getUser(this.lastContribution.contributor_id)
+                .then(contributor => this.lastContributor = contributor);
+              });
+              this.apiService.getApisByProvider(this.provider).then(apis => {
+                this.restApis = apis;
+              });
+            }
+          }, err => {
             this.router.navigate(['404']);
-          } else {
-            this.provider = provider;
-            this.historyContributionService.getAllhistoryContributionsByContribution(this.provider._id, 'Provider')
-            .then(contributions => {
-              contributions.forEach(contribution => contribution.date = new Date(contribution.date));
-              this.contributions = contributions;
-              this.lastContribution = contributions.sort((a, b) => b.date.getTime() - a.date.getTime())[0];
-              this.userService.getUser(this.lastContribution.contributor_id)
-              .then(contributor => this.lastContributor = contributor);
-            });
-            this.apiService.getApisByProvider(this.provider).then(apis => {
-              this.restApis = apis;
-            });
-          }
-        }, err => {
-          this.router.navigate(['404']);
-        })
-    );
+          })
+      );
+    }
   }
 
   goToAPI(api) {

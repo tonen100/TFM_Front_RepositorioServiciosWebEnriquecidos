@@ -23,11 +23,13 @@ export class AuthService {
   constructor(private fireAuth: AngularFireAuth,
               private http: HttpClient,
               private userService: UserService,
-              private storageService: StorageService) {
-                if (localStorage.getItem('currentUser')) {
-                  this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
-                }
-              }
+              private storageService: StorageService) {}
+
+  init() {
+    if (localStorage.getItem('currentUser')) {
+      this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    }
+  }
 
   register(user: User) {
     return new Promise<any>((resolve, reject) => {

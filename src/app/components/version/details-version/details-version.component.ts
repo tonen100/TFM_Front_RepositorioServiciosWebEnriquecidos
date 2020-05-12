@@ -1,5 +1,6 @@
-import { Component, Input, AfterViewInit, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, Input, AfterViewInit, OnChanges, SimpleChanges, Inject, PLATFORM_ID } from '@angular/core';
 import { Version } from 'src/app/models/version';
+import { isPlatformBrowser } from '@angular/common';
 
 declare let Redoc: any;
 
@@ -12,14 +13,20 @@ export class DetailsVersionComponent implements AfterViewInit, OnChanges {
 
   @Input() version: Version;
 
-  constructor() { }
+  constructor(
+    @Inject(PLATFORM_ID) private platformId
+    ) { }
 
   ngAfterViewInit(): void {
-    this.attachDocumentationComponent();
+    if (isPlatformBrowser(this.platformId)) {
+      this.attachDocumentationComponent();
+    }
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    this.attachDocumentationComponent();
+    if (isPlatformBrowser(this.platformId)) {
+      this.attachDocumentationComponent();
+    }
   }
 
   attachDocumentationComponent() {

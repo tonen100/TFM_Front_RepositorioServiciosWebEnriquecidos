@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, Inject, PLATFORM_ID } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { ProviderService } from 'src/app/services/provider.service';
 import { Provider } from 'src/app/models/provider';
@@ -10,6 +10,7 @@ import { AuthService } from 'src/app/services/auth.service';
 import { ImgStorageService } from 'src/app/services/img-storage.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Ng2ImgMaxService } from 'ng2-img-max';
+import { isPlatformBrowser } from '@angular/common';
 
 const snakeCase = (str) => {
   return str.replace(/\W+/g, ' ')
@@ -45,7 +46,8 @@ export class EditProviderComponent extends TranslatableComponent implements OnIn
     private activatedRoute: ActivatedRoute,
     private providerService: ProviderService,
     private authService: AuthService,
-    private imgMaxService: Ng2ImgMaxService
+    private imgMaxService: Ng2ImgMaxService,
+    @Inject(PLATFORM_ID) private platformId
     ) {
     super(translateService);
     this.currentUser = this.authService.getCurrentUser();
@@ -58,34 +60,38 @@ export class EditProviderComponent extends TranslatableComponent implements OnIn
   }
 
   ngOnInit(): void {
-    this.activatedRoute.params.subscribe(
-      (params: Params) =>
-        this.providerService.getProvider(params.id).then(provider =>  {
-          if (!provider) {
+    if (isPlatformBrowser(this.platformId)) {
+      this.activatedRoute.params.subscribe(
+        (params: Params) =>
+          this.providerService.getProvider(params.id).then(provider =>  {
+            if (!provider) {
+              this.router.navigate(['404']);
+            } else {
+              this.provider = provider;
+              this.editProviderForm.patchValue({
+                name: provider.name,
+                description: provider.description,
+                logoURL: provider.logoUrl
+              });
+              this.provider.externalLinks.forEach((link, i) => {
+                const value = {};
+                value['link-' + i] = link;
+                this.editProviderForm.patchValue(value);
+                this.addLink('link-' + i);
+              });
+              this.onLoadLogoURL();
+            }
+          }, err => {
             this.router.navigate(['404']);
-          } else {
-            this.provider = provider;
-            this.editProviderForm.patchValue({
-              name: provider.name,
-              description: provider.description,
-              logoURL: provider.logoUrl
-            });
-            this.provider.externalLinks.forEach((link, i) => {
-              const value = {};
-              value['link-' + i] = link;
-              this.editProviderForm.patchValue(value);
-              this.addLink('link-' + i);
-            });
-            this.onLoadLogoURL();
-          }
-        }, err => {
-          this.router.navigate(['404']);
-        })
-    );
+          })
+      );
+    }
   }
 
   ngAfterViewInit() {
-    this.errorAlert = document.getElementById('errorAlert') as HTMLDivElement;
+    if (isPlatformBrowser(this.platformId)) {
+      this.errorAlert = document.getElementById('errorAlert') as HTMLDivElement;
+    }
   }
 
   createForm() {

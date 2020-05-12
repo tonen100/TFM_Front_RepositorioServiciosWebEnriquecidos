@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, Inject, PLATFORM_ID } from '@angular/core';
 import { UserService } from 'src/app/services/user.service';
 import { Params, Router, ActivatedRoute } from '@angular/router';
 import { faUserCircle } from '@fortawesome/free-solid-svg-icons';
@@ -11,6 +11,7 @@ import { AuthService } from 'src/app/services/auth.service';
 import { ToastrService } from 'ngx-toastr';
 import * as clone from 'clone';
 import { Ng2ImgMaxService } from 'ng2-img-max';
+import { isPlatformBrowser } from '@angular/common';
 
 const snakeCase = (str) => {
   return str.replace(/\W+/g, ' ')
@@ -44,39 +45,43 @@ export class EditUserComponent extends TranslatableComponent implements OnInit, 
     private activatedRoute: ActivatedRoute,
     private userService: UserService,
     private authService: AuthService,
-    private imgMaxService: Ng2ImgMaxService
+    private imgMaxService: Ng2ImgMaxService,
+    @Inject(PLATFORM_ID) private platformId
     ) {
     super(translateService);
   }
 
   ngOnInit(): void {
-    this.activatedRoute.params.subscribe(
-      (params: Params) => {
-        this.currentUser = this.authService.getCurrentUser();
-        console.log(this.currentUser)
-        if (this.currentUser && this.authService.getIdToken()) {
-          if (this.currentUser._id === params.id) {
-            this.activeRole = this.currentUser.role.toString();
-            this.createForm();
-            this.editUserForm.patchValue({
-              name: this.currentUser.username,
-              description: this.currentUser.description,
-              logoURL: this.currentUser.logoUrl
-            });
-            this.onLoadLogoURL();
+    if (isPlatformBrowser(this.platformId)) {
+      this.activatedRoute.params.subscribe(
+        (params: Params) => {
+          this.currentUser = this.authService.getCurrentUser();
+          if (this.currentUser && this.authService.getIdToken()) {
+            if (this.currentUser._id === params.id) {
+              this.activeRole = this.currentUser.role.toString();
+              this.createForm();
+              this.editUserForm.patchValue({
+                name: this.currentUser.username,
+                description: this.currentUser.description,
+                logoURL: this.currentUser.logoUrl
+              });
+              this.onLoadLogoURL();
+            } else {
+              this.router.navigate(['404']);
+              this.toastr.error('auth.forbidden');
+            }
           } else {
-            this.router.navigate(['404']);
-            this.toastr.error('auth.forbidden');
+            this.router.navigate(['login']);
           }
-        } else {
-          this.router.navigate(['login']);
         }
-      }
-    );
+      );
+    }
   }
 
   ngAfterViewInit() {
-    this.errorAlert = document.getElementById('errorAlert') as HTMLDivElement;
+    if (isPlatformBrowser(this.platformId)) {
+      this.errorAlert = document.getElementById('errorAlert') as HTMLDivElement;
+    }
   }
 
   createForm() {

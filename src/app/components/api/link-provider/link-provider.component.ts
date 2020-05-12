@@ -1,4 +1,4 @@
-import { Component, AfterViewInit, OnInit } from '@angular/core';
+import { Component, AfterViewInit, OnInit, PLATFORM_ID, Inject } from '@angular/core';
 import { User } from '../../../models/user';
 import { AuthService } from 'src/app/services/auth.service';
 import { Router, ActivatedRoute, Params } from '@angular/router';
@@ -10,6 +10,7 @@ import { ProviderService } from 'src/app/services/provider.service';
 import { Provider } from 'src/app/models/provider';
 import { TranslatableComponent } from '../../shared/translatable/translatable.component';
 import { Ng2ImgMaxService } from 'ng2-img-max';
+import { isPlatformBrowser } from '@angular/common';
 
 const snakeCase = (str) => {
   return str.replace(/\W+/g, ' ')
@@ -47,7 +48,8 @@ export class LinkProviderComponent extends TranslatableComponent implements OnIn
     private imgStorageService: ImgStorageService,
     private apiService: APIService,
     private providerService: ProviderService,
-    private imgMaxService: Ng2ImgMaxService
+    private imgMaxService: Ng2ImgMaxService,
+    @Inject(PLATFORM_ID) private platformId
     ) {
     super(translateService);
     this.currentUser = this.authService.getCurrentUser();
@@ -66,7 +68,9 @@ export class LinkProviderComponent extends TranslatableComponent implements OnIn
   }
 
   ngAfterViewInit() {
-    this.errorAlert = document.getElementById('errorAlert') as HTMLDivElement;
+    if (isPlatformBrowser(this.platformId)) {
+      this.errorAlert = document.getElementById('errorAlert') as HTMLDivElement;
+    }
   }
 
   createForm() {

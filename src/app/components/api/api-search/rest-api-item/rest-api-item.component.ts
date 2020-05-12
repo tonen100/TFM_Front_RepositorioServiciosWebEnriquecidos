@@ -8,7 +8,7 @@ import { TranslatableComponent } from 'src/app/components/shared/translatable/tr
   templateUrl: './rest-api-item.component.html',
   styleUrls: ['./rest-api-item.component.css']
 })
-export class RestApiItemComponent extends TranslatableComponent implements OnInit {
+export class RestApiItemComponent extends TranslatableComponent {
 
   @Input() restApi: API;
 
@@ -16,10 +16,6 @@ export class RestApiItemComponent extends TranslatableComponent implements OnIni
     public translateService: TranslateService
   ) {
     super(translateService);
-  }
-
-  ngOnInit(): void {
-
   }
 
   extractCategories(restApi: API) {

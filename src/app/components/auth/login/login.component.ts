@@ -1,10 +1,11 @@
-import { Component, AfterViewInit } from '@angular/core';
+import { Component, AfterViewInit, Inject, PLATFORM_ID } from '@angular/core';
 import { AuthService } from 'src/app/services/auth.service';
 import { Router } from '@angular/router';
 import { NgForm } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
 import { TranslatableComponent } from '../../shared/translatable/translatable.component';
 import { ToastrService } from 'ngx-toastr';
+import { isPlatformBrowser } from '@angular/common';
 
 @Component({
   selector: 'app-login',
@@ -20,7 +21,8 @@ export class LoginComponent extends TranslatableComponent implements AfterViewIn
     public translateService: TranslateService,
     public authService: AuthService,
     private toastr: ToastrService,
-    private router: Router
+    private router: Router,
+    @Inject(PLATFORM_ID) private platformId
     ) {
       super(translateService);
       if (this.authService.getCurrentUser() != null) {
@@ -29,7 +31,9 @@ export class LoginComponent extends TranslatableComponent implements AfterViewIn
   }
 
   ngAfterViewInit() {
-    this.errorAlert = document.getElementById('errorAlert') as HTMLDivElement;
+    if (isPlatformBrowser(this.platformId)) {
+      this.errorAlert = document.getElementById('errorAlert') as HTMLDivElement;
+    }
   }
 
   showError(message: string) {

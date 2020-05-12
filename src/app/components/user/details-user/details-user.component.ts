@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject, PLATFORM_ID } from '@angular/core';
 import { User } from 'src/app/models/user';
 import { faUserCircle, faPlusCircle, faEdit, faMinusCircle, faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import { TranslateService } from '@ngx-translate/core';
@@ -13,6 +13,7 @@ import * as moment from 'moment';
 import { APIService } from 'src/app/services/api.service';
 import { ToastrService } from 'ngx-toastr';
 import { ProviderService } from 'src/app/services/provider.service';
+import { isPlatformBrowser } from '@angular/common';
 
 @Component({
   selector: 'app-details-user',
@@ -41,7 +42,8 @@ export class DetailsUserComponent extends TranslatableComponent implements OnIni
     private providerService: ProviderService,
     private historyContributionService: HistoryContributionService,
     private toastr: ToastrService,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    @Inject(PLATFORM_ID) private platformId
     ) {
     super(translateService);
     this.currentUser = this.authService.getCurrentUser();
@@ -51,22 +53,24 @@ export class DetailsUserComponent extends TranslatableComponent implements OnIni
   }
 
   ngOnInit(): void {
-    this.currentUser = this.authService.getCurrentUser();
-    if (this.currentUser && this.authService.getIdToken()) {
-      this.activeRole = this.currentUser.role.toString();
-    }
-    this.activatedRoute.params.subscribe(
-      (params: Params) =>
-        this.userService.getUser(params.id).then(user =>  {
-          if (!user) {
+    if (isPlatformBrowser(this.platformId)) {
+      this.currentUser = this.authService.getCurrentUser();
+      if (this.currentUser && this.authService.getIdToken()) {
+        this.activeRole = this.currentUser.role.toString();
+      }
+      this.activatedRoute.params.subscribe(
+        (params: Params) =>
+          this.userService.getUser(params.id).then(user =>  {
+            if (!user) {
+              this.router.navigate(['404']);
+            } else {
+              this.user = user;
+            }
+          }, err => {
             this.router.navigate(['404']);
-          } else {
-            this.user = user;
-          }
-        }, err => {
-          this.router.navigate(['404']);
-        })
-    );
+          })
+      );
+    }
   }
 
   getMomentFromNow(contribution: HistoryContribution) {
