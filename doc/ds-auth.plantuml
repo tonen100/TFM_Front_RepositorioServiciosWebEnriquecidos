@@ -1,0 +1,46 @@
+@startuml
+
+title Authenticacion con Firebase utilizando Custom tokens
+
+actor Usuario
+entity "Front-end"
+entity "Back-end"
+database MongoDB
+participant "<img:firebase-auth-logo.png>\nFirebase" as Firebase
+
+group Conexion
+    Usuario -> "Front-end": Completa formulario\nconexion
+    "Front-end" -> "Back-end": Log in
+    "Back-end" -> MongoDB: Verifica la exactitud\nde las credentiales
+    alt Credentiales corectas
+        "MongoDB" --> "Back-end": Respuesta positiva
+        "Back-end" -> Firebase: Pide token temporario
+        Firebase --> "Back-end": Devuelve el custom token
+        "Back-end" --> "Front-end": Devuelve el custom token\n(Respuesta positiva)
+        "Front-end" -> Firebase: Crea sesion
+        Firebase --> "Front-end": Sesion (con el id token)
+        "Front-end" --> "Usuario": Redirige a la pagina principal
+    else Credentiales incorectas
+        "MongoDB" --> "Back-end": Respuesta negativa
+        "Back-end" --> "Front-end": Respuesta negativa
+        "Front-end" --> "Usuario": Muestra el error
+    end
+end
+
+group Para cada peticion subsiguiente
+    Usuario -> "Front-end": Hace algo particular
+    "Front-end" -> "Back-end": Manda peticion con el id token\n(en el header 'Authorization')
+    "Back-end" -> "Firebase": Pide la verificacion del id token
+    alt "Token valido"
+        "Firebase" --> "Back-end": Usuario corespondiente
+        "Back-end" -> "Back-end": Trata la peticion
+        "Back-end" --> "Front-end": Manda respuesta positiva
+        "Front-end" --> "Usuario": Actualiza la interfaz
+    else "Token incorecto o expirado"
+        "Firebase" --> "Back-end": Error
+        "Back-end" --> "Front-end": Manda respuesta negativa
+        "Front-end" --> "Usuario": Redirige a la pagina de conexion
+    end
+end
+
+@enduml

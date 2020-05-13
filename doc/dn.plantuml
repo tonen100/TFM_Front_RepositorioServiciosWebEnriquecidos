@@ -1,4 +1,7 @@
 @startuml
+
+title Diagrama de navegacion de la aplicacion
+
 class "Home" <<(P,IndianRed) page>>
 class "API search results" <<(P,IndianRed) page>>
 class "Details API" <<(P,IndianRed) page>>
