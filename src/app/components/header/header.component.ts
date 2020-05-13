@@ -41,12 +41,13 @@ export class HeaderComponent extends TranslatableComponent implements OnInit {
     if (isPlatformBrowser(this.platformId)) {
       this.initTranslate();
       this.lang = super.getLanguage();
-      this.authService.init();
-      this.token = this.authService.loadIdToken();
-      this.currentUser = this.authService.getCurrentUser();
-      if (this.currentUser) {
-        this.activeRole = this.currentUser.role.toString();
-      }
+      this.authService.init().then(() => {
+        this.token = this.authService.getIdToken();
+        this.currentUser = this.authService.getCurrentUser();
+        if (this.currentUser) {
+          this.activeRole = this.currentUser.role.toString();
+        }
+      });
       this.router.events.subscribe(event => {
         if (event instanceof NavigationEnd && event.url === '/') {
           this.currentUser = this.authService.getCurrentUser();

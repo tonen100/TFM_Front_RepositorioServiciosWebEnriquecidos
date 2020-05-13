@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { API } from '../../../../models/api';
 import { TranslateService } from '@ngx-translate/core';
 import { TranslatableComponent } from 'src/app/components/shared/translatable/translatable.component';

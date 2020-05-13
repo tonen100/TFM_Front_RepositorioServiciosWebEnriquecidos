@@ -26,9 +26,24 @@ export class AuthService {
               private storageService: StorageService) {}
 
   init() {
-    if (localStorage.getItem('currentUser')) {
-      this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
-    }
+    return new Promise<any>((resolve, reject) => {
+      if (localStorage.getItem('currentUser')) {
+        this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
+        this.userService.postLogin(this.currentUser.email, this.currentUser.password).then(user => {
+          this.fireAuth.auth.signInWithCustomToken(user.customToken)
+          .then(_1 => {
+            user.password = this.currentUser.password;
+            this.currentUser = user;
+            this.storageService.setItem('currentUser', JSON.stringify(this.currentUser));
+            this.fireAuth.auth.currentUser.getIdToken().then(idToken => {
+              this.idToken = idToken;
+              this.storageService.setItem('idToken', idToken);
+              resolve();
+            }, _ => resolve(''));
+          }).catch(reject);
+        }).catch(reject);
+      }
+    });
   }
 
   register(user: User) {
@@ -44,6 +59,7 @@ export class AuthService {
       this.userService.postLogin(login, password).then(user => {
         this.fireAuth.auth.signInWithCustomToken(user.customToken)
         .then(_1 => {
+          user.password = password;
           this.currentUser = user;
           this.storageService.setItem('currentUser', JSON.stringify(this.currentUser));
           this.fireAuth.auth.currentUser.getIdToken().then(idToken => {
@@ -78,11 +94,6 @@ export class AuthService {
 
   setCurrentUser(user: User) {
     this.currentUser = user;
-  }
-
-  loadIdToken() {
-    this.idToken = localStorage.getItem('idToken');
-    return this.idToken;
   }
 
   getIdToken() {

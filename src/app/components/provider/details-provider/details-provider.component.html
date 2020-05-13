@@ -1,4 +1,4 @@
-<div style="margin: 50px;">
+<div>
     <ng-template #deleteModalContent let-modal>
         <div class="modal-header">
           <h4 class="modal-title">{{ translateService.instant('provider.delete') }} {{ provider.name }}</h4>
@@ -18,8 +18,8 @@
         <div class="centerInlineBlock">
             <img [src]="provider.logoUrl" style="margin: auto; width:250px; max-width: 90%; height: auto;"/>
         </div>
-        <div class="centerVerticalBlock" style="margin-left: 2%;width: 73%;display: inline-block">
-            <div class="row" style="line-height: 100px;margin-right: 0;">
+        <div class="centerVerticalBlock" style="margin-left: 2%;width: 73%;display: inline-block;border-left: teal solid 20px;">
+            <div class="row" style="line-height: 100px;margin-right: 0;margin-left: 15px;">
                 <span style="font-size: xxx-large;">{{ provider.name }}</span>
                 <span *ngIf="activeRole == 'Contributor' || activeRole == 'Administrator'" style="margin-left: auto;margin-right: 50px;">
                     <button type="button" class="btn btn-info" style="font-size: x-large;" (click)="goToEditProvider()">{{ translateService.instant('provider.edit') }}</button>
@@ -28,7 +28,7 @@
                     <button type="button" class="btn btn-outline-danger" style="margin-left: auto;font-size: x-large;" (click)="openModalDeleteProvider(deleteModalContent)">{{ translateService.instant('provider.delete') }}</button>
                 </span>
             </div>
-            <div class="row">
+            <div class="row" style="margin-left: 15px;">
                 <p style="font-size: medium;font-weight: 500; width: 100%;">
                     <span *ngIf="lastContributor != null" style="margin-right: 10%;">{{ translateService.instant('contribution.' + lastContribution.action + '_by') }}
                         <button type="button" class="btn btn-light" style="color: coral;font-weight: 500;" (click)="goToContributor()">{{ lastContributor.username }}</button>
@@ -36,11 +36,11 @@
                     </span>
                 </p>
             </div>
-            <div class="row" style="min-height: 100px;">
+            <div class="row" style="min-height: 100px;margin-left: 15px;">
                 <p *ngIf="provider && provider.description; else noDescriptionAlt" style="font-size: medium;">{{ provider.description }}</p>
                 <ng-template #noDescriptionAlt style="font-size: medium;">{{ translateService.instant('provider.no_description') }}</ng-template>
             </div>
-            <div *ngIf="provider.externalLinks.length > 0" class="row">
+            <div *ngIf="provider.externalLinks.length > 0" class="row" style="margin-left: 15px;">
                 <div class="col-1" style="font-size: x-large;">{{ translateService.instant('provider.see') }} :</div>
                 <div class="col-11">
                     <ul class="list-group list-group-horizontal" style="flex-wrap: wrap;">
@@ -65,17 +65,10 @@
             </span>
         </div>
         <div *ngIf="displayMode == 'columns'" style="display: flex; flex-direction: row; flex-wrap: wrap;justify-content: space-evenly;">
-            <div *ngFor="let restApi of restApis" class="api-item" (click)="goToAPI(restApi)">
-                <p style="font-size: xx-large;text-align: center;">{{ restApi.name }}</p>
-                <div style="margin: auto;width: fit-content;">
-                    <img [src]="restApi.logoUrl" style="height: 150px;"/>
-                </div>
-                <p *ngIf="restApi.metadata.description; else noDescriptionAPIAlt" style="font-size: medium;text-align: justify;height: -webkit-fill-available;" [innerHTML]="restApi.metadata.description"></p>
-                <ng-template #noDescriptionAPIAlt><p style="font-size: medium;text-align: center;height: -webkit-fill-available;">{{ translateService.instant('provider.no_description') }}</p></ng-template>
-            </div>
+            <app-rest-api-column-item *ngFor="let restApi of restApis" [restApi]="restApi" showDescription="true"></app-rest-api-column-item>
         </div>
         <div *ngIf="displayMode == 'table'" class="list-group" style="width: fit-content;min-width: 600px;margin: auto;">
-            <div *ngFor="let restApi of restApis" class="list-group-item btn btn-light api-list-item" (click)="goToAPI(restApi)">
+            <div *ngFor="let restApi of restApis" class="list-group-item btn btn-light api-list-item">
                 <p style="font-size: x-large;text-align: center;margin-top: 0.5rem;margin-bottom: 0.5rem;">{{ restApi.name }}</p>
             </div>
         </div>

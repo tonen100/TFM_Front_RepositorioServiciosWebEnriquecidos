@@ -1,1 +1,17 @@
-<p>home works!</p>
+<div class="alert alert-danger alert-dismissible fade in" style="width: 100%; display: none;" id="errorAlert">
+    <p style="margin: auto;text-align: center;">{{ errorMessage }}<span (click)="hideError()" aria-label="close" style="float: right;">&times;</span></p>
+</div>
+
+<div>
+    <div>
+        Welcome to RestAPIsWiki
+    </div>
+    <div>Short description</div>
+    <div style="display: flex; flex-direction: row; flex-wrap: wrap;justify-content: space-evenly;">
+        <app-rest-api-column-item *ngFor="let restApi of restApis" [restApi]="restApi" showDescription="false"></app-rest-api-column-item>
+    </div>
+    <div>
+        What is RestAPIsWiki?
+        <div>...</div>
+    </div>
+</div>

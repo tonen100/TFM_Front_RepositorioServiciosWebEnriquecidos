@@ -2,7 +2,7 @@
     <p style="margin: auto;text-align: center;">{{ errorMessage }}<span (click)="hideError()" aria-label="close" style="float: right;">&times;</span></p>
 </div>
 
-<form [formGroup]="createAPIForm" (ngSubmit)="onCreateAPI()" id="formCreateAPI" style="width: 90%;">
+<form [formGroup]="createAPIForm" (ngSubmit)="onCreateAPI()" id="formCreateAPI">
     <fieldset class="fieldsGroup container" style="width: 100%;max-width: 100%;">
         <legend style="text-align: left; height:17%; margin-top:2%; justify-content: flex-start; font-size: xxx-large;" class="centerVerticalBlock">{{ translateService.instant('api.add_title') }}</legend>
         <div class="centerVerticalBlock row align-items-center" style="height: 75%;">

@@ -56,11 +56,11 @@ export class AddAPIComponent extends TranslatableComponent implements OnInit, Af
   }
 
   ngOnInit() {
+    this.createForm();
     if (isPlatformBrowser(this.platformId)) {
       this.currentUser = this.authService.getCurrentUser();
       if (this.currentUser && this.authService.getIdToken()) {
         this.activeRole = this.currentUser.role.toString();
-        this.createForm();
       } else {
         this.router.navigate(['login']);
       }

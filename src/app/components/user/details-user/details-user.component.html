@@ -1,4 +1,4 @@
-<div style="margin: 50px;">    
+<div>    
     <ng-template #banModalContent let-modal>
         <div *ngIf="activeRole == 'Administrator'">
             <div class="modal-header">
@@ -16,13 +16,13 @@
             </div>
         </div>
     </ng-template>
-    <div *ngIf="user">
+    <div *ngIf="user" style="margin-bottom: 5%;">
         <div class="centerInlineBlock">
             <img *ngIf="user.logoUrl" [src]="user.logoUrl" style="margin: auto; width:250px; max-width: 90%; height: auto;"/>
             <fa-icon *ngIf="!user.logoUrl" [icon]="faUserCircle" size="6x"></fa-icon>
         </div>
-        <div class="centerVerticalBlock" style="margin-left: 2%;width: 73%;display: inline-block">
-            <div class="row" style="line-height: 100px;margin-right: 0;">
+        <div class="centerVerticalBlock" style="margin-left: 2%;width: 73%;display: inline-block;border-left: teal solid 20px;">
+            <div class="row" style="line-height: 100px;margin: 0 15px;">
                 <span style="font-size: xxx-large;">{{ user.username }}</span>
                 <span *ngIf="(activeRole == 'Contributor' && currentUser._id == user._id) || activeRole == 'Administrator'" style="margin-left: auto;margin-right: 50px;">
                     <button type="button" class="btn btn-info" style="font-size: x-large;" (click)="goToEditUser()">{{ translateService.instant('user.edit') }}</button>
@@ -31,7 +31,7 @@
                     <button type="button" class="btn btn-outline-danger" style="margin-left: auto;font-size: x-large;" (click)="openModalBanUser(banModalContent)">{{ translateService.instant('user.ban') }}</button>
                 </span>
             </div>
-            <div class="row" style="min-height: 100px;">
+            <div class="row" style="min-height: 100px;margin: 0 15px;">
                 <p *ngIf="user && user.description; else noDescriptionAlt" style="font-size: medium;">{{ user.description }}</p>
                 <ng-template #noDescriptionAlt style="font-size: medium;">{{ translateService.instant('user.no_description') }}</ng-template>
             </div>

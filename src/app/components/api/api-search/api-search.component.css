@@ -8,6 +8,14 @@
     border-width: 2em;
 }
 
+#secondarySpinner {
+    width: 6rem;
+    height: 6rem;
+    color:SkyBlue;
+    margin: auto;
+    display: none;
+}
+
 app-rest-api-item:hover {
     cursor: pointer;
 }

@@ -9,7 +9,9 @@ import * as moment from 'moment';
 })
 export class TranslatableComponent {
 
-  constructor(private translate: TranslateService) {}
+  constructor(private translate: TranslateService) {
+    this.translate.use('en');
+  }
 
   initTranslate() {
     const lang = localStorage.getItem('language') ? localStorage.getItem('language') : 'en' ;

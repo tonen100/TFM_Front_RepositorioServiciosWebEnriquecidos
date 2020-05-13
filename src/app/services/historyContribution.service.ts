@@ -3,6 +3,7 @@ import { environment } from 'src/environments/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
 import { HistoryContribution } from '../models/historyContribution';
+import { API } from '../models/api';
 
 const httpOptions = {
   headers: new HttpHeaders({

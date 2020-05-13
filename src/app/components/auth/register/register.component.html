@@ -1,6 +1,7 @@
 <div class="alert alert-danger alert-dismissible fade in" style="width: 100%; display: none;" id="errorAlert">
     <p style="margin: auto;text-align: center;">{{ errorMessage }}<span (click)="hideError()" aria-label="close" style="float: right;">&times;</span></p>
 </div>
+
 <form [formGroup]="registrationForm" (ngSubmit)="onRegister()" id="formRegister">
     <fieldset class="fieldsGroup">
         <legend style="text-align: center; height:15%;justify-content: flex-end; font-size: xxx-large;" class="centerVerticalBlock">{{ translateService.instant('auth.sign_up_title') }}</legend>

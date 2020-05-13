@@ -1,10 +1,10 @@
-<div style="margin: 50px;">
+<div>
     <div *ngIf="restApi">
         <div class="centerInlineBlock">
             <img [src]="restApi.logoUrl" style="margin: auto; width:250px; max-width: 90%; height: auto;"/>
         </div>
-        <div class="centerVerticalBlock" style="margin-left: 2%;width: 73%;display: inline-block">
-            <div class="row" style="line-height: 100px;margin-right: 0;">
+        <div class="centerVerticalBlock" style="margin-left: 2%;width: 73%;display: inline-block;border-left: teal solid 20px;">
+            <div class="row" style="line-height: 100px;margin-right: 0;margin-left: 15px;">
                 <span style="font-size: xxx-large;">{{ restApi.name }}</span>
                 <span *ngIf="provider != null" style="font-size: x-large;margin-left: 10%;">{{ translateService.instant('api.provided_by') }}
                     <button type="button" class="btn btn-light" style="font-size: x-large;color: coral;font-weight: 500;" (click)="goToProvider()">{{ provider.name }}</button>
@@ -13,7 +13,7 @@
                     <button type="button" class="btn btn-info" style="font-size: x-large;" (click)="goToEditAPI()">{{ translateService.instant('api.edit') }}</button>
                 </span>
             </div>
-            <div class="row">
+            <div class="row" style="margin-left: 15px;">
                 <p style="font-size: medium;font-weight: 500; width: 100%;">
                     <span *ngIf="lastContributor != null" style="margin-right: 10%;">{{ translateService.instant('contribution.' + lastContribution.action + '_by') }}
                         <button type="button" class="btn btn-light" style="color: coral;font-weight: 500;" (click)="goToContributor()">{{ lastContributor.username }}</button>
@@ -22,7 +22,7 @@
                     <span></span>
                 </p>
             </div>
-            <div class="row">
+            <div class="row" style="margin-left: 15px;">
                 <p style="font-size: small;font-style: italic; width: 100%;">
                     <span style="margin-right: 10%;">{{ translateService.instant('api.last_version') }} :
                         <span style="font-weight: bold;">{{ restApi.versions[0].number }}</span>
@@ -30,7 +30,7 @@
                     <span *ngIf="restApi.metadata.category">{{ translateService.instant('api.categories') }} : {{ extractCategories(restApi) }}</span>
                 </p>
             </div>
-            <div class="row" style="min-height: 100px;">
+            <div class="row" style="min-height: 100px;margin-left: 15px;">
                 <div *ngIf="restApi.metadata && restApi.metadata.description; else noDescriptionAlt">
                     <p style="font-size: medium;" [innerHTML]="restApi.metadata.description"></p>
                 </div>

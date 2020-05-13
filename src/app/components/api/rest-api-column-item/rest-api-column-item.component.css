@@ -1,0 +1,42 @@
+.api-item {
+    width:300px;
+    min-height: 300px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    border-color: teal;
+    border-width: 10px;
+    border-style: solid;
+    border-radius: 50px;
+    display: inline-block;
+    color: black;
+    word-break: break-word;
+}
+
+.api-item:active {
+    color:black;
+}
+
+.api-item:hover {
+    cursor: pointer;
+}
+
+.api-item > p, .api-item > ng-div {
+    background-color: floralwhite;
+    padding:15px;
+}
+
+.api-list-item:hover {
+    background-color: rgb(13, 15, 15);
+    color: white;
+}
+
+.api-description {
+    font-size: medium;
+    text-align: justify;
+    height: -webkit-fill-available;
+    height: 270px;
+}
+
+a {
+    text-decoration: none !important;
+}

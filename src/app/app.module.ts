@@ -4,7 +4,7 @@ import { AngularMaterialModule } from './angular-material.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { AngularFireModule } from '@angular/fire';
-import { AngularFireAuth, AngularFireAuthModule } from '@angular/fire/auth';
+import { AngularFireAuthModule } from '@angular/fire/auth';
 import { AngularFireStorageModule } from '@angular/fire/storage';
 import { HttpClientModule, HttpClient } from '@angular/common/http';
 import { TranslateModule, TranslateLoader, TranslateService  } from '@ngx-translate/core';
@@ -33,6 +33,7 @@ import { ListUserComponent } from './components/user/list-user/list-user.compone
 import { ApiSearchComponent } from './components/api/api-search/api-search.component';
 import { EditUserComponent } from './components/user/edit-user/edit-user.component';
 import { RestApiItemComponent } from './components/api/api-search/rest-api-item/rest-api-item.component';
+import { RestApiColumnItemComponent } from './components/api/rest-api-column-item/rest-api-column-item.component';
 import { AuthService } from './services/auth.service';
 import { CommonModule } from '@angular/common';
 import { TranslatableComponent } from './components/shared/translatable/translatable.component';
@@ -74,6 +75,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     ListUserComponent,
     ApiSearchComponent,
     RestApiItemComponent,
+    RestApiColumnItemComponent,
     EditUserComponent,
     TranslatableComponent,
     LinkProviderComponent

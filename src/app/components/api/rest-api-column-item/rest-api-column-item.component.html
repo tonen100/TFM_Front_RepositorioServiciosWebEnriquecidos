@@ -1,0 +1,12 @@
+<div>
+    <a class="api-item" [routerLink]="'/api/' + restApi._id">
+        <p style="font-size: xx-large;text-align: center;">{{ restApi.name }}</p>
+        <div style="margin: auto;width: fit-content;">
+            <img [src]="restApi.logoUrl" style="height: 120px;"/>
+        </div>
+        <div *ngIf="showDescription">
+            <p *ngIf="restApi.metadata.description; else noDescriptionAPIAlt" class="api-description" [innerHTML]="restApi.metadata.description"></p>
+            <ng-template #noDescriptionAPIAlt><p class="api-description" style="text-align: center;">{{ translateService.instant('provider.no_description') }}</p></ng-template>
+        </div>
+    </a>
+</div>

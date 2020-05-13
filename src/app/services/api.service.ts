@@ -50,6 +50,11 @@ export class APIService {
     return this.http.get<Array<API>>(url).toPromise();
   }
 
+  getMostRecentAPIs(count: number) {
+    const url = `${this.URL_API}/v1/restApis/recent?count=${count}`;
+    return this.http.get<Array<API>>(url).toPromise();
+  }
+
   postApi(api: API) {
     const url = `${this.URL_API}/v1/restApis`;
     const postApi = JSON.parse(JSON.stringify(api));

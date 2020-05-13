@@ -78,10 +78,6 @@ export class DetailsProviderComponent extends TranslatableComponent implements O
     }
   }
 
-  goToAPI(api) {
-    this.router.navigate(['api', api._id]);
-  }
-
   goToContributor() {
     this.router.navigate(['user', this.lastContributor._id]);
   }
