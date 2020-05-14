@@ -2,26 +2,15 @@ sudo: required
 language: node_js
 node_js:
   - "12.16.3"
-services:
-  - docker
-
-before_install:
-  - sudo rm /usr/local/bin/docker-compose
-  - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
-  - chmod +x docker-compose
-  - sudo mv docker-compose /usr/local/bin
-  - docker-compose up -d --build
-
 install:
   - npm install
-
-env:
-  - DOCKER_COMPOSE_VERSION=1.16.1
 
 script:
   - echo "npm test"
 
-after_success:
-  - sudo docker login --username $HEROKU_DOCKER_USERNAME --password $API_KEY registry.heroku.com
-  - sudo docker tag tfm-front:latest registry.heroku.com/tfm-front-repositorio/web
-  - if [ $TRAVIS_BRANCH == "master" ]; then sudo docker push registry.heroku.com/tfm-front-repositorio/web; fi
+deploy:
+  provider: heroku
+  api_key: $API_KEY
+  app: $APP_NAME
+  on:
+    branch: master
