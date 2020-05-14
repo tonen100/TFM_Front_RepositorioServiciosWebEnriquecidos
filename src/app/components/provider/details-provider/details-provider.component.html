@@ -65,7 +65,7 @@
             </span>
         </div>
         <div *ngIf="displayMode == 'columns'" style="display: flex; flex-direction: row; flex-wrap: wrap;justify-content: space-evenly;">
-            <app-rest-api-column-item *ngFor="let restApi of restApis" [restApi]="restApi" showDescription="true"></app-rest-api-column-item>
+            <app-rest-api-column-item *ngFor="let restApi of restApis" [restApi]="restApi" [showDescription]="true"></app-rest-api-column-item>
         </div>
         <div *ngIf="displayMode == 'table'" class="list-group" style="width: fit-content;min-width: 600px;margin: auto;">
             <div *ngFor="let restApi of restApis" class="list-group-item btn btn-light api-list-item">

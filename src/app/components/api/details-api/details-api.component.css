@@ -28,7 +28,8 @@
     border-style: solid;
     border-radius: 5px;
     border-color: darkslategray;
-    overflow: scroll;
+    overflow-y: scroll;
+    scrollbar-width: none;
     -ms-overflow-style: none;
 }
 
@@ -49,6 +50,7 @@
     max-height: 125px;
     text-overflow: ellipsis;
     overflow: hidden;
+    scrollbar-width: none;
 }
 
 .versionSelect:hover {
@@ -85,6 +87,7 @@ app-details-version {
     border-radius: 6px;
     background: mintcream;
     overflow: scroll;
+    scrollbar-width: thin;
     -ms-overflow-style: none;
 }
 

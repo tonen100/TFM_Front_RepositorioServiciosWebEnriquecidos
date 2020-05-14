@@ -3,7 +3,7 @@
         "sign_in_title": "Sign in",
         "sign_up_title": "Sign up",
         "login_label": "Username or e-mail",
-        "name_label": "Name",
+        "name_label": "Username",
         "email_label": "E-mail",
         "password_label": "Password",
         "confirm_password_label": "Confirm Password",
@@ -143,7 +143,7 @@
         "ADD_Provider": "Added provider",
         "EDIT_Provider": "Updated provider",
         "DELETE_Provider": "Deleted provider",
-        "ADD_by": "Add by",
+        "ADD_by": "Added by",
         "EDIT_by": "Updated by",
         "DELETE_by": "Deleted by"
     }, "user": {

@@ -3,7 +3,7 @@
         "sign_in_title": "Conectarse",
         "sign_up_title": "Registrarse",
         "login_label": "Nombre de usuario o correo",
-        "name_label": "Nombre",
+        "name_label": "Nombre de usuario",
         "email_label": "Correo electronico",
         "password_label": "Contraseña",
         "confirm_password_label": "Confirmar la contraseña",

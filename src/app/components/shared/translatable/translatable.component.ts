@@ -9,14 +9,18 @@ import * as moment from 'moment';
 })
 export class TranslatableComponent {
 
-  constructor(private translate: TranslateService) {
-    this.translate.use('en');
-  }
+  lang: string;
+
+  constructor(private translate: TranslateService) {}
 
   initTranslate() {
-    const lang = localStorage.getItem('language') ? localStorage.getItem('language') : 'en' ;
-    this.translate.setDefaultLang(lang);
-    this.changeLanguage(lang);
+    if (!this.lang) {
+      this.lang = this.getLanguage();
+      console.log(this.lang)
+    }
+    console.log(this.lang)
+    this.translate.setDefaultLang(this.lang);
+    this.changeLanguage(this.lang);
   }
 
   changeLanguage(language: string) {
@@ -26,7 +30,7 @@ export class TranslatableComponent {
   }
 
   getLanguage() {
-    return localStorage.getItem('language');
+    return localStorage.getItem('language') ?  localStorage.getItem('language') : 'en';
   }
 
 }

@@ -8,7 +8,7 @@
     </div>
     <div>Short description</div>
     <div style="display: flex; flex-direction: row; flex-wrap: wrap;justify-content: space-evenly;">
-        <app-rest-api-column-item *ngFor="let restApi of restApis" [restApi]="restApi" showDescription="false"></app-rest-api-column-item>
+        <app-rest-api-column-item *ngFor="let restApi of restApis" [restApi]="restApi" [showDescription]="false"></app-rest-api-column-item>
     </div>
     <div>
         What is RestAPIsWiki?

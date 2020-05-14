@@ -27,7 +27,6 @@ export class HomeComponent extends TranslatableComponent implements OnInit, Afte
 
   ngOnInit(): void {
     if (isPlatformBrowser(this.platformId)) {
-      this.initTranslate();
       this.apiService.getMostRecentAPIs(4)
         .then(apis => this.restApis = apis)
         .catch(_ => this.showError(this.translateService.instant('api.errors.server_inaccessible')));

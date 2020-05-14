@@ -1,6 +1,6 @@
 .api-item {
-    width:300px;
-    min-height: 300px;
+    width: 100%;
+    min-height: 100%;
     overflow: hidden;
     text-overflow: ellipsis;
     border-color: teal;
@@ -34,7 +34,7 @@
     font-size: medium;
     text-align: justify;
     height: -webkit-fill-available;
-    height: 270px;
+    height: 250px;
 }
 
 a {
