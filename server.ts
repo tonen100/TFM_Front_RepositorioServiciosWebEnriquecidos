@@ -42,7 +42,7 @@ export function app() {
         if (err || !html) {
           res.render(indexHtml, { req, providers: [{ provide: APP_BASE_HREF, useValue: '404' }] });
         } else {
-          html.replace('<script id="metadata" type="application/ld+json"></script>',
+          html = html.replace('<script id="metadata" type="application/ld+json"></script>',
           `<script id="metadata" type="application/ld+json">${JSON.stringify(response.data)}</script>`);
           res.status(200).type('html').send(html);
         }
