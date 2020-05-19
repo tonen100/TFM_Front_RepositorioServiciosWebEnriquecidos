@@ -1,0 +1,21 @@
+<div class="centered" style="font-size: xxx-large; font-weight: bold;text-align: center;">
+    {{ translateService.instant('api.list_title') }}
+</div>
+
+<ul class="nav nav-tabs" role="tablist" style="justify-content: center;">
+    <li *ngFor="let letter of alphabet" class="nav-item">
+      <a class="nav-link" data-toggle="tab" role="tab" [href]="'#' + letter">{{ letter }}</a>
+    </li>
+</ul>
+
+<div class="tab-content">
+    <div *ngFor="let letter of alphabet" class="tab-pane fade list-group listLetter" [id]="letter" role="tabpanel">
+        <div *ngFor="let restApi of restApisByLetter.get(letter)">
+            <a [routerLink]="'/api/' + restApi._id" class="api-link">
+                <div class="list-group-item btn btn-light api-list-item">
+                    <p class="api-name">{{ restApi.name }}</p>
+               </div>
+            </a>
+        </div>    
+    </div>
+</div>

@@ -3,15 +3,39 @@
 </div>
 
 <div>
-    <div>
-        Welcome to RestAPIsWiki
+    <div class="centered" style="font-size: xxx-large; font-weight: bold;">
+        {{ translateService.instant('home.welcome_message') }}
     </div>
-    <div>Short description</div>
-    <div style="display: flex; flex-direction: row; flex-wrap: wrap;justify-content: space-evenly;">
+    <div class="centered" style="font-size: large;margin-bottom: 5%;">Short description</div>
+    <div class="centered" style="font-size: xx-large;">
+        {{ translateService.instant('home.latest_apis_title') }}
+    </div>
+    <div class="vertical-list">
         <app-rest-api-column-item *ngFor="let restApi of restApis" [restApi]="restApi" [showDescription]="false"></app-rest-api-column-item>
     </div>
-    <div>
-        What is RestAPIsWiki?
-        <div>...</div>
+    
+    <div class="vertical-list">
+        <div style="width: 600px;">
+            <p style="font-size: xx-large;">{{ translateService.instant('home.description_title') }}</p>
+            <div style="font-size: medium;" >
+                <p>{{ translateService.instant('home.description_sentence_1') }}</p>
+                <p>{{ translateService.instant('home.description_sentence_2') }}</p>
+                <p>{{ translateService.instant('home.description_sentence_3') }}</p>
+            </div>
+        </div>
+        <div style="width: 600px;">
+            <p style="font-size: xx-large;">{{ translateService.instant('home.description_title') }}</p>
+            <div style="font-size: medium;" >
+                <p>{{ translateService.instant('home.description_sentence_1') }}</p>
+                <p>{{ translateService.instant('home.description_sentence_2') }}</p>
+                <p>{{ translateService.instant('home.description_sentence_3') }}</p>
+            </div>
+        </div>
+    </div>
+    
+    <div style="width: 100%; height:50px; text-align: center;margin-top: 10%;">
+        <a class="centered" style="font-size: large;text-decoration: none; color: darkslategray;" routerLink="/apis/list">
+        {{ translateService.instant('home.entire_repository') }}
+        </a>
     </div>
 </div>

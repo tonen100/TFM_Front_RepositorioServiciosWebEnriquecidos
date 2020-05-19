@@ -18,7 +18,7 @@ import * as clone from 'clone';
 import * as moment from 'moment';
 import * as fileDownload from 'js-file-download';
 import { Title, Meta } from '@angular/platform-browser';
-import { isPlatformBrowser, isPlatformServer } from '@angular/common';
+import { isPlatformBrowser } from '@angular/common';
 
 declare class NestedVersion {
   version: Version;

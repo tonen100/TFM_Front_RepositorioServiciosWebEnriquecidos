@@ -1,0 +1,26 @@
+.listLetter {
+    width: fit-content;
+    min-width: 600px;
+    margin: auto;
+}
+
+.api-name {
+    font-size: x-large;
+    text-align: center;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+    color: black;
+    text-decoration: none;
+}
+
+.api-link:hover {
+    text-decoration: none;
+}
+
+.api-name:hover {
+    text-decoration: none;
+}
+
+.nav {
+    margin-bottom: 15px;
+}

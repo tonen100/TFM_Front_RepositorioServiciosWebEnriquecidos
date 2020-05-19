@@ -1,5 +1,13 @@
 {
-    "auth": {
+    "home": {
+        "welcome_messsage": "Bienvenue sur RestAPImantics",
+        "latest_apis_title": "Dernières APIs REST ajoutées",
+        "entire_repository": "Liste complète des APIs REST",
+        "description_title": "Qu'est-ce que RestAPImantics ?",
+        "description_sentence_1": "RestAPImantics es un projecto que tiene como objetivo listar APIs REST publicas y documentadas para exponerlas de una mañera uniformisada y intuitiva.",
+        "description_sentence_2": "La meta final del sitio es tambien ayudar los motores de busqueda tracionales a referenciar APIs REST proporcionandoles metadatos semanticos sobre esas APIs.",
+        "description_sentence_3": "Para conseguirlo, nuestra estupenda herramiental a información de la documentación de la API y la convierte en una forma conveniente para los motores de búsqueda, para que entiendan de qué se trata la API (schema.org ontologías)."
+    }, "auth": {
         "sign_in_title": "Se connecter",
         "sign_up_title": "S'enregistrer",
         "login_label": "Pseudonyme ou e-mail",
@@ -87,6 +95,7 @@
         "terms_of_service": "Conditions d'utilisation",
         "original_documentation": "Documentation originelle",
         "api_url": "URL racine de l'API",
+        "list_title": "Liste des APIs REST référencées",
         "errors": {
             "unprocessable_file": "Le chargement du fichier a échoué. Le fichier est peut être corrompu, ou bien un fichier binaire, ou tout simplement inaccessible",
             "server_inaccessible": "Impossible d'accéder au serveur pour le moment, veuillez réessayer plus tard",

@@ -1,11 +1,14 @@
 <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #008080;">
     <div class="navbar-collapse" id="navbarSupportedContent" style="min-height: 100px;">
-        <div style="width: 5%;"></div>
+        <div style="width: 1%;"></div>
         <div style="width: 21%;">
-            <div style="margin: auto;" routerLink='/'>
-                <p style="font-size: xx-large;">RestAPIsWiki</p>
+            <div id="logoDiv" routerLink='/'>
+                <p style="font-size: xx-large;margin-bottom: 0;font-family: Arial;">
+                    <img src="../../../assets/icons/logo.svg" style="width: 100px;margin-right: 20px;">RestAPImantics
+                </p>
             </div>
         </div>
+        <div style="width: auto;"></div>
         <div style="width: 10%">
             <div *ngIf="currentUser != null" class="btn" style="display: block;margin-right: 0;width: fit-content;margin-left: auto;" [routerLink]="'/user/' + currentUser._id">
                 <img *ngIf="currentUser.logoUrl != null" class="profilePicture" [src]="currentUser.logoUrl"/>

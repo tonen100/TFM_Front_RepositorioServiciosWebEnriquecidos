@@ -38,7 +38,7 @@
             </div>
         </div>
         <div class="row" style="margin-left: 25%; margin-right: 50px;font-size: large;">
-            <button *ngIf="restApi.metadata.termsOfService" type="button" class="btn btn-light referenceLink" (click)="popupToS()">{{ translateService.instant('api.terms_of_service') }}</button>
+            <!-- <button *ngIf="restApi.metadata.termsOfService" type="button" class="btn btn-light referenceLink" (click)="popupToS()">{{ translateService.instant('api.terms_of_service') }}</button> -->
             <button *ngIf="apiDocName" type="button" (click)="downloadOriginalDocumentation()" class="btn btn-light referenceLink">{{ translateService.instant('api.original_documentation') }}</button>
             <button *ngIf="restApi.metadata.url" type="button" class="btn btn-light referenceLink" (click)="redirectToAPIRoot()">{{ translateService.instant('api.api_url') }}</button>
         </div>

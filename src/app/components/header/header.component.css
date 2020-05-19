@@ -2,6 +2,14 @@
     color: #FFFFFF;
 }
 
+#logoDiv {
+    width: max-content;
+}
+
+#logoDiv :hover{
+    cursor: pointer;
+}
+
 .search-icon {
     color: black;
     background-color: white;
@@ -33,11 +41,17 @@
 
 .textButton:hover {
     background-color: #87CEFA;
+    border-width: 0;
 }
 
 .textButton:active {
     background-color: #008080;
     border-width: 0;
+}
+
+
+.textButton:focus {
+    border:none !important
 }
 
 .smallAuthButton {

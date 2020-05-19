@@ -1,3 +1,17 @@
+.centered {
+    margin: auto;
+    text-align: center;
+    width: fit-content;
+}
+
+.vertical-list {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    margin: 25px auto;
+}
+
 app-rest-api-column-item {
     width:250px;
     height: 250px;

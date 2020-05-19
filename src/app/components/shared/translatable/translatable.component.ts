@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, PLATFORM_ID } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import * as moment from 'moment';
 
@@ -11,26 +11,29 @@ export class TranslatableComponent {
 
   lang: string;
 
-  constructor(private translate: TranslateService) {}
+  constructor(
+    private translate: TranslateService
+    ) {}
 
   initTranslate() {
     if (!this.lang) {
       this.lang = this.getLanguage();
-      console.log(this.lang)
     }
-    console.log(this.lang)
     this.translate.setDefaultLang(this.lang);
     this.changeLanguage(this.lang);
   }
 
-  changeLanguage(language: string) {
+  changeLanguage(language: string, isPlatformBrowser: boolean = true) {
+    this.lang = language;
     this.translate.use(language);
     moment.locale(language);
-    localStorage.setItem('language', language);
+    if (isPlatformBrowser) {
+      localStorage.setItem('language', language);
+    }
   }
 
   getLanguage() {
-    return localStorage.getItem('language') ?  localStorage.getItem('language') : 'en';
+    return this.lang ? this.lang : localStorage.getItem('language') ?  localStorage.getItem('language') : 'en';
   }
 
 }

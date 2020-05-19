@@ -10,6 +10,7 @@ import { AddVersionComponent } from './components/version/add-version/add-versio
 import { DetailsVersionComponent } from './components/version/details-version/details-version.component';
 import { LoginComponent } from './components/auth/login/login.component';
 import { RegisterComponent } from './components/auth/register/register.component';
+import { ApiListComponent } from './components/api/api-list/api-list.component';
 import { ApiSearchComponent } from './components/api/api-search/api-search.component';
 import { LinkProviderComponent } from './components/api/link-provider/link-provider.component';
 import { DetailsProviderComponent } from './components/provider/details-provider/details-provider.component';
@@ -27,6 +28,7 @@ const routes: Routes = [
   { path: 'user/:id', component: DetailsUserComponent },
   { path: 'user/:id/edit', component: EditUserComponent },
   { path: 'apis/searchResults', component: ApiSearchComponent, runGuardsAndResolvers: 'always' },
+  { path: 'apis/list', component: ApiListComponent},
   { path: 'api/add', component: AddAPIComponent },
   { path: 'api/:id', component: DetailsAPIComponent },
   { path: 'api/:id/edit', component: EditAPIComponent },

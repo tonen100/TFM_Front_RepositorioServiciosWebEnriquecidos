@@ -31,6 +31,7 @@ import { LoginComponent } from './components/auth/login/login.component';
 import { RegisterComponent } from './components/auth/register/register.component';
 import { ListUserComponent } from './components/user/list-user/list-user.component';
 import { ApiSearchComponent } from './components/api/api-search/api-search.component';
+import { ApiListComponent } from './components/api/api-list/api-list.component';
 import { EditUserComponent } from './components/user/edit-user/edit-user.component';
 import { RestApiItemComponent } from './components/api/api-search/rest-api-item/rest-api-item.component';
 import { RestApiColumnItemComponent } from './components/api/rest-api-column-item/rest-api-column-item.component';
@@ -74,6 +75,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     RegisterComponent,
     ListUserComponent,
     ApiSearchComponent,
+    ApiListComponent,
     RestApiItemComponent,
     RestApiColumnItemComponent,
     EditUserComponent,

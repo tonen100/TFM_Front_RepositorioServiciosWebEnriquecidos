@@ -1,5 +1,13 @@
 {
-    "auth": {
+    "home": {
+        "welcome_message": "Welcome to RestAPImantics",
+        "latest_apis_title": "Latest REST APIs added to repository",
+        "entire_repository": "Complete list of RESTfull APIs",
+        "description_title": "What is RestAPImantics ?",
+        "description_sentence_1": "RestAPImantics is a project which aims at listing public and documented REST APIs and expose them in a uniformed and user-friendly way.",
+        "description_sentence_2": "The end goal of this site is also to help standard search engines to reference REST APIs by providing them semantical metadata on Rest APIs.",
+        "description_sentence_3": "To do that, our awesome automated tool extract from the API documentation information and convert it in a convenient form for search engines to understand what the API is about (schema.org ontologies)."
+    }, "auth": {
         "sign_in_title": "Sign in",
         "sign_up_title": "Sign up",
         "login_label": "Username or e-mail",
@@ -88,6 +96,7 @@
         "terms_of_service": "Terms of service",
         "original_documentation": "Original documentation",
         "api_url": "API root URL",
+        "list_title": "List of referenced RESTfull APIs",
         "errors": {
             "unprocessable_file": "Failed to load the file, the file might be a binary, corrupted or just unaccessible",
             "server_inaccessible": "Impossible to request the server right now, wait a bit and retry",
@@ -123,7 +132,7 @@
         "no_description": "No description found",
         "display_columns": "Columns",
         "display_table": "Table",
-        "apis_provided": "REST APIs provided",
+        "apis_provided": "RESTfull APIs provided",
         "see": "See",
         "errors": {
             "fail_create_provider": "Failed to create the provider, please check the validity of the informations",

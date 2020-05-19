@@ -34,6 +34,11 @@ export class APIService {
       });
   }
 
+  getApisList() {
+    const url = `${this.URL_API}/v1/restApis?all=true`;
+    return this.http.get<Array<API>>(url).toPromise();
+  }
+
   searchApis(keywords: string, page: number = 0, businessModels: Array<string> = null) {
     const url = `${this.URL_API}/v1/restApis?keywords=${keywords}&page=${page}`
       + (businessModels != null ? businessModels.map(businessModel => '&businessModels=' + businessModel).join() : '');

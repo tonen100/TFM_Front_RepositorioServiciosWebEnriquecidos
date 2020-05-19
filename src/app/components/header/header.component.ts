@@ -3,7 +3,7 @@ import { faSearch, faUserCircle } from '@fortawesome/free-solid-svg-icons';
 import { TranslateService } from '@ngx-translate/core';
 import { TranslatableComponent } from '../shared/translatable/translatable.component';
 import { AuthService } from 'src/app/services/auth.service';
-import { isPlatformBrowser, isPlatformServer } from "@angular/common";
+import { isPlatformBrowser } from '@angular/common';
 import { User } from '../../models/user';
 import { ToastrService } from 'ngx-toastr';
 import { environment } from 'src/environments/environment';
@@ -35,12 +35,11 @@ export class HeaderComponent extends TranslatableComponent implements OnInit {
     @Inject(PLATFORM_ID) private platformId
   ) {
     super(translateService);
+    this.translateService.use('en');
   }
 
   ngOnInit() {
-    if (isPlatformServer(this.platformId)) {
-      this.changeLanguage('en');
-    } else if (isPlatformBrowser(this.platformId)) {
+    if (isPlatformBrowser(this.platformId)) {
       this.initTranslate();
       this.lang = super.getLanguage();
       this.authService.init().then(() => {
@@ -62,7 +61,7 @@ export class HeaderComponent extends TranslatableComponent implements OnInit {
   }
 
   changeLanguage(language: string) {
-    super.changeLanguage(language);
+    super.changeLanguage(language, isPlatformBrowser(this.platformId));
     this.lang = super.getLanguage();
   }
 

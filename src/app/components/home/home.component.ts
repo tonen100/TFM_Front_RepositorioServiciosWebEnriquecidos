@@ -4,7 +4,7 @@ import { HistoryContributionService } from 'src/app/services/historyContribution
 import { TranslatableComponent } from '../shared/translatable/translatable.component';
 import { API } from 'src/app/models/api';
 import { APIService } from 'src/app/services/api.service';
-import { isPlatformServer, isPlatformBrowser } from '@angular/common';
+import { isPlatformBrowser } from '@angular/common';
 
 @Component({
   selector: 'app-home',
