@@ -1,4 +1,4 @@
-import { Component, PLATFORM_ID, Inject, OnDestroy } from '@angular/core';
+import { Component, PLATFORM_ID, Inject } from '@angular/core';
 import { APIService } from 'src/app/services/api.service';
 import { faArrowDown } from '@fortawesome/free-solid-svg-icons';
 import { ActivatedRoute, Params, Router } from '@angular/router';
@@ -17,7 +17,7 @@ const COUNT_PER_PAGE = 5;
   templateUrl: './api-search.component.html',
   styleUrls: ['./api-search.component.css']
 })
-export class ApiSearchComponent extends TranslatableComponent implements OnDestroy {
+export class ApiSearchComponent extends TranslatableComponent {
 
   faArrowDown = faArrowDown;
 
@@ -38,13 +38,15 @@ export class ApiSearchComponent extends TranslatableComponent implements OnDestr
     ) {
       super(translateService);
       if (isPlatformBrowser(this.platformId)) {
-        this.page = 0;
-        this.paramsSubscription = this.activatedRoute.queryParams.subscribe((params: Params) => {
+        this.activatedRoute.queryParams.subscribe((params: Params) => {
+          this.page = 0;
           this.keywords = params.keywords;
           this.apiService.searchApis(this.keywords, this.page, null)
           .then(restApis => {
             document.getElementById('loadingSpinner').style.display = 'none';
-            document.getElementById('nextArrow').style.display = 'block';
+            if (document.getElementById('nextArrow')) {
+              document.getElementById('nextArrow').style.display = 'block';
+            }
             this.restApis = restApis;
             jQuery('#SelectPicker').selectpicker();
             if (restApis.length < COUNT_PER_PAGE ) { this.reachedEnd = true; }
@@ -52,12 +54,6 @@ export class ApiSearchComponent extends TranslatableComponent implements OnDestr
           .catch(err => document.getElementById('loadingSpinner').style.display = 'none');
         });
       }
-  }
-
-  ngOnDestroy(): void {
-    if (this.paramsSubscription) {
-      this.paramsSubscription.unsubscribe();
-    }
   }
 
   searchNextResults(): void {
