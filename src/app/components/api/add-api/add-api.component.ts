@@ -193,7 +193,7 @@ export class AddAPIComponent extends TranslatableComponent implements OnInit, Af
     const newAPI = new API(values.name, values.logoURL, businessModels.filter(businessModel => values[businessModel]));
     this.apiService.postApi(newAPI).then(api => {
       // tslint:disable-next-line: max-line-length
-      const newVersion = new Version(values.versionNb, values.originalDocumentation, values.versionSummary, values.urlDoc, values.rootUrlApi);
+      const newVersion = new Version(values.versionNb, values.originalDocumentation, values.versionSummary, values.rootUrlApi, values.urlDoc);
       this.versionService.postVersion(api, newVersion).then(version => {
         this.router.navigate(['api', api._id, 'provider', 'link']);
       }).catch(err => {

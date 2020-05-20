@@ -40,8 +40,14 @@ export class AuthService {
               this.storageService.setItem('idToken', idToken);
               resolve();
             }, _ => resolve(''));
-          }).catch(reject);
-        }).catch(reject);
+          }).catch((err) => {
+            this.logout();
+            reject(err);
+          });
+        }).catch((err) => {
+          this.logout();
+          reject(err);
+        });
       }
     });
   }
@@ -81,8 +87,11 @@ export class AuthService {
       this.fireAuth.auth.signOut()
         .then(_ => {
           this.currentUser = null;
+          this.idToken = null;
           resolve();
         }).catch(error => {
+          this.currentUser = null;
+          this.idToken = null;
           reject(error);
         });
     });

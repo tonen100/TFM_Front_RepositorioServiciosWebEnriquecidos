@@ -65,7 +65,7 @@
             "root_url_api_label": "URL racine de l'API",
             "url_doc_label": "URL de la documentation" ,
             "summary_label": "Résumé de la version",
-            "number_placeholder": "Numéro de version",
+            "number_placeholder": "1.0.0",
             "initial": "Initial",
             "metadata": "Métadonnées",
             "details": "Détails de la version",

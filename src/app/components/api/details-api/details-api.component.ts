@@ -138,11 +138,11 @@ export class DetailsAPIComponent extends TranslatableComponent implements OnInit
     document.match(/\s(__|\*\*)(?!\s)(.(?!\1))+(?!\s(?=\1))/) != null;
   }
 
-  redirectToAPIRoot() {
-    if (typeof(this.restApi.metadata.url) === 'string') {
-      window.location.replace(this.restApi.metadata.url);
+  getRootURLAPI() {
+    if (this.restApi.metadata.url) {
+      return typeof(this.restApi.metadata.url) === 'string' ? this.restApi.metadata.url : this.restApi.metadata.url[0];
     } else {
-      window.location.replace(this.restApi.metadata.url[0]);
+      return null;
     }
   }
 
@@ -165,7 +165,7 @@ export class DetailsAPIComponent extends TranslatableComponent implements OnInit
     const result: NestedVersion[] = [];
     versions.forEach(version => version.createdAt = new Date(version.createdAt));
     versions.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime()).forEach(version => {
-      if (version.number.match(/^v[0-9]+\.[0-9]+\.[0-9]+$/)) {
+      if (version.number.match(/^[0-9]+\.[0-9]+\.[0-9]+$/)) {
         const nestedVersion = result.find(
           v => v.version.number.slice(0, v.version.number.indexOf('.')) === version.number.slice(0, version.number.indexOf('.'))
         );

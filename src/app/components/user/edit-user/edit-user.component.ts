@@ -140,7 +140,7 @@ export class EditUserComponent extends TranslatableComponent implements OnInit, 
   }
 
   editUser() {
-    let values = this.editUserForm.value;
+    const values = this.editUserForm.value;
     const user = clone<User>(this.currentUser);
     user.username = values.name;
     user.logoUrl = values.logoURL;

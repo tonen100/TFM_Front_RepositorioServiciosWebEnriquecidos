@@ -1,4 +1,4 @@
-import { Component, OnInit, PLATFORM_ID, Inject } from '@angular/core';
+import { Component, PLATFORM_ID, Inject, OnDestroy } from '@angular/core';
 import { APIService } from 'src/app/services/api.service';
 import { faArrowDown } from '@fortawesome/free-solid-svg-icons';
 import { ActivatedRoute, Params, Router } from '@angular/router';
@@ -7,6 +7,7 @@ import { businessModels } from '../business-models.enum';
 import { TranslatableComponent } from '../../shared/translatable/translatable.component';
 import { TranslateService } from '@ngx-translate/core';
 import { isPlatformBrowser } from '@angular/common';
+import { Subscription } from 'rxjs';
 declare var jQuery: any;
 
 const COUNT_PER_PAGE = 5;
@@ -16,12 +17,11 @@ const COUNT_PER_PAGE = 5;
   templateUrl: './api-search.component.html',
   styleUrls: ['./api-search.component.css']
 })
-export class ApiSearchComponent extends TranslatableComponent implements OnInit {
-
-  
+export class ApiSearchComponent extends TranslatableComponent implements OnDestroy {
 
   faArrowDown = faArrowDown;
 
+  paramsSubscription: Subscription;
   keywords: string;
   restApis: API[];
   page: number;
@@ -37,23 +37,26 @@ export class ApiSearchComponent extends TranslatableComponent implements OnInit 
     @Inject(PLATFORM_ID) private platformId
     ) {
       super(translateService);
+      if (isPlatformBrowser(this.platformId)) {
+        this.page = 0;
+        this.paramsSubscription = this.activatedRoute.queryParams.subscribe((params: Params) => {
+          this.keywords = params.keywords;
+          this.apiService.searchApis(this.keywords, this.page, null)
+          .then(restApis => {
+            document.getElementById('loadingSpinner').style.display = 'none';
+            document.getElementById('nextArrow').style.display = 'block';
+            this.restApis = restApis;
+            jQuery('#SelectPicker').selectpicker();
+            if (restApis.length < COUNT_PER_PAGE ) { this.reachedEnd = true; }
+          })
+          .catch(err => document.getElementById('loadingSpinner').style.display = 'none');
+        });
+      }
   }
 
-  ngOnInit(): void {
-    if (isPlatformBrowser(this.platformId)) {
-      this.page = 0;
-      this.activatedRoute.queryParams.subscribe((params: Params) => {
-        this.keywords = params.keywords;
-        this.apiService.searchApis(this.keywords, this.page, null)
-        .then(restApis => {
-          document.getElementById('loadingSpinner').style.display = 'none';
-          document.getElementById('nextArrow').style.display = 'block';
-          this.restApis = restApis;
-          jQuery('#SelectPicker').selectpicker();
-          if (restApis.length < COUNT_PER_PAGE ) { this.reachedEnd = true; }
-        })
-        .catch(err => document.getElementById('loadingSpinner').style.display = 'none');
-      });
+  ngOnDestroy(): void {
+    if (this.paramsSubscription) {
+      this.paramsSubscription.unsubscribe();
     }
   }
 

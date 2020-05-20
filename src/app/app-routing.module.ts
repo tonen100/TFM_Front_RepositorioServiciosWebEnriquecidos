@@ -27,7 +27,7 @@ const routes: Routes = [
   { path: 'users', component: ListUserComponent },
   { path: 'user/:id', component: DetailsUserComponent },
   { path: 'user/:id/edit', component: EditUserComponent },
-  { path: 'apis/searchResults', component: ApiSearchComponent, runGuardsAndResolvers: 'always' },
+  { path: 'apis/searchResults', component: ApiSearchComponent },
   { path: 'apis/list', component: ApiListComponent},
   { path: 'api/add', component: AddAPIComponent },
   { path: 'api/:id', component: DetailsAPIComponent },
