@@ -1,12 +1,20 @@
 {
     "home": {
         "welcome_message": "Welcome to RestAPImantics",
+        "moto": "The Wikipedia for RESTfull APIs made accessible to both human and machines",
         "latest_apis_title": "Latest REST APIs added to repository",
         "entire_repository": "Complete list of RESTfull APIs",
-        "description_title": "What is RestAPImantics ?",
-        "description_sentence_1": "RestAPImantics is a project which aims at listing public and documented REST APIs and expose them in a uniformed and user-friendly way.",
-        "description_sentence_2": "The end goal of this site is also to help standard search engines to reference REST APIs by providing them semantical metadata on Rest APIs.",
-        "description_sentence_3": "To do that, our awesome automated tool extract from the API documentation information and convert it in a convenient form for search engines to understand what the API is about (schema.org ontologies)."
+        "description_title_1": "What is RestAPImantics ?",
+        "description_sentence_1_1": "RestAPImantics is a project which aims at listing public and documented REST APIs and expose them in a uniformed and user-friendly way.",
+        "description_sentence_1_2": "The end goal of this site is also to help standard search engines to reference REST APIs by providing them semantical metadata on Rest APIs.",
+        "description_sentence_1_3": "To do that, our awesome automated tool extract from the API documentation information and convert it in a convenient form for search engines to understand what the API is about (schema.org ontologies).",
+        "description_title_2": "What RESTfull API can be found in RestAPImantics ?",
+        "description_sentence_2_1": "We aim at referencing only public RESTfull APIs (free or paid) in our own API, but as this project is community-driven, we recommend our dear contributers to respect that rule.",
+        "description_sentence_2_2": "Our API, used by this website, can also be read freely by anyone.",
+        "description_title_3": "How can i contribute to the project ?",
+        "description_sentence_3_1": "Anyone can add new (or missing) RESTfull APIs, not just API owners.",
+        "description_sentence_3_2": "Just create an account (we will never sell your email address to any mailing list) and start adding RESTfull APIs to the repository through this website or update existing ones (new version...).",
+        "description_sentence_3_3": "All you really need for that is the documentation of the API (either Swagger, OpenAPI, RAML or API Blueprint)."
     }, "auth": {
         "sign_in_title": "Sign in",
         "sign_up_title": "Sign up",

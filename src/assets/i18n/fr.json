@@ -1,12 +1,20 @@
 {
     "home": {
-        "welcome_messsage": "Bienvenue sur RestAPImantics",
+        "welcome_message": "Bienvenue sur RestAPImantics",
+        "moto": "Le wikipedia des APIs REST accesible pour les humains tout comme pour les machines",
         "latest_apis_title": "Dernières APIs REST ajoutées",
         "entire_repository": "Liste complète des APIs REST",
-        "description_title": "Qu'est-ce que RestAPImantics ?",
-        "description_sentence_1": "RestAPImantics es un projecto que tiene como objetivo listar APIs REST publicas y documentadas para exponerlas de una mañera uniformisada y intuitiva.",
-        "description_sentence_2": "La meta final del sitio es tambien ayudar los motores de busqueda tracionales a referenciar APIs REST proporcionandoles metadatos semanticos sobre esas APIs.",
-        "description_sentence_3": "Para conseguirlo, nuestra estupenda herramiental a información de la documentación de la API y la convierte en una forma conveniente para los motores de búsqueda, para que entiendan de qué se trata la API (schema.org ontologías)."
+        "description_title_1": "Qu'est-ce que RestAPImantics ?",
+        "description_sentence_1_1": "RestAPImantics est un projet qui a pour but de lister les APIs REST publiques et documentés pour les rendre accessible de manière uniforme et intuitive.",
+        "description_sentence_1_2": "L'objectif final du ce site est également d'aider les moteurs de recherches conventionnels a réferencer ces APIs REST, en leur fournissant les métadonnées sémantiques adéquates sur ces APIs.",
+        "description_sentence_1_3": "Pour y parvenir, notre formidable outil extrait des informations de la documentation de l'API y la convertit dans un format intelligible pour les moteurs de recherche, afin qu'il puisse comprendre à quoi sert cette API (ontologies schema.org).",
+        "description_title_2": "Quelles APIs trouve-t-on sur RestAPImantics ?",
+        "description_sentence_2_1": "Nous voulons référencer seulement des APIs REST publics (gratuite ou payantes) dans notre propre API, mais ce projet se basant sur sa communauté, nous demandons à nos aimables contributeurs de respecter cette règle.",
+        "description_sentence_2_2": "A noter que notre API, utilisée par ce site, peut être consultée directement par tout le monde.",
+        "description_title_3": "Comment participer au projet ?",
+        "description_sentence_3_1": "Rien de plus simple, tout le monde peut ajouter de nouvelles (ou manquantes) APIs REST, pas seulement les propriétaires de ces APIs.",
+        "description_sentence_3_2": "Il y a juste à créer un compte (nous ne vendrons jamais votre adresse email a une liste d'envoi) et vous pourrez commencer à ajouter des APIs REST au dépôt à travers ce site, ou bien mettre à jour celles qui existes déjà (nouvelle version...).",
+        "description_sentence_3_3": "La seule chose dont vous ayez vraiment besoin est de la documentation de la dite API (au format Swagger, OpenAPI, RAML ou API Blueprint)."
     }, "auth": {
         "sign_in_title": "Se connecter",
         "sign_up_title": "S'enregistrer",

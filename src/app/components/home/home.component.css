@@ -12,6 +12,11 @@
     margin: 25px auto;
 }
 
+.description-div {
+    width: 600px;
+    margin-top: 25px
+}
+
 app-rest-api-column-item {
     width:250px;
     height: 250px;

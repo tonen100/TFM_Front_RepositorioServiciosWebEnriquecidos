@@ -58,7 +58,7 @@ registerLocaleData(localeEs, 'es');
 registerLocaleData(localeFr, 'fr');
 
 export function HttpLoaderFactory(http: HttpClient) {
-  return new TranslateHttpLoader(http);
+  return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }
 
 @NgModule({
@@ -102,7 +102,9 @@ export function HttpLoaderFactory(http: HttpClient) {
         provide: TranslateLoader,
         useFactory: HttpLoaderFactory,
         deps: [HttpClient]
-      }
+      },
+      useDefaultLang: true,
+      defaultLanguage: 'en'
     }),
     ToastrModule.forRoot(),
     BrowserAnimationsModule,

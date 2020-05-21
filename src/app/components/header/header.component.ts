@@ -35,7 +35,8 @@ export class HeaderComponent extends TranslatableComponent implements OnInit {
     @Inject(PLATFORM_ID) private platformId
   ) {
     super(translateService);
-    this.translateService.use('en');
+    translateService.setDefaultLang('en');
+    translateService.use('en');
   }
 
   ngOnInit() {
@@ -61,7 +62,7 @@ export class HeaderComponent extends TranslatableComponent implements OnInit {
   }
 
   changeLanguage(language: string) {
-    super.changeLanguage(language, isPlatformBrowser(this.platformId));
+    super.changeLanguage(language);
     this.lang = super.getLanguage();
   }
 

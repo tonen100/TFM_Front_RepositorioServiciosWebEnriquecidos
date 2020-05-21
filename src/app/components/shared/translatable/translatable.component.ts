@@ -19,21 +19,17 @@ export class TranslatableComponent {
     if (!this.lang) {
       this.lang = this.getLanguage();
     }
-    this.translate.setDefaultLang(this.lang);
     this.changeLanguage(this.lang);
   }
 
-  changeLanguage(language: string, isPlatformBrowser: boolean = true) {
+  changeLanguage(language: string) {
     this.lang = language;
     this.translate.use(language);
     moment.locale(language);
-    if (isPlatformBrowser) {
-      localStorage.setItem('language', language);
-    }
+    localStorage.setItem('language', language);
   }
 
   getLanguage() {
     return this.lang ? this.lang : localStorage.getItem('language') ?  localStorage.getItem('language') : 'en';
   }
-
 }
