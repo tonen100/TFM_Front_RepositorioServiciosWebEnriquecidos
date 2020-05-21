@@ -31,7 +31,8 @@
                 <button type="button" class="btn btn-light textButton" routerLink="/api/add">{{ translateService.instant('api.add') }}</button>
             </div>
             <div class="col text-center textButtonCol">
-                <button type="button" class="btn btn-light textButton" [routerLink]="['api', idMainAPI]">{{ translateService.instant('api.our_api') }}</button>
+                <button *ngIf="!activeRole || activeRole != 'Administrator'" type="button" class="btn btn-light textButton" [routerLink]="['api', idMainAPI]">{{ translateService.instant('api.our_api') }}</button>
+                <button *ngIf="activeRole == 'Administrator'" type="button" class="btn btn-light textButton" [routerLink]="['users']">{{ translateService.instant('user.list') }}</button>
             </div>
         </ul>
         <ul class="navbar-nav justify-content-center" style="min-height: 100px;padding-right: 0px; width: 10%">

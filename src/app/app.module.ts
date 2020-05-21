@@ -12,6 +12,9 @@ import { ToastrModule } from 'ngx-toastr';
 import { registerLocaleData } from '@angular/common';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
+import { TableModule } from 'primeng/table';
+import { CalendarModule } from 'primeng/calendar';
+import { DropdownModule } from 'primeng/dropdown';
 import localeEs from '@angular/common/locales/es';
 import localeFr from '@angular/common/locales/fr';
 
@@ -105,7 +108,10 @@ export function HttpLoaderFactory(http: HttpClient) {
     BrowserAnimationsModule,
     NgbModalModule,
     Ng2ImgMaxModule,
-    MarkdownModule.forRoot({ loader: HttpClient })
+    MarkdownModule.forRoot({ loader: HttpClient }),
+    TableModule,
+    CalendarModule,
+    DropdownModule
   ],
   providers: [
     AuthService,

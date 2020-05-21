@@ -30,6 +30,11 @@ export class UserService {
           });
   }
 
+  getUsersList(idToken: string) {
+    const url = `${this.URL_API}/v1/users?all=true`;
+    return this.http.get<Array<User>>(url, { headers: httpOptions.headers.set('Authorization', idToken) } ).toPromise();
+  }
+
   postLogin(login: string, password: string) {
     const url = `${this.URL_API}/v1/login`;
     return this.http.post<User>(url, {
@@ -71,8 +76,8 @@ export class UserService {
     return this.http.put<User>(url, body, httpOptions).toPromise();
   }
 
-  banUser(id: string, banned: boolean) {
+  banUser(id: string, banned: boolean, idToken) {
     const url = `${this.URL_API}/v1/users/${id}/ban`;
-    return this.http.patch<User>(url, { banned }).toPromise();
+    return this.http.patch<User>(url, { banned }, { headers: httpOptions.headers.set('Authorization', idToken) }).toPromise();
   }
 }

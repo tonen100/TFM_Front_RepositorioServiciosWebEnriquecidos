@@ -156,11 +156,14 @@
         "DELETE_by": "Supprimé par"
     }, "user": {
         "ban": "Bannir",
+        "unban": "Débannir",
         "cancel": "Annuler",
         "edit": "Modifier",
+        "list": "Liste des utilisateurs",
         "cant_undo_action": "Cette action est irréversible !",
         "ban_repository_question": "Êtes-vous sûr de vouloir bannir cet utilisateur ?",
         "no_description": "Aucune description n'a été trouvée",
+        "profil": "Profil",
         "edit_title": "Mettre à jour le profil",
         "name_label": "Pseudo",
         "logo_label": "URL du logo",

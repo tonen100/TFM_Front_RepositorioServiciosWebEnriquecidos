@@ -136,7 +136,7 @@ export class DetailsUserComponent extends TranslatableComponent implements OnIni
   }
 
   banUser() {
-    this.userService.banUser(this.user._id, !this.user.banned);
+    this.userService.banUser(this.user._id, !this.user.banned, this.authService.getIdToken());
     this.router.navigate(['']);
   }
 

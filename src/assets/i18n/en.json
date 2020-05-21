@@ -157,11 +157,14 @@
         "DELETE_by": "Deleted by"
     }, "user": {
         "ban": "Ban",
+        "unban": "Unban",
         "cancel": "Cancel",
         "edit": "Edit",
+        "list": "Users list",
         "cant_undo_action": "This action cannot be undone !",
         "ban_repository_question": "Are you sure you want to ban this user ?",
         "no_description": "No description found",
+        "profil": "Profil",
         "edit_title": "Edit profile",
         "name_label": "Username",
         "logo_label": "Logo URL",
