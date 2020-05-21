@@ -72,8 +72,8 @@ export class AuthService {
             this.idToken = idToken;
             this.storageService.setItem('idToken', idToken);
             resolve(idToken);
-          }, _ => resolve(''));
-        }, _2 => resolve(''));
+          }, err => reject(err));
+        }, err2 => reject(err2));
       }).catch(error => {
         reject(error);
       });
