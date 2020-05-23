@@ -1,8 +1,8 @@
 @startuml
-
 title Diagrama de navegacion de la aplicacion
 
 class "Home" <<(P,IndianRed) page>>
+class "Entire List APIs" <<(P,IndianRed) page>>
 class "API search results" <<(P,IndianRed) page>>
 class "Details API" <<(P,IndianRed) page>>
 class "Sign up" <<(P,IndianRed) form>>
@@ -27,8 +27,10 @@ class "Add version" <<(P,IndianRed) form>>
 class "Users list" <<(P,IndianRed) page>>
 
 "Home" --> "API search results": <<process>>\nsearch
-"Home" --> "Sign up": <<link>>
-"Home" --> "Sign in": <<link>>
+"Home" --> "Entire List APIs": <<link>>
+"Home" -up-> "Sign up": <<link>>
+"Home" -up-> "Sign in": <<link>>
+"Home" --> "Details API": <<link>>\nlast APIs
 "Sign in" --> "Home": <<process>>\nlog in
 "Home" -left-> "User profile": <<link>>\n(if logged)
 "User profile" -left-> "Edit profile": <<link>>
@@ -40,6 +42,7 @@ class "Users list" <<(P,IndianRed) page>>
 "Link provider" --> "Home": <<process>>\ncreate\nAPI
 "API search results" --> "Details API": <<link>>
 "API search results" *-- "REST APIs list "
+"Entire List APIs" *-- "REST APIs list "
 "Details API" --> "Details provider": <<link>>
 "Details API" *-- "REST API"
 "Details API" --> "Edit API": <<link>>\n(if logged)
@@ -49,7 +52,7 @@ class "Users list" <<(P,IndianRed) page>>
 "Details API" *-up- "Contributions list"
 "REST API" *-- "Versions list"
 "Versions list" *-- "Version"
-"Contributions list" *-left- "Contribution"
+"Contributions list" *-down- "Contribution"
 "Details provider" *-left- "Provider"
 "Details provider" *-- "REST APIs list"
 "Details provider" --> "Details API": <<link>>
