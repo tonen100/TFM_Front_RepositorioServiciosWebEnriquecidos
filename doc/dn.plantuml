@@ -49,7 +49,7 @@ class "Users list" <<(P,IndianRed) page>>
 "Edit API" --> "Details API": <<process>>\nedit
 "Edit API" --> "Add version": <<link>>
 "Add version" --> "Details API": <<process>>\nedit
-"Details API" *-up- "Contributions list"
+"Details API" <-down- "Contributions list": <<link>>
 "REST API" *-- "Versions list"
 "Versions list" *-- "Version"
 "Contributions list" *-down- "Contribution"
