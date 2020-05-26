@@ -1,7 +1,7 @@
 <div class="alert alert-danger alert-dismissible fade in" style="width: 100%; display: none;" id="errorAlert">
     <p style="margin: auto;text-align: center;">{{ errorMessage }}<span (click)="hideError()" aria-label="close" style="float: right;">&times;</span></p>
 </div>
-<ng-container *ngIf="this.authService.getCurrentUser() != null; else logForm">
+<ng-container *ngIf="checkCurrentUser(); else logForm">
 </ng-container>
 <ng-template #logForm>
     <form class="form-horizontal" (ngSubmit)="onLogin(f)" #f="ngForm" id="formLogin">

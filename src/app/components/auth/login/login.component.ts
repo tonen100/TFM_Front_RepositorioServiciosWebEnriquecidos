@@ -1,4 +1,5 @@
 import { Component, AfterViewInit, Inject, PLATFORM_ID } from '@angular/core';
+import { Location } from '@angular/common';
 import { AuthService } from 'src/app/services/auth.service';
 import { Router } from '@angular/router';
 import { NgForm } from '@angular/forms';
@@ -22,6 +23,7 @@ export class LoginComponent extends TranslatableComponent implements AfterViewIn
     public authService: AuthService,
     private toastr: ToastrService,
     private router: Router,
+    private location: Location,
     @Inject(PLATFORM_ID) private platformId
     ) {
       super(translateService);
@@ -47,6 +49,12 @@ export class LoginComponent extends TranslatableComponent implements AfterViewIn
     this.errorMessage = null;
     this.errorAlert.style.display = 'none';
     this.errorAlert.classList.remove('show');
+  }
+
+  checkCurrentUser() {
+    if (this.authService.getCurrentUser() != null && this.authService.getIdToken() != null) {
+      this.location.back();
+    }
   }
 
   onLogin(form: NgForm) {
