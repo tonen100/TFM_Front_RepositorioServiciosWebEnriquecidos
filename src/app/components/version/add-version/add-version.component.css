@@ -60,7 +60,6 @@
 
 #documents {
     height: 500px;
-    width: 70%;
     margin: auto;
     padding: 15px;
     text-align: center;
@@ -78,8 +77,6 @@
 
 #documents > nav {
     display: none;
-    position: absolute;
-    right: 50px;
 }
 
 #documents > pre {

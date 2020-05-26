@@ -20,6 +20,10 @@ const snakeCase = (str) => {
     .join('_');
 };
 
+const symmetricDifference = (array1, array2) => {
+  return array1.filter(x => !array2.includes(x)).concat(array2.filter(x => !array1.includes(x)));
+}
+
 @Component({
   selector: 'app-edit-api',
   templateUrl: './edit-api.component.html',
@@ -35,6 +39,7 @@ export class EditAPIComponent extends TranslatableComponent implements OnInit, A
   errorAlert: HTMLDivElement;
   logo: any;
   businessModels = businessModels;
+  initialsBusinessModels: Array<string> = [];
 
   constructor(
     public translateService: TranslateService,
@@ -72,9 +77,10 @@ export class EditAPIComponent extends TranslatableComponent implements OnInit, A
                 description: api.metadata.description,
                 logoURL: api.logoUrl
               });
-              this.restApi.businessModels.forEach(businessModel => {
+              this.restApi.metadata.offers.forEach(offer => {
                 const val = {};
-                val[businessModel] = true;
+                val[offer.identifier] = true;
+                this.initialsBusinessModels.push(offer.identifier);
                 this.editAPIForm.patchValue(val);
               });
               this.onLoadLogoURL();
@@ -197,7 +203,11 @@ export class EditAPIComponent extends TranslatableComponent implements OnInit, A
     this.restApi.name = values.name;
     this.restApi.logoUrl = values.logoURL;
     this.restApi.metadata.description = values.description;
-    this.restApi.businessModels =  businessModels.filter(businessModel => values[businessModel]);
+
+    const selectedBusinessModels = businessModels.filter(businessModel => values[businessModel]);
+    if (symmetricDifference(selectedBusinessModels, this.initialsBusinessModels).length > 0) {
+      this.restApi.businessModels = selectedBusinessModels;
+    }
     this.apiService.updateApi(this.restApi).then(_ => this.goToRestAPI())
       .catch(_ => this.showError(this.translateService.instant('api.errors.fail_edit_api')));
   }

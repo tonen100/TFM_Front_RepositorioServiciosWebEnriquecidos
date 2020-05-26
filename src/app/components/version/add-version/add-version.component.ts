@@ -6,11 +6,11 @@ import { TranslateService } from '@ngx-translate/core';
 import { AuthService } from 'src/app/services/auth.service';
 import { APIService } from 'src/app/services/api.service';
 import { Router, Params, ActivatedRoute } from '@angular/router';
-import { ImgStorageService } from 'src/app/services/img-storage.service';
 import { VersionService } from 'src/app/services/version.service';
 import { API } from 'src/app/models/api';
 import { Version } from 'src/app/models/version';
 import { isPlatformBrowser } from '@angular/common';
+import { businessModels } from '../../api/business-models.enum';
 
 @Component({
   selector: 'app-add-version',
@@ -25,6 +25,8 @@ export class AddVersionComponent extends TranslatableComponent implements OnInit
   errorMessage: string;
   errorAlert: HTMLDivElement;
   restApi: API;
+  businessModels = businessModels;
+  initialsBusinessModels: Array<string> = [];
   previewVersion: {
     originalDocumentation: string;
     oasDocumentation: string;
@@ -37,7 +39,6 @@ export class AddVersionComponent extends TranslatableComponent implements OnInit
     private fb: FormBuilder,
     private router: Router,
     private activatedRoute: ActivatedRoute,
-    private imgStorageService: ImgStorageService,
     private apiService: APIService,
     private versionService: VersionService,
     @Inject(PLATFORM_ID) private platformId
@@ -46,6 +47,7 @@ export class AddVersionComponent extends TranslatableComponent implements OnInit
   }
 
   ngOnInit() {
+    this.createForm();
     if (isPlatformBrowser(this.platformId)) {
       this.currentUser = this.authService.getCurrentUser();
       if (this.currentUser && this.authService.getIdToken()) {
@@ -53,7 +55,14 @@ export class AddVersionComponent extends TranslatableComponent implements OnInit
         this.activatedRoute.params.subscribe(
           (params: Params) => this.apiService.getApi(params.id).then(api => {
             this.restApi = api;
-            this.createForm();
+            if(this.restApi.metadata && this.restApi.metadata.offers) {
+              this.restApi.metadata.offers.forEach(offer => {
+                const val = {};
+                val[offer.identifier] = true;
+                this.initialsBusinessModels.push(offer.identifier);
+                this.createVersionForm.patchValue(val);
+              });
+            }
           }).catch(_ => this.router.navigate(['404']))
         );
       } else {
@@ -78,6 +87,7 @@ export class AddVersionComponent extends TranslatableComponent implements OnInit
       versionSummary: ['', Validators.required],
       validated: ['true']
     };
+    businessModels.forEach(businessModel => formGroup[businessModel] = ['']);
     this.createVersionForm = this.fb.group(formGroup, { validators: [this.checkDocumentation] });
   }
 
@@ -156,7 +166,11 @@ export class AddVersionComponent extends TranslatableComponent implements OnInit
         this.showError(this.translateService.instant('api.version.errors.already_exist_number'));
       } else {
         // tslint:disable-next-line: max-line-length
-        const newVersion = new Version(values.versionNb, values.originalDocumentation, values.versionSummary, values.urlDoc, values.rootUrlApi);
+        const selectedBusinessModels = businessModels.filter(businessModel => values[businessModel]);
+        const newVersion = new Version(
+          values.versionNb, values.originalDocumentation, values.versionSummary,
+          selectedBusinessModels, values.urlDoc, values.rootUrlApi
+        );
         this.versionService.postVersion(this.restApi, newVersion).then(version => {
           this.router.navigate(['api', this.restApi._id]);
         }).catch(err => {

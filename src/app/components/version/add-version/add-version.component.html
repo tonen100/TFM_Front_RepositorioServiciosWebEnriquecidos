@@ -4,7 +4,7 @@
 
 <form [formGroup]="createVersionForm" (ngSubmit)="onCreateVersion()" id="formCreateVersion" style="width: 90%;">
     <fieldset class="fieldsGroup container" style="width: 100%;max-width: 100%;">
-        <legend style="text-align: left; height:17%; margin-top:2%; justify-content: flex-start; font-size: xxx-large;margin-left: 17%;width: 80%;" class="centerVerticalBlock">{{ translateService.instant('api.version.add_title') }} {{ restApi.name }}</legend>
+        <legend *ngIf="restApi" style="text-align: left; height:17%; margin-top:2%; justify-content: flex-start; font-size: xxx-large;margin-left: 17%;width: 80%;" class="centerVerticalBlock">{{ translateService.instant('api.version.add_title') }} {{ restApi.name }}</legend>
         <div class="centerVerticalBlock row align-items-center" style="min-height: 75%;">
             <div class="form-group has-danger row align-items-center" style="height: 50px; width: 95%">
                 <label for="versionNb" class="form-control-label col-1">{{ translateService.instant('api.version.title') }} :</label>
@@ -14,13 +14,26 @@
                     id="documentation" name="documentation" aria-describedby="fileHelp" (change)="onLoadDocumentation()">
                 <small class="col-4" style="font-style: italic;">{{ translateService.instant('api.version.supported_types') }}</small>
             </div>
-            <div id="documents" class="form-group align-items-center">
-                <nav class="nav nav-pills flex-column flex-sm-row justify-content-end" class="position: initial;">
-                    <span id="originalDocumentation" class="flex-sm-fill text-sm-center nav-link active" (click)="switchDocumentPreview('originalDocumentation')">{{ translateService.instant('api.version.initial') }}</span>
-                    <span id="oasDocumentation" class="flex-sm-fill text-sm-center nav-link" (click)="switchDocumentPreview('oasDocumentation')">OAS v3</span>
-                    <span id="metadata" class="flex-sm-fill text-sm-center nav-link" (click)="switchDocumentPreview('metadata')">{{ translateService.instant('api.version.metadata') }}</span>
-                </nav>
-                <pre></pre>
+            <div style="width: 100%;">
+                <div class="custom-control custom-checkbox form-group has-danger row align-items-center" style="display: inline-block; vertical-align: middle; width: fit-content; margin: 25px;">
+                    <div class="form-control-label" style="text-align: start;font-weight: 500;">{{ translateService.instant('api.business_models.title') }}</div>
+                    <ul>
+                        <li *ngFor="let businessModel of businessModels">
+                            <input [formControlName]="businessModel" [name]="businessModel" type="checkbox" class="custom-control-input" [id]="businessModel">
+                            <label class="custom-control-label" [for]="businessModel">{{ translateService.instant('api.business_models.' + businessModel) }}</label>
+                        </li>
+                    </ul>
+                </div>
+                <div style="display: inline-block;vertical-align: middle;width: 70%;">
+                    <div id="documents" class="form-group align-items-center">
+                        <nav class="nav nav-pills flex-column flex-sm-row justify-content-end" class="position: initial;">
+                            <span id="originalDocumentation" class="flex-sm-fill text-sm-center nav-link active btn-light" (click)="switchDocumentPreview('originalDocumentation')">{{ translateService.instant('api.version.initial') }}</span>
+                            <span id="oasDocumentation" class="flex-sm-fill text-sm-center nav-link btn-light" (click)="switchDocumentPreview('oasDocumentation')">OAS v3</span>
+                            <span id="metadata" class="flex-sm-fill text-sm-center nav-link btn-light" (click)="switchDocumentPreview('metadata')">{{ translateService.instant('api.version.metadata') }}</span>
+                        </nav>
+                        <pre></pre>
+                    </div>
+                </div>
             </div>
             <div class="form-group has-danger row align-items-center" style="height: 50px;width: 100%">
                 <label for="rootUrlApi" class="form-control-label col-2" style="font-size:medium;">{{ translateService.instant('api.version.root_url_api_label') }} :</label>

@@ -5,6 +5,7 @@ export class Version extends Entity {
     originalDocumentation: string;
     oasDocumentation: string;
     metadata: any;
+    businessModels: Array<string>;
     urlAPI: string;
     urlDoc: string;
     description: string;
@@ -16,6 +17,7 @@ export class Version extends Entity {
         number: string,
         originalDocumentation: string,
         description: string,
+        businessModels: Array<string>,
         urlAPI: string,
         urlDoc: string
     ) {
@@ -23,6 +25,8 @@ export class Version extends Entity {
         this.number = number;
         this.originalDocumentation = originalDocumentation;
         this.description = description;
+        this.businessModels = businessModels;
+
         if (urlAPI != null) { this.urlAPI = urlAPI; }
         if (urlDoc != null) { this.urlDoc = urlDoc; }
     }

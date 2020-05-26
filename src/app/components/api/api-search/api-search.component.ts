@@ -60,7 +60,7 @@ export class ApiSearchComponent extends TranslatableComponent {
     document.getElementById('secondarySpinner').style.display = 'block';
     document.getElementById('nextArrow').style.display = 'none';
     this.page++;
-    this.apiService.searchApis(this.keywords, this.page, null)
+    this.apiService.searchApis(this.keywords, this.page, this.selectedBusinessModels.length > 0 ? this.selectedBusinessModels : null)
     .then(restApis => {
       document.getElementById('secondarySpinner').style.display = 'none';
       document.getElementById('nextArrow').style.display = 'block';
@@ -75,8 +75,10 @@ export class ApiSearchComponent extends TranslatableComponent {
   }
 
   filterByBusinessModel(api: API): boolean {
-    return api.businessModels == null || api.businessModels.length === 0 || this.selectedBusinessModels.length === 0 ||
-    this.selectedBusinessModels.filter(businessModel => api.businessModels.includes(businessModel)).length > 0;
+    return api.metadata == null || api.metadata.offers == null || api.metadata.offers.length === 0 ||
+    this.selectedBusinessModels.length === 0 || this.selectedBusinessModels.filter(
+      businessModel => api.metadata.offers.map(offer => offer.identifier).includes(businessModel)
+    ).length > 0;
   }
 
   onClickAPI(api: API) {
