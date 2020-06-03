@@ -8,6 +8,7 @@ import { User } from '../../models/user';
 import { ToastrService } from 'ngx-toastr';
 import { environment } from 'src/environments/environment';
 import { Router, NavigationEnd } from '@angular/router';
+import { Title, Meta } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-header',
@@ -28,6 +29,8 @@ export class HeaderComponent extends TranslatableComponent implements OnInit {
   keywords = '';
 
   constructor(
+    private title: Title,
+    private meta: Meta,
     public translateService: TranslateService,
     public authService: AuthService,
     private toastr: ToastrService,
@@ -51,10 +54,14 @@ export class HeaderComponent extends TranslatableComponent implements OnInit {
         }
       });
       this.router.events.subscribe(event => {
-        if (event instanceof NavigationEnd && event.url === '/') {
-          this.currentUser = this.authService.getCurrentUser();
-          if (this.currentUser) {
-            this.activeRole = this.currentUser.role.toString();
+        if (event instanceof NavigationEnd) {
+          this.title.setTitle('RestAPImantics');
+          this.meta.updateTag({name: 'description', content: '' });
+          if (event.url === '/') {
+            this.currentUser = this.authService.getCurrentUser();
+            if (this.currentUser) {
+              this.activeRole = this.currentUser.role.toString();
+            }
           }
         }
       });
