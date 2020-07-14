@@ -95,6 +95,7 @@ export class RegisterComponent extends TranslatableComponent implements AfterVie
         if (users.length === 0) {
           this.userService.getUserByEmail(this.registrationForm.value.email).then(users2 => {
             if (users2.length === 0) {
+              this.registrationForm.setValue({ passwordConfirm: null });
               this.authService.register(this.registrationForm.value)
               .then(res => {
                 this.registrationForm.reset();
