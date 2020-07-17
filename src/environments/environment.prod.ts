@@ -1,6 +1,6 @@
 export const environment = {
   production: true,
-  URL_API: 'http://localhost:8080',
+  URL_API: 'https://api.restapimantics.governify.io',
   DEFAULT_LANG: 'en-US',
   FIRE_CONFIG: {
     apiKey: 'AIzaSyDLqZG0zNK1rZB7S_D_QVRI-KKDPmxNk8g',
