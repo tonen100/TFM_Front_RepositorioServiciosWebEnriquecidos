@@ -15,7 +15,7 @@ export const environment = {
     messagingSenderId: '86439804625',
     appId: '1:86439804625:web:167d40897d54d0baffcff0'
   },
-  ID_MAIN_API_IN_API: '5ee0f2ad84d0af0017613e65'
+  ID_MAIN_API_IN_API: '1'
 };
 
 /*
