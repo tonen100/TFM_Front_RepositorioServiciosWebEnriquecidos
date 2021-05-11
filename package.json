@@ -52,7 +52,7 @@
     "i": "^0.3.6",
     "jquery": "^3.4.1",
     "js-file-download": "^0.4.11",
-    "lodash": "^4.17.19",
+    "lodash": "^4.17.21",
     "moment": "^2.24.0",
     "ng2-img-max": "^2.2.4",
     "ngx-bootstrap": "^5.5.0",
