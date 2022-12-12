@@ -46,7 +46,7 @@
     "bootstrap-select": "^1.13.16",
     "clone": "^2.1.2",
     "cloudinary-core": "^2.8.2",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "firebase": "^7.11.0",
     "font-awesome": "^4.7.0",
     "i": "^0.3.6",
